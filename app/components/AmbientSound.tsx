@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { MotionValue, useMotionValueEvent } from 'framer-motion';
 
-// --- DUAL MODE AUDIO ENGINE ---
-// 1. GLOBAL: Procedural "Space Drone" (Subtle, always on).
-// 2. HIGHLIGHT: "Hans Zimmer" MP3 (Only active during sculpture scroll).
-// Cross-fades between them.
+// --- CINEMATIC FILTER ENGINE ---
+// Uses the real MP3 but processes it live.
+// Top: Deep/Lowpass (Underwater/Space feel).
+// Sculpture: Full Frequency (Epic).
+// Bottom: Fades back.
 
 interface AmbientSoundProps {
     scrollProgress: MotionValue<number>;
@@ -16,122 +17,114 @@ interface AmbientSoundProps {
 export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
     const [isMuted, setIsMuted] = useState(true);
 
-    // REFS
-    const mp3Ref = useRef<HTMLAudioElement | null>(null); // The Zimmer Track
-    const audioContextRef = useRef<AudioContext | null>(null); // The Drone Engine
-    const droneGainRef = useRef<GainNode | null>(null);
+    // Audio Graph Refs
+    const audioContextRef = useRef<AudioContext | null>(null);
+    const audioElementRef = useRef<HTMLAudioElement | null>(null);
+    const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
+    const filterNodeRef = useRef<BiquadFilterNode | null>(null);
+    const gainNodeRef = useRef<GainNode | null>(null);
 
-    // 1. SETUP AUDIO SYSTEMS
-    useEffect(() => {
-        // A. Setup MP3
-        const audio = new Audio("/soundscape.mp3");
-        audio.loop = true;
-        audio.volume = 0;
-        mp3Ref.current = audio;
-
-        // B. Setup Drone (Web Audio API) - Init on first click to avoid policy block
-        // We'll init context in toggleSound
-    }, []);
-
-    const initDrone = () => {
-        if (audioContextRef.current) return;
+    // Init Audio Context (Must be user triggered)
+    const initAudio = () => {
+        if (audioContextRef.current) {
+            // Already inited, just checking state
+            if (audioContextRef.current.state === 'suspended') {
+                audioContextRef.current.resume();
+            }
+            if (audioElementRef.current?.paused) {
+                audioElementRef.current.play().catch(e => console.error(e));
+            }
+            setIsMuted(false);
+            return;
+        }
 
         const Ctx = window.AudioContext || (window as any).webkitAudioContext;
         const ctx = new Ctx();
         audioContextRef.current = ctx;
 
-        const masterGain = ctx.createGain();
-        masterGain.gain.value = 0.0; // Start silent
-        masterGain.connect(ctx.destination);
-        droneGainRef.current = masterGain;
+        // 1. Create Source from HTML5 Audio Element
+        const audio = new Audio("/soundscape.mp3");
+        audio.loop = true;
+        audio.crossOrigin = "anonymous"; // Essential for Web Audio
+        audioElementRef.current = audio;
 
-        // Create "Space Wind" (Pink Noise-ish via multiple Oscillators)
-        const freqs = [55, 110, 165]; // A1, A2, E3 (Open 5ths)
-        freqs.forEach(f => {
-            const osc = ctx.createOscillator();
-            osc.type = "sine";
-            osc.frequency.value = f;
+        const source = ctx.createMediaElementSource(audio);
+        sourceNodeRef.current = source;
 
-            const oscGain = ctx.createGain();
-            oscGain.gain.value = 0.1;
+        // 2. Create BIQUAD FILTER (The "Depth" Effect)
+        const filter = ctx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 100; // Start VERY muffled/deep
+        filter.Q.value = 1; // Slight resonance
+        filterNodeRef.current = filter;
 
-            // LFO for movement
-            const lfo = ctx.createOscillator();
-            lfo.frequency.value = 0.05 + Math.random() * 0.1;
-            lfo.connect(oscGain.gain);
-            lfo.start();
+        // 3. Gain Node
+        const gain = ctx.createGain();
+        gain.gain.value = 1.0;
+        gainNodeRef.current = gain;
 
-            osc.connect(oscGain);
-            oscGain.connect(masterGain);
-            osc.start();
-        });
+        // 4. Connect Graph: Source -> Filter -> Gain -> Dest
+        source.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        // Start
+        audio.play().then(() => setIsMuted(false)).catch(e => console.error("Play prevented", e));
     };
 
     const toggleSound = () => {
-        // Init procedural drone if needed
-        initDrone();
-
-        if (isMuted) {
-            // UNMUTE
-            if (audioContextRef.current?.state === 'suspended') audioContextRef.current.resume();
-            mp3Ref.current?.play().catch(e => console.log("MP3 play failed", e));
-            setIsMuted(false);
+        if (!audioContextRef.current) {
+            initAudio();
         } else {
-            // MUTE
-            if (audioContextRef.current) audioContextRef.current.suspend();
-            mp3Ref.current?.pause();
-            setIsMuted(true);
+            if (isMuted) {
+                audioContextRef.current.resume();
+                audioElementRef.current?.play();
+                setIsMuted(false);
+            } else {
+                audioContextRef.current.suspend();
+                audioElementRef.current?.pause();
+                setIsMuted(true);
+            }
         }
     };
 
-    // 2. MIXER LOGIC (Scroll Controlled Crossfade)
+    // --- LIVE MODULATION ---
     useMotionValueEvent(scrollProgress, "change", (latest) => {
-        if (isMuted) return;
+        if (!audioContextRef.current || !filterNodeRef.current || !gainNodeRef.current) return;
+        const now = audioContextRef.current.currentTime;
 
-        // ZONES:
-        // 0.0 - 0.1: Hero (Drone: 100%, Zimmer: 0%)
-        // 0.1 - 0.2: Transition (Drone: Fades, Zimmer: Starts)
-        // 0.2 - 0.8: SCULPTURE (Drone: 20%, Zimmer: CLIMAX)
-        // 0.8 - 0.9: Transition Out (Drone: Returns, Zimmer: Fades)
-        // 0.9 - 1.0: Footer (Drone: 100%, Zimmer: 0%)
+        // MAPPING LOGIC:
+        // 0.0 - 0.2: DEEP SPACE (Freq: 200Hz, Vol: 0.5)
+        // 0.2 - 0.5: RISING (Freq: 200 -> 2000Hz, Vol: 0.8)
+        // 0.5 - 0.8: CLIMAX (Freq: 20000Hz - Full Open, Vol: 1.0)
+        // 0.8 - 1.0: FADE OUT (Freq: 500Hz, Vol: 0.0)
 
-        let droneVol = 0.0;
-        let mp3Vol = 0.0;
+        let targetFreq = 200;
+        let targetVol = 0.5;
 
-        if (latest < 0.15) {
-            // HERO
-            droneVol = 0.4; // Base drone volume
-            mp3Vol = 0;
-        } else if (latest < 0.85) {
-            // SCULPTURE (The Main Event)
-            // Normalized progress within this section (0 to 1)
-            const p = (latest - 0.15) / 0.7;
-
-            // Climax Logic: Peak at p=0.8 (approx scroll 0.7)
-            if (p < 0.8) {
-                mp3Vol = p * 1.25; // Ramp up to 1.0
-            } else {
-                // Sustain/Slight dip
-                mp3Vol = 1.0;
-            }
-
-            droneVol = 0.1; // Dip drone to background
+        if (latest < 0.2) {
+            targetFreq = 200;
+            targetVol = 0.4;
+        } else if (latest < 0.8) {
+            // The BUILD UP to SCULPTURE
+            // Map 0.2->0.8 range to 200 -> 20000 Hz
+            const p = (latest - 0.2) / 0.6; // 0 to 1
+            // Exponential curve for frequency sounds more natural
+            targetFreq = 200 * Math.pow(100, p);
+            targetVol = 0.4 + (p * 0.6);
         } else {
-            // FOOTER / END
-            mp3Vol = 0; // Quick cut or fade
-            droneVol = 0.4; // Drone takes over
+            // ENDING
+            targetFreq = 400;
+            targetVol = 0; // Fade out completely at bottom
         }
 
-        // Apply Volumes
-        if (mp3Ref.current) {
-            // Smooth ramp for MP3
-            const diff = Math.min(1, Math.max(0, mp3Vol)) - mp3Ref.current.volume;
-            mp3Ref.current.volume += diff * 0.1;
-        }
+        // Clamp frequency to safety limits (20Hz - 22kHz)
+        targetFreq = Math.max(20, Math.min(22000, targetFreq));
+        targetVol = Math.max(0, Math.min(1, targetVol));
 
-        if (droneGainRef.current && audioContextRef.current) {
-            droneGainRef.current.gain.setTargetAtTime(droneVol, audioContextRef.current.currentTime, 0.1);
-        }
+        // Smooth Ramp (removes clicking/stepping)
+        filterNodeRef.current.frequency.setTargetAtTime(targetFreq, now, 0.1);
+        gainNodeRef.current.gain.setTargetAtTime(targetVol, now, 0.1);
     });
 
     return (
