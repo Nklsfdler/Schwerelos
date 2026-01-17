@@ -34,36 +34,38 @@ function MouseTrail() {
     );
 }
 
-// --- LIVING CRYSTAL LETTER (Static Liquid Glass) ---
+// --- LIVING CRYSTAL LETTER (Dynamic Liquid Glass) ---
+// Smooth, non-wobbly, premium motion.
 const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number }) => {
     return (
-        <div className="relative inline-block cursor-default select-none px-[0.2vw] py-4">
+        <div className="relative inline-block cursor-default select-none px-[0.1vw] py-4">
 
-            {/* 1. Base Text (Pure Liquid Glass) */}
-            <span className="
-                relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                text-transparent bg-clip-text
-            "
+            {/* 1. Base Text (Dynamic Liquid Gradient) */}
+            {/* We use a large background that slides slowly. No scaling/wobbling. */}
+            <motion.span
+                className="
+                    relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
+                    text-transparent bg-clip-text
+                "
                 style={{
-                    // "Liquid Metal/Glass" Gradient - subtly shifts vertical angle
-                    backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0.8) 100%)',
-                    backgroundSize: '100% 120%',
+                    // "Liquid Light" Path: Transparent -> Silver -> White -> Silver -> Transparent
+                    backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.8) 55%, rgba(255,255,255,0) 100%)',
+                    backgroundSize: '300% 100%',
+                }}
+                animate={{
+                    backgroundPosition: ["100% 0%", "0% 0%"]
+                }}
+                transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.2
                 }}
             >
                 {letter}
+            </motion.span>
 
-                {/* 2. Static Sheen (The "Reflection") - No movement, just presence */}
-                <span
-                    className="absolute inset-0 block text-transparent bg-clip-text mix-blend-overlay opacity-50"
-                    style={{
-                        backgroundImage: 'linear-gradient(to bottom, transparent 40%, white 50%, transparent 60%)',
-                    }}
-                >
-                    {letter}
-                </span>
-            </span>
-
-            {/* 3. The Glow Aura (Behind) - Subtle Breathing "Soul" */}
+            {/* 2. Deep Glow (The Atmosphere) */}
             <motion.span
                 className="
                     absolute inset-0 z-[-1]
@@ -71,13 +73,13 @@ const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number 
                     text-white/20 blur-[30px]
                 "
                 animate={{
-                    opacity: [0.3, 0.5, 0.3],
+                    opacity: [0.2, 0.4, 0.2],
                 }}
                 transition={{
-                    duration: 8,
+                    duration: 4,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.5
+                    delay: index * 0.2
                 }}
             >
                 {letter}
