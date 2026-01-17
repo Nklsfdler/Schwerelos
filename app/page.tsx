@@ -355,12 +355,12 @@ export default function Home() {
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
                                     <span className="text-[9px] uppercase tracking-widest font-bold opacity-30">Context</span>
-                                    <h5 className="text-2xl font-[family-name:var(--font-outfit)] font-bold">Technisches<br /> Design</h5>
+                                    <h5 className="text-2xl font-[family-name:var(--font-outfit)] font-bold">B.Sc. Technisches<br /> Design</h5>
                                 </div>
                                 <div className="w-1.5 h-1.5 bg-black rounded-full" />
                             </div>
                             <div className="border-t border-black/5 pt-4 mt-4">
-                                <p className="text-xs font-[family-name:var(--font-dm)] opacity-50">TH Ingolstadt<br /> Semesterprojekt 2026</p>
+                                <p className="text-xs font-[family-name:var(--font-dm)] opacity-50">🇩🇪 TH Ingolstadt<br /> Semesterprojekt 2026</p>
                             </div>
                         </div>
                     </SpotlightCard>
