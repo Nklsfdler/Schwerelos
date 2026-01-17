@@ -34,52 +34,73 @@ function MouseTrail() {
     );
 }
 
-// --- LIVING CRYSTAL LETTER (Dynamic Liquid Glass) ---
-// Smooth, non-wobbly, premium motion.
+// --- LIVING CRYSTAL LETTER (True Liquid) ---
+// "Liquid Glass somehow" -> Organic breathing + Liquid Gradient
 const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number }) => {
     return (
-        <div className="relative inline-block cursor-default select-none px-[0.1vw] py-4">
+        <div className="relative inline-block cursor-default select-none px-[0.1vw] py-4 group">
 
-            {/* 1. Base Text (Dynamic Liquid Gradient) */}
-            {/* We use a large background that slides slowly. No scaling/wobbling. */}
+            {/* 1. Base Text (Breathing Liquid Form) */}
             <motion.span
                 className="
                     relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
                     text-transparent bg-clip-text
                 "
                 style={{
-                    // "Liquid Light" Path: Transparent -> Silver -> White -> Silver -> Transparent
-                    backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.8) 55%, rgba(255,255,255,0) 100%)',
-                    backgroundSize: '300% 100%',
+                    // Liquid: A gradient that looks like water surface
+                    backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(200,220,255,0.8) 50%, rgba(255,255,255,0.9) 100%)',
                 }}
                 animate={{
-                    backgroundPosition: ["100% 0%", "0% 0%"]
+                    // The "Liquid" Form Change: Scales Y slightly to look like a droplet or breathing matter
+                    scaleY: [1, 1.08, 1],
+                    y: [0, -2, 0],
                 }}
                 transition={{
-                    duration: 6,
+                    duration: 3,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.2
+                    delay: index * 0.15
                 }}
             >
                 {letter}
+
+                {/* SHEEN (The 'Glass' Reflection) */}
+                <motion.span
+                    className="absolute inset-0 block bg-clip-text text-transparent mix-blend-overlay"
+                    style={{
+                        backgroundImage: 'linear-gradient(120deg, transparent 30%, white 50%, transparent 70%)',
+                        backgroundSize: '200% 100%'
+                    }}
+                    animate={{
+                        backgroundPosition: ['100% 0%', '-100% 0%']
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: index * 0.1
+                    }}
+                >
+                    {letter}
+                </motion.span>
             </motion.span>
 
-            {/* 2. Deep Glow (The Atmosphere) */}
+            {/* 2. GLOW (Atmosphere) */}
             <motion.span
                 className="
                     absolute inset-0 z-[-1]
                     block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/20 blur-[30px]
+                    text-white/30 blur-[20px]
                 "
                 animate={{
-                    opacity: [0.2, 0.4, 0.2],
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [0.95, 1.05, 0.95],
                 }}
                 transition={{
-                    duration: 4,
+                    duration: 3,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.2
+                    delay: index * 0.15
                 }}
             >
                 {letter}
