@@ -233,7 +233,7 @@ export default function Home() {
             </nav>
 
             {/* 1. HERO SECTION (LIVING CRYSTAL) */}
-            <header className="relative h-[120vh] flex flex-col items-center justify-center z-20 w-full overflow-hidden bg-transparent perspective-[1000px]">
+            <header className="relative h-[120vh] flex flex-col items-center justify-center z-20 w-full bg-transparent perspective-[1000px]">
                 <motion.div
                     style={{ opacity: opacityHero, y: ySlow }}
                     className="text-center relative flex flex-col items-center w-full px-4"
@@ -247,29 +247,45 @@ export default function Home() {
                         Studio NF — 2026
                     </motion.span>
 
-                    {/* HERO TITLE: LIVING CRYSTAL (NO BOXES, PERMANENT LOOP) */}
-                    <motion.div
-                        initial={{ opacity: 0, filter: "blur(20px)" }}
-                        animate={{
-                            opacity: 1,
-                            filter: "blur(0px)",
-                            y: [0, -20, 0], // The "True Weightless" Levitation
+                    {/* HERO TITLE: LIVING CRYSTAL (NO BOXES, PERMANENT LOOP + PARALLAX TRACE) */}
+                    <div
+                        className="w-full flex justify-center flex-wrap px-8 py-20 perspective-[2000px]" // Added padding for the 's'
+                        onMouseMove={(e) => {
+                            const { clientX, clientY, currentTarget } = e;
+                            const { left, top, width, height } = currentTarget.getBoundingClientRect();
+                            const x = (clientX - left - width / 2) / 25; // Gentle Follow Factor
+                            const y = (clientY - top - height / 2) / 25;
+                            currentTarget.style.transform = `translate(${x}px, ${y}px)`; // Direct DOM for instant 'Trace'
                         }}
-                        transition={{
-                            opacity: { duration: 2, ease: "easeOut" },
-                            filter: { duration: 2, ease: "easeOut" },
-                            y: {
-                                duration: 8,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = `translate(0px, 0px)`;
+                            e.currentTarget.style.transition = "transform 1s ease-out"; // Smooth return
                         }}
-                        className="w-full flex justify-center flex-wrap px-8 py-10"
+                        style={{ transition: "transform 0.1s ease-out" }} // Smooth follow
                     >
-                        {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
-                            <LivingCrystalLetter key={i} letter={char} index={i} />
-                        ))}
-                    </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, filter: "blur(20px)" }}
+                            animate={{
+                                opacity: 1,
+                                filter: "blur(0px)",
+                                y: [0, -20, 0], // The "True Weightless" Levitation
+                            }}
+                            transition={{
+                                opacity: { duration: 2, ease: "easeOut" },
+                                filter: { duration: 2, ease: "easeOut" },
+                                y: {
+                                    duration: 8,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }
+                            }}
+                            className="flex justify-center flex-wrap"
+                        >
+                            {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
+                                <LivingCrystalLetter key={i} letter={char} index={i} />
+                            ))}
+                        </motion.div>
+                    </div>
 
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3, duration: 2 }}
