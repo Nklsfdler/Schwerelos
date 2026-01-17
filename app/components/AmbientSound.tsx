@@ -4,11 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { MotionValue, useMotionValueEvent } from 'framer-motion';
 
-// --- CINEMATIC FILTER ENGINE ---
-// Uses the real MP3 but processes it live.
-// Top: Deep/Lowpass (Underwater/Space feel).
-// Sculpture: Full Frequency (Epic).
-// Bottom: Fades back.
+// --- PURE CINEMATIC ENGINE (Volume Dynamics Only) ---
+// No Filters. Just the raw, high-quality Hans Zimmer style track.
+// Logic: Volume swells to 100% during the Sculpture, fades out elsewhere.
 
 interface AmbientSoundProps {
     scrollProgress: MotionValue<number>;
@@ -16,115 +14,63 @@ interface AmbientSoundProps {
 
 export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
     const [isMuted, setIsMuted] = useState(true);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    // Audio Graph Refs
-    const audioContextRef = useRef<AudioContext | null>(null);
-    const audioElementRef = useRef<HTMLAudioElement | null>(null);
-    const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
-    const filterNodeRef = useRef<BiquadFilterNode | null>(null);
-    const gainNodeRef = useRef<GainNode | null>(null);
-
-    // Init Audio Context (Must be user triggered)
-    const initAudio = () => {
-        if (audioContextRef.current) {
-            // Already inited, just checking state
-            if (audioContextRef.current.state === 'suspended') {
-                audioContextRef.current.resume();
-            }
-            if (audioElementRef.current?.paused) {
-                audioElementRef.current.play().catch(e => console.error(e));
-            }
-            setIsMuted(false);
-            return;
-        }
-
-        const Ctx = window.AudioContext || (window as any).webkitAudioContext;
-        const ctx = new Ctx();
-        audioContextRef.current = ctx;
-
-        // 1. Create Source from HTML5 Audio Element
+    useEffect(() => {
         const audio = new Audio("/soundscape.mp3");
         audio.loop = true;
-        audio.crossOrigin = "anonymous"; // Essential for Web Audio
-        audioElementRef.current = audio;
-
-        const source = ctx.createMediaElementSource(audio);
-        sourceNodeRef.current = source;
-
-        // 2. Create BIQUAD FILTER (The "Depth" Effect)
-        const filter = ctx.createBiquadFilter();
-        filter.type = "lowpass";
-        filter.frequency.value = 100; // Start VERY muffled/deep
-        filter.Q.value = 1; // Slight resonance
-        filterNodeRef.current = filter;
-
-        // 3. Gain Node
-        const gain = ctx.createGain();
-        gain.gain.value = 1.0;
-        gainNodeRef.current = gain;
-
-        // 4. Connect Graph: Source -> Filter -> Gain -> Dest
-        source.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        // Start
-        audio.play().then(() => setIsMuted(false)).catch(e => console.error("Play prevented", e));
-    };
+        audio.volume = 0; // Start silent
+        audioRef.current = audio;
+    }, []);
 
     const toggleSound = () => {
-        if (!audioContextRef.current) {
-            initAudio();
+        if (!audioRef.current) return;
+
+        if (isMuted) {
+            audioRef.current.play()
+                .then(() => setIsMuted(false))
+                .catch(e => console.error("Play failed", e));
         } else {
-            if (isMuted) {
-                audioContextRef.current.resume();
-                audioElementRef.current?.play();
-                setIsMuted(false);
-            } else {
-                audioContextRef.current.suspend();
-                audioElementRef.current?.pause();
-                setIsMuted(true);
-            }
+            audioRef.current.pause();
+            setIsMuted(true);
         }
     };
 
-    // --- LIVE MODULATION ---
+    // --- SCROLL VOLUME LOGIC ---
     useMotionValueEvent(scrollProgress, "change", (latest) => {
-        if (!audioContextRef.current || !filterNodeRef.current || !gainNodeRef.current) return;
-        const now = audioContextRef.current.currentTime;
+        if (isMuted || !audioRef.current) return;
+        const audio = audioRef.current;
 
-        // MAPPING LOGIC:
-        // 0.0 - 0.2: DEEP SPACE (Freq: 200Hz, Vol: 0.5)
-        // 0.2 - 0.5: RISING (Freq: 200 -> 2000Hz, Vol: 0.8)
-        // 0.5 - 0.8: CLIMAX (Freq: 20000Hz - Full Open, Vol: 1.0)
-        // 0.8 - 1.0: FADE OUT (Freq: 500Hz, Vol: 0.0)
+        // MAPPING (Pure Volume):
+        // 0.0 - 0.2: INTRO (Low Volume: 20%) -> Whisper level
+        // 0.2 - 0.5: CRESCENDO (Ramp to 60%)
+        // 0.5 - 0.8: CLIMAX (Max Volume: 100%) -> Sculpture is full power
+        // 0.8 - 1.0: DIMINUENDO (Fade to 0%) -> Footer silence
 
-        let targetFreq = 200;
-        let targetVol = 0.5;
+        let targetVol = 0;
 
         if (latest < 0.2) {
-            targetFreq = 200;
-            targetVol = 0.4;
+            targetVol = 0.2; // Ambient background
         } else if (latest < 0.8) {
-            // The BUILD UP to SCULPTURE
-            // Map 0.2->0.8 range to 200 -> 20000 Hz
-            const p = (latest - 0.2) / 0.6; // 0 to 1
-            // Exponential curve for frequency sounds more natural
-            targetFreq = 200 * Math.pow(100, p);
-            targetVol = 0.4 + (p * 0.6);
+            // BUILD UP to 1.0
+            // Map 0.2->0.8 to 0.2->1.0
+            const p = (latest - 0.2) / 0.6;
+            targetVol = 0.2 + (p * 0.8);
         } else {
-            // ENDING
-            targetFreq = 400;
-            targetVol = 0; // Fade out completely at bottom
+            // FADE OUT at absolute bottom
+            // Map 0.8->1.0 to 1.0->0.0
+            const p = (latest - 0.8) / 0.2;
+            targetVol = 1.0 - p;
         }
 
-        // Clamp frequency to safety limits (20Hz - 22kHz)
-        targetFreq = Math.max(20, Math.min(22000, targetFreq));
-        targetVol = Math.max(0, Math.min(1, targetVol));
+        // Safety Clamp
+        targetVol = Math.max(0, Math.min(1.0, targetVol));
 
-        // Smooth Ramp (removes clicking/stepping)
-        filterNodeRef.current.frequency.setTargetAtTime(targetFreq, now, 0.1);
-        gainNodeRef.current.gain.setTargetAtTime(targetVol, now, 0.1);
+        // Smooth Fade (0.1s interpolation)
+        const diff = targetVol - audio.volume;
+        if (Math.abs(diff) > 0.01) {
+            audio.volume += diff * 0.1;
+        }
     });
 
     return (
