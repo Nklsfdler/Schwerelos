@@ -370,7 +370,7 @@ export default function Home() {
                         <div className="p-10 flex flex-col justify-center h-full items-center text-center relative z-10">
                             <MousePointer2 className="w-6 h-6 text-white/80 mb-6" />
                             <h3 className="text-2xl font-[family-name:var(--font-outfit)] text-white mb-2">Projekt anfragen</h3>
-                            <button className="px-8 py-3 rounded-full border border-white/10 text-[10px] text-white uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all mt-6">Contact</button>
+                            <a href="mailto:niklas@studio-nf.com" className="px-8 py-3 rounded-full border border-white/10 text-[10px] text-white uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all mt-6 inline-block">Contact</a>
                         </div>
                     </SpotlightCard>
                 </div>
