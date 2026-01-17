@@ -62,14 +62,26 @@ const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number 
                 {letter}
             </motion.span>
 
-            {/* The Glow Aura (Behind) - Adds the "Atmosphere" */}
-            <span className="
-                absolute inset-0 z-[-1]
-                block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                text-white/20 blur-[15px]
-            ">
+            {/* The Glow Aura (Behind) - Adds the "Atmosphere" - STRONGER ANIMATION */}
+            <motion.span
+                className="
+                    absolute inset-0 z-[-1]
+                    block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
+                    text-white/40 blur-[20px]
+                "
+                animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [0.9, 1.1, 0.9],
+                }}
+                transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.1
+                }}
+            >
                 {letter}
-            </span>
+            </motion.span>
         </div>
     );
 };
@@ -252,7 +264,7 @@ export default function Home() {
                                 ease: "easeInOut"
                             }
                         }}
-                        className="w-full flex justify-center flex-wrap"
+                        className="w-full flex justify-center flex-wrap px-8 py-10"
                     >
                         {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
                             <LivingCrystalLetter key={i} letter={char} index={i} />
@@ -264,7 +276,7 @@ export default function Home() {
                         className="mt-24 flex flex-col items-center"
                     >
                         <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 tracking-widest uppercase">
-                            Zustand reiner Existenz
+                            Wenn Materie zu atmen beginnt
                         </p>
                         <div className="w-px h-12 bg-gradient-to-b from-white/20 to-transparent mt-8" />
                     </motion.div>
@@ -315,7 +327,7 @@ export default function Home() {
                             <h3 className="text-5xl md:text-8xl font-[family-name:var(--font-outfit)] font-bold text-white mb-8 leading-none">Organische <br /> Geometrie.</h3>
                             <div className="max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-1000 overflow-hidden">
                                 <p className="font-[family-name:var(--font-dm)] text-lg text-white/50 leading-relaxed max-w-xl pb-6">
-                                    Eine Form, die dem Auge keine Ruhe lässt. Jede Kurve ist eine mathematische Funktion, die Licht und Schatten in einen Dialog zwingt. Die verdrehte Struktur erzeugt eine Dynamik im Stillstand.
+                                    Meine Formsprache folgt dem Instinkt des Aufstiegs. Dynamische, organische Windungen und hauchdünne Verbindungen bilden eine Geometrie, die atmet. Inspiriert von der Sanftheit des Kosmos und der flüchtigen Eleganz von Rauch, entsteht eine Form, die den Geist zur Ruhe kommen lässt.
                                 </p>
                             </div>
                         </div>
@@ -330,7 +342,7 @@ export default function Home() {
                                 <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
                             </div>
                             <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
-                                <p>Es geht um das Abwerfen von mentalem Ballast. Der Moment, in dem der Geist aufhört zu wiegen und anfängt zu schweben.</p>
+                                <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                             </div>
                         </div>
                     </SpotlightCard>
@@ -344,7 +356,7 @@ export default function Home() {
                             <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
                             <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
                             <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
-                                <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Erforscht die Schnittstelle zwischen digitaler Perfektion und physischer Realität.</p>
+                                <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                             </div>
                         </div>
                     </SpotlightCard>
