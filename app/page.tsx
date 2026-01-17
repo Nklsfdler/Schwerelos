@@ -35,69 +35,56 @@ function MouseTrail() {
 }
 
 // --- LIVING CRYSTAL LETTER (Organic & Permanent) ---
-// No boxes. No static borders. Just living, breathing light.
+// UPDATED: Static "Frozen Glass" Refraction. No rhythmic scanning.
 const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number }) => {
     return (
-        <div className="relative inline-block cursor-default select-none px-[0.2vw] py-4"> {/* Added padding for "s" cutoff */}
+        <div className="relative inline-block cursor-default select-none px-[0.2vw] py-4 group">
 
-            {/* 1. Base Text (Transparent with clipping) */}
+            {/* 1. Base Text - FROZEN GLASS (Static, High Refraction) */}
             <span className="
                 relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                text-transparent bg-clip-text bg-white/10
-            ">
-                {letter}
-
-                {/* 2. The EPIK GLAS FADE (Moving Sheen) */}
-                <motion.span
-                    className="absolute inset-0 block text-transparent bg-clip-text"
-                    style={{
-                        backgroundImage: 'linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.9) 50%, transparent 70%)',
-                        backgroundSize: '200% 100%',
-                    }}
-                    animate={{ baseFrequency: 0 }} // Dummy to force render
-                // We animate background-position from -100% to 200%
-                >
-                    <motion.span
-                        className="absolute inset-0 block bg-clip-text text-transparent"
-                        style={{
-                            backgroundImage: 'inherit',
-                            backgroundSize: 'inherit',
-                        }}
-                        animate={{
-                            backgroundPosition: ['100% 0%', '-100% 0%']
-                        }}
-                        transition={{
-                            duration: 6,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: index * 0.15
-                        }}
-                    >
-                        {letter}
-                    </motion.span>
-                </motion.span>
-            </span>
-
-            {/* 3. The Glow Aura (Behind) - "Moving Fade that follows" */}
-            <motion.span
-                className="
-                    absolute inset-0 z-[-1]
-                    block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/30 blur-[25px]
-                "
-                animate={{
-                    opacity: [0.2, 0.6, 0.2],
-                    x: [-5, 5, -5], // Subtle lateral movement "following" the sheen
-                }}
-                transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.15
+                text-transparent bg-clip-text
+            "
+                style={{
+                    // "Ice" Gradient: White top, transparent middle, white bottom. 
+                    // Looks like light passing through a crystal prism. STATIC.
+                    backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, rgba(255,255,255,0.9) 100%)',
                 }}
             >
                 {letter}
-            </motion.span>
+
+                {/* 2. SUBTLE BREATHE (Not rhythm, just ALIVE) */}
+                <motion.span
+                    className="absolute inset-0 block text-transparent bg-clip-text"
+                    style={{
+                        backgroundImage: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%)',
+                        backgroundSize: '200% 200%',
+                        backgroundPosition: '0% 0%'
+                    }}
+                    animate={{
+                        opacity: [0, 0.5, 0] // Just appearing and disappearing slowly (Breathing)
+                    }}
+                    transition={{
+                        duration: 8, // Very slow
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: Math.random() * 5 // Random delay so they don't pulse together (Not rhythmic!)
+                    }}
+                >
+                    {letter}
+                </motion.span>
+            </span>
+
+            {/* 3. The Glow Aura (Behind) - Frosted Bloom */}
+            <span
+                className="
+                    absolute inset-0 z-[-1]
+                    block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
+                    text-white/20 blur-[30px] opacity-50
+                "
+            >
+                {letter}
+            </span>
         </div>
     );
 };

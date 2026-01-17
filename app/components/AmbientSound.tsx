@@ -41,31 +41,46 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         filter.connect(masterGain);
         filterRef.current = filter;
 
-        // CHORD: E Major 9 (Open, Ethereal, Space-like)
-        // Frequencies: E2, B2, E3, G#3, D#4
-        const frequencies = [82.41, 123.47, 164.81, 207.65, 311.13];
+        // CHORD: E Major 9 + Add 11 (The "Heavenly" Chord)
+        // A rich, detuned "Super-Pad" sound.
+        // Frequencies: E2, B2, E3, G#3, B3, D#4, F#4
+        const baseFrequencies = [82.41, 123.47, 164.81, 207.65, 246.94, 311.13, 369.99];
 
-        frequencies.forEach(freq => {
-            const osc = ctx.createOscillator();
-            osc.type = "sine"; // Pure tone
-            osc.frequency.value = freq;
+        baseFrequencies.forEach((freq, i) => {
+            // Create 3 oscillators per note for "Unison" effect (Thick, wide sound)
+            for (let j = 0; j < 2; j++) {
+                const osc = ctx.createOscillator();
+                osc.type = "triangle"; // Softer than sine, richer than saw
 
-            // Individual LFO for "movement" (stops it sounding static)
-            const lfo = ctx.createOscillator();
-            lfo.type = "sine";
-            lfo.frequency.value = 0.1 + Math.random() * 0.2; // Slow breathing
+                // Slight detuning for "beautiful" chorusing
+                const detune = (Math.random() - 0.5) * 12; // +/- 6 cents
+                osc.frequency.value = freq;
+                osc.detune.value = detune;
 
-            const lfoGain = ctx.createGain();
-            lfoGain.gain.value = 5; // Slight pitch drift
+                // Individual LFO for "Movement" (Breathing volume)
+                const gainNode = ctx.createGain();
+                gainNode.gain.value = 0.0; // Start silent, fade in
 
-            lfo.connect(lfoGain);
-            lfoGain.connect(osc.frequency);
-            lfo.start();
+                // Attack/Release envelope simulation via LFO
+                const lfo = ctx.createOscillator();
+                lfo.type = "sine";
+                lfo.frequency.value = 0.05 + Math.random() * 0.1; // Very slow breathing (10-20s)
 
-            // Connect to filter
-            osc.connect(filter);
-            osc.start();
-            oscillatorsRef.current.push(osc);
+                const lfoGain = ctx.createGain();
+                lfoGain.gain.value = 0.3; // Modulation depth
+
+                lfo.connect(lfoGain);
+                lfoGain.connect(gainNode.gain);
+                lfo.start();
+
+                // Initial fade in
+                gainNode.gain.setTargetAtTime(0.15 - (i * 0.01), ctx.currentTime, 2);
+
+                osc.connect(gainNode);
+                gainNode.connect(filter);
+                osc.start();
+                oscillatorsRef.current.push(osc);
+            }
         });
 
         setIsMuted(false);
