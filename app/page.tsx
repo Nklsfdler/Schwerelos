@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { Wind, Sparkles, MousePointer2 } from 'lucide-react';
+import AmbientSound from './components/AmbientSound';
 
 const FRAME_COUNT = 104;
 const IMAGE_PATH_PREFIX = "/sequence/ezgif-frame-";
@@ -407,6 +408,9 @@ export default function Home() {
                 <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
                 <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 Studio NF</p>
             </footer>
+
+            {/* GENERATIVE AUDIO SYSTEM */}
+            <AmbientSound scrollProgress={smoothProgress} />
         </div>
     );
 }
