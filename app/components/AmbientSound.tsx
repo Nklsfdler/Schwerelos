@@ -4,113 +4,137 @@ import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { MotionValue, useMotionValueEvent } from 'framer-motion';
 
-// --- GENERATIVE AUDIO ENGINE ---
-// No MP3s. Pure mathematics and sound waves.
-// Creates an "Ethereal Drone" that reacts to the sculpture's completion.
+// --- HANS ZIMMER ENGINE (Cinematic / Orchestral) ---
+// Deep Sub-Bass + Slow Moving String Texture.
+// Autoplays on first interaction.
 
 interface AmbientSoundProps {
-    scrollProgress: MotionValue<number>; // Connected to the sculpture scroll
+    scrollProgress: MotionValue<number>;
 }
 
 export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
     const [isMuted, setIsMuted] = useState(true);
     const audioContextRef = useRef<AudioContext | null>(null);
     const masterGainRef = useRef<GainNode | null>(null);
-    const filterRef = useRef<BiquadFilterNode | null>(null);
-    const oscillatorsRef = useRef<OscillatorNode[]>([]);
+    const busRef = useRef<GainNode | null>(null);
 
-    // 1. Initialize Audio Engine (On User Click)
+    // 1. "Hans Zimmer" Sound Design
     const initAudio = () => {
-        if (audioContextRef.current) return;
+        if (audioContextRef.current) {
+            // If already init, just resume
+            if (audioContextRef.current.state === 'suspended') {
+                audioContextRef.current.resume();
+            }
+            setIsMuted(false);
+            return;
+        }
 
         const Ctx = window.AudioContext || (window as any).webkitAudioContext;
         const ctx = new Ctx();
         audioContextRef.current = ctx;
 
-        // Master Chain
+        // Master Bus
         const masterGain = ctx.createGain();
-        masterGain.gain.value = 0.4; // Base volume
+        masterGain.gain.value = 0.5;
         masterGain.connect(ctx.destination);
         masterGainRef.current = masterGain;
 
-        // Filter (The "Muffle" effect)
-        const filter = ctx.createBiquadFilter();
-        filter.type = "lowpass";
-        filter.frequency.value = 200; // Start dark/muffled
-        filter.Q.value = 1;
-        filter.connect(masterGain);
-        filterRef.current = filter;
+        // Dynamic Bus (Controlled by Scroll)
+        const bus = ctx.createGain();
+        bus.gain.value = 0.2; // Start quiet (Intro)
+        bus.connect(masterGain);
+        busRef.current = bus;
 
-        // CHORD: E Major 9 + Add 11 (The "Heavenly" Chord)
-        // A rich, detuned "Super-Pad" sound.
-        // Frequencies: E2, B2, E3, G#3, B3, D#4, F#4
-        const baseFrequencies = [82.41, 123.47, 164.81, 207.65, 246.94, 311.13, 369.99];
+        // LAYER A: THE SUB (The "Anchor")
+        // Deep, steady bass (C2/E2)
+        const createSub = (freq: number) => {
+            const osc = ctx.createOscillator();
+            osc.type = "sine"; // Pure sub
+            osc.frequency.value = freq;
+            const g = ctx.createGain();
+            g.gain.value = 0.4; // Heavy weight
+            osc.connect(g);
+            g.connect(bus);
+            osc.start();
+        };
+        createSub(41.20); // E1 (Deep Rumbles)
+        createSub(82.41); // E2
 
-        baseFrequencies.forEach((freq, i) => {
-            // Create 3 oscillators per note for "Unison" effect (Thick, wide sound)
-            for (let j = 0; j < 2; j++) {
-                const osc = ctx.createOscillator();
-                osc.type = "triangle"; // Softer than sine, richer than saw
+        // LAYER B: THE STRINGS (The "Emotion")
+        // Sawtooths with heavy filtering and slow attack
+        const frequencies = [164.81, 246.94, 329.63, 392.00, 493.88]; // E Major / E Minor ambiguous
 
-                // Slight detuning for "beautiful" chorusing
-                const detune = (Math.random() - 0.5) * 12; // +/- 6 cents
-                osc.frequency.value = freq;
-                osc.detune.value = detune;
+        frequencies.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            osc.type = "sawtooth"; // Rich harmonics
 
-                // Individual LFO for "Movement" (Breathing volume)
-                const gainNode = ctx.createGain();
-                gainNode.gain.value = 0.0; // Start silent, fade in
+            // Filter each string (Low pass to make it soft/warm)
+            const filter = ctx.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.value = 400 + (Math.random() * 200);
 
-                // Attack/Release envelope simulation via LFO
-                const lfo = ctx.createOscillator();
-                lfo.type = "sine";
-                lfo.frequency.value = 0.05 + Math.random() * 0.1; // Very slow breathing (10-20s)
+            // Detune for "Orchestra" feel
+            osc.frequency.value = freq;
+            osc.detune.value = (Math.random() - 0.5) * 15;
 
-                const lfoGain = ctx.createGain();
-                lfoGain.gain.value = 0.3; // Modulation depth
+            // Envelope / Breathing
+            const gain = ctx.createGain();
+            gain.gain.value = 0.05; // Mix low
 
-                lfo.connect(lfoGain);
-                lfoGain.connect(gainNode.gain);
-                lfo.start();
-
-                // Initial fade in
-                gainNode.gain.setTargetAtTime(0.15 - (i * 0.01), ctx.currentTime, 2);
-
-                osc.connect(gainNode);
-                gainNode.connect(filter);
-                osc.start();
-                oscillatorsRef.current.push(osc);
-            }
+            // connect
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(bus);
+            osc.start();
         });
 
         setIsMuted(false);
     };
 
+    // 2. Global "Autoplay" Listener
+    // Browsers block audio until user interaction. We catch the FIRST interaction.
+    useEffect(() => {
+        const handleInteraction = () => {
+            if (isMuted) {
+                initAudio();
+            }
+        };
+
+        window.addEventListener('click', handleInteraction);
+        window.addEventListener('scroll', handleInteraction);
+        window.addEventListener('keydown', handleInteraction);
+
+        return () => {
+            window.removeEventListener('click', handleInteraction);
+            window.removeEventListener('scroll', handleInteraction);
+            window.removeEventListener('keydown', handleInteraction);
+        };
+    }, [isMuted]);
+
+    // 3. Cinematic Swell (Scroll control)
+    useMotionValueEvent(scrollProgress, "change", (latest) => {
+        if (!audioContextRef.current || !busRef.current) return;
+
+        // As you scroll (Sculpture builds), the music swells.
+        // It gets Louder and Brighter (Hans Zimmer Crescendo).
+        const volume = 0.2 + (latest * 0.6); // 0.2 -> 0.8
+        busRef.current.gain.setTargetAtTime(volume, audioContextRef.current.currentTime, 0.5);
+    });
+
+    // Manual Toggle (Still needed if user wants silence)
     const toggleSound = () => {
         if (!audioContextRef.current) {
             initAudio();
         } else {
-            if (audioContextRef.current.state === 'suspended') {
-                audioContextRef.current.resume();
-                setIsMuted(false);
-            } else if (audioContextRef.current.state === 'running') {
+            if (audioContextRef.current.state === 'running') {
                 audioContextRef.current.suspend();
                 setIsMuted(true);
+            } else {
+                audioContextRef.current.resume();
+                setIsMuted(false);
             }
         }
     };
-
-    // 2. Sync to Sculpture Animation
-    useMotionValueEvent(scrollProgress, "change", (latest) => {
-        if (!audioContextRef.current || !filterRef.current || !masterGainRef.current) return;
-
-        // As sculpture completes (0 -> 1):
-        // 1. Filter opens up (Sound becomes "Brighter" / "Clearer") -> 200Hz to 3000Hz
-        // 2. Volume swirls slightly
-
-        const frequency = 200 + (latest * 4000); // Dramatic opening
-        filterRef.current.frequency.setTargetAtTime(frequency, audioContextRef.current.currentTime, 0.1);
-    });
 
     return (
         <button
@@ -119,7 +143,7 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         >
             {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
             <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                {isMuted ? "Initialize Audio" : "Atmosphere Active"}
+                {isMuted ? "Audio Paused" : "Hans Zimmer Mode"}
             </span>
         </button>
     );
