@@ -335,6 +335,50 @@ export default function Home() {
                         </div>
                     </SpotlightCard>
 
+                    {/* TILE 2: PHILOSOPHY */}
+                    <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[400px]">
+                        <div className="p-10 flex flex-col justify-between h-full relative z-10">
+                            <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
+                            <div>
+                                <span className="text-[9px] uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
+                                <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
+                            </div>
+                            <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
+                                <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                            </div>
+                        </div>
+                    </SpotlightCard>
+
+                    {/* TILE 3: ARTIST */}
+                    <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[600px]">
+                        <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-top filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
+                        <div className="absolute bottom-0 left-0 p-10 w-full">
+                            <div className="h-px w-12 bg-white/20 mb-6" />
+                            <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
+                            <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
+                            <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
+                                <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
+                            </div>
+                        </div>
+                    </SpotlightCard>
+
+                    {/* TILE 4: CONTEXT */}
+                    <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] bg-white text-black border-none">
+                        <div className="bg-white absolute inset-0 text-black p-10 flex flex-col justify-between transition-colors hover:bg-neutral-100">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                    <span className="text-[9px] uppercase tracking-widest font-bold opacity-30">Context</span>
+                                    <h5 className="text-2xl font-[family-name:var(--font-outfit)] font-bold">B.Sc. Technisches<br /> Design</h5>
+                                </div>
+                                <div className="w-1.5 h-1.5 bg-black rounded-full" />
+                            </div>
+                            <div className="border-t border-black/5 pt-4 mt-4">
+                                <p className="text-xs font-[family-name:var(--font-dm)] opacity-50">🇩🇪 TH Ingolstadt<br /> Semesterprojekt 2026</p>
+                            </div>
+                        </div>
+                    </SpotlightCard>
+
                     {/* TILE 5: CONTACT */}
                     <SpotlightCard id="kontakt" colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px]">
                         <div className="p-10 flex flex-col justify-center h-full items-center text-center relative z-10">
