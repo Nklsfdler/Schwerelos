@@ -36,49 +36,72 @@ function MouseTrail() {
 // --- LIVING CRYSTAL LETTER (Organic & Permanent) ---
 // No boxes. No static borders. Just living, breathing light.
 const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number }) => {
+    // Levitation Animation Definition
+    const floatAnim = { y: [0, -30, 0] }; // Increased range slightly for more "breath"
+    const floatTransition = {
+        duration: 7,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: index * 0.05 // Slight wave across the word
+    };
+
     return (
-        <div className="relative inline-block cursor-default select-none px-[0.1vw]">
-            {/* The Living Light (Aurora Gradient) */}
+        <div className="relative inline-block cursor-default select-none px-[0.1vw] py-4">
+            {/* 
+                THE GHOST TRAIL (Trace Effect) 
+                Follows the main letter but with a delay, creating a "motion blur" feel.
+             */}
             <motion.span
                 className="
+                    absolute inset-0 z-[-1]
                     block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-transparent bg-clip-text
+                    text-white/30 blur-[8px] mix-blend-screen
                 "
-                style={{
-                    // An animated gradient that creates the "permanent cooling effect"
-                    backgroundImage: 'linear-gradient(120deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,1) 20%, rgba(200,220,255,0.8) 40%, rgba(255,255,255,0.8) 60%, rgba(255,255,255,1) 80%)',
-                    backgroundSize: '200% auto',
-                }}
-                animate={{
-                    backgroundPosition: ["0% 50%", "200% 50%"]
-                }}
+                animate={floatAnim}
                 transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: index * 0.2 // Stagger the shimmer slightly so it travels across
+                    ...floatTransition,
+                    delay: (index * 0.05) + 0.4 // LAGS behind the main letter
                 }}
             >
                 {letter}
             </motion.span>
 
-            {/* The Glow Aura (Behind) - Adds the "Atmosphere" - STRONGER ANIMATION */}
+            {/* The Living Light (Aurora Gradient) - FRONT LAYER */}
             <motion.span
                 className="
-                    absolute inset-0 z-[-1]
+                    relative z-10
                     block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/40 blur-[20px]
+                    text-transparent bg-clip-text
                 "
+                style={{
+                    backgroundImage: 'linear-gradient(120deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,1) 20%, rgba(200,220,255,0.8) 40%, rgba(255,255,255,0.8) 60%, rgba(255,255,255,1) 80%)',
+                    backgroundSize: '200% auto',
+                }}
                 animate={{
-                    opacity: [0.3, 0.6, 0.3],
-                    scale: [0.9, 1.1, 0.9],
+                    ...floatAnim, // Moves up/down
+                    backgroundPosition: ["0% 50%", "200% 50%"] // Shimmers internally
                 }}
                 transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.1
+                    y: floatTransition,
+                    backgroundPosition: {
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }
                 }}
+            >
+                {letter}
+            </motion.span>
+
+            {/* DEEP GLOW (Atmosphere) - Static relative to main, moves with it */}
+            <motion.span
+                className="
+                    absolute inset-0 z-[-2]
+                    block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
+                    text-white/20 blur-[30px]
+                "
+                animate={floatAnim}
+                transition={floatTransition}
             >
                 {letter}
             </motion.span>
@@ -233,10 +256,10 @@ export default function Home() {
             </nav>
 
             {/* 1. HERO SECTION (LIVING CRYSTAL) */}
-            <header className="relative h-[120vh] flex flex-col items-center justify-center z-20 w-full bg-transparent perspective-[1000px]">
+            <header className="relative h-[120vh] flex flex-col items-center justify-center z-20 w-full overflow-visible bg-transparent perspective-[1000px]">
                 <motion.div
                     style={{ opacity: opacityHero, y: ySlow }}
-                    className="text-center relative flex flex-col items-center w-full px-4"
+                    className="text-center relative flex flex-col items-center w-full px-4 md:px-20"
                 >
                     <motion.span
                         initial={{ opacity: 0 }}
@@ -247,45 +270,24 @@ export default function Home() {
                         Studio NF — 2026
                     </motion.span>
 
-                    {/* HERO TITLE: LIVING CRYSTAL (NO BOXES, PERMANENT LOOP + PARALLAX TRACE) */}
-                    <div
-                        className="w-full flex justify-center flex-wrap px-8 py-20 perspective-[2000px]" // Added padding for the 's'
-                        onMouseMove={(e) => {
-                            const { clientX, clientY, currentTarget } = e;
-                            const { left, top, width, height } = currentTarget.getBoundingClientRect();
-                            const x = (clientX - left - width / 2) / 25; // Gentle Follow Factor
-                            const y = (clientY - top - height / 2) / 25;
-                            currentTarget.style.transform = `translate(${x}px, ${y}px)`; // Direct DOM for instant 'Trace'
+                    {/* HERO TITLE: LIVING CRYSTAL (Refactored) */}
+                    <motion.div
+                        initial={{ opacity: 0, filter: "blur(20px)" }}
+                        animate={{
+                            opacity: 1,
+                            filter: "blur(0px)",
+                            // Levitation removed here, moved to letters
                         }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = `translate(0px, 0px)`;
-                            e.currentTarget.style.transition = "transform 1s ease-out"; // Smooth return
+                        transition={{
+                            opacity: { duration: 2, ease: "easeOut" },
+                            filter: { duration: 2, ease: "easeOut" },
                         }}
-                        style={{ transition: "transform 0.1s ease-out" }} // Smooth follow
+                        className="w-full flex justify-center flex-wrap px-8 py-20"
                     >
-                        <motion.div
-                            initial={{ opacity: 0, filter: "blur(20px)" }}
-                            animate={{
-                                opacity: 1,
-                                filter: "blur(0px)",
-                                y: [0, -20, 0], // The "True Weightless" Levitation
-                            }}
-                            transition={{
-                                opacity: { duration: 2, ease: "easeOut" },
-                                filter: { duration: 2, ease: "easeOut" },
-                                y: {
-                                    duration: 8,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }
-                            }}
-                            className="flex justify-center flex-wrap"
-                        >
-                            {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
-                                <LivingCrystalLetter key={i} letter={char} index={i} />
-                            ))}
-                        </motion.div>
-                    </div>
+                        {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
+                            <LivingCrystalLetter key={i} letter={char} index={i} />
+                        ))}
+                    </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3, duration: 2 }}
