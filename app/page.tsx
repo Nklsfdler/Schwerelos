@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
-import { Wind, Sparkles, MousePointer2 } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue, useMotionValueEvent } from 'framer-motion';
+import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 
 const FRAME_COUNT = 104;
@@ -34,57 +34,54 @@ function MouseTrail() {
     );
 }
 
-// --- LIQUID GLASS LETTER (True Refraction) ---
-// Uses SVG Filters for genuine liquid distortion.
+// --- LIVING CRYSTAL LETTER (Static Liquid Glass) ---
 const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number }) => {
     return (
-        <div className="relative inline-block cursor-default select-none px-[0.1vw] py-4 group">
-            {/* 
-                THE LIQUID FILTER 
-                This SVG filter creates the "Melted Glass" distortion.
-                We apply it via CSS `filter: url(#liquid-{index})`.
-             */}
-            <svg className="absolute w-0 h-0">
-                <defs>
-                    <filter id={`liquid-${index}`}>
-                        <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" seed={index}>
-                            <animate attributeName="baseFrequency" values="0.01;0.02;0.01" dur="10s" repeatCount="indefinite" />
-                        </feTurbulence>
-                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" />
-                    </filter>
-                </defs>
-            </svg>
+        <div className="relative inline-block cursor-default select-none px-[0.2vw] py-4">
 
-            {/* 1. Base Text - LIQUID GLASS (Distorted) */}
-            <span
-                className="
-                    relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/10
-                "
+            {/* 1. Base Text (Pure Liquid Glass) */}
+            <span className="
+                relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
+                text-transparent bg-clip-text
+            "
                 style={{
-                    filter: `url(#liquid-${index}) blur(1px)`, // Apply the unique liquid filter
+                    // "Liquid Metal/Glass" Gradient - subtly shifts vertical angle
+                    backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0.8) 100%)',
+                    backgroundSize: '100% 120%',
                 }}
             >
-                {/* Internal Refraction Gradient */}
-                <span className="text-transparent bg-clip-text bg-gradient-to-b from-white/90 via-white/20 to-white/90">
+                {letter}
+
+                {/* 2. Static Sheen (The "Reflection") - No movement, just presence */}
+                <span
+                    className="absolute inset-0 block text-transparent bg-clip-text mix-blend-overlay opacity-50"
+                    style={{
+                        backgroundImage: 'linear-gradient(to bottom, transparent 40%, white 50%, transparent 60%)',
+                    }}
+                >
                     {letter}
                 </span>
             </span>
 
-            {/* 2. The Glow Aura (Behind) */}
-            <span
+            {/* 3. The Glow Aura (Behind) - Subtle Breathing "Soul" */}
+            <motion.span
                 className="
                     absolute inset-0 z-[-1]
                     block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/30 blur-[30px] opacity-60
+                    text-white/20 blur-[30px]
                 "
-                style={{
-                    // Adding a different distortion for the glow for depth
-                    filter: `blur(20px)`,
+                animate={{
+                    opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.5
                 }}
             >
                 {letter}
-            </span>
+            </motion.span>
         </div>
     );
 };
@@ -250,7 +247,7 @@ export default function Home() {
                         Studio NF — 2026
                     </motion.span>
 
-                    {/* HERO TITLE: LIQUID GLASS (Distorted SVG) */}
+                    {/* HERO TITLE: LIVING CRYSTAL (NO BOXES, PERMANENT LOOP) */}
                     <motion.div
                         initial={{ opacity: 0, filter: "blur(20px)" }}
                         animate={{
