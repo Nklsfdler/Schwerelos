@@ -186,7 +186,10 @@ export default function Home() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const sculptureSectionRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress: stickyProgress } = useScroll({ target: sculptureSectionRef, offset: ["start start", "end end"] });
-    const smoothProgress = useSpring(stickyProgress, { mass: 0.1, stiffness: 100, damping: 20, restDelta: 0.001 });
+
+    // --- SCROLL PHYSICS (Rutschiger/Fast Glide) ---
+    // Lower damping = 'Oilier' / Faster glide. From 20 to 12.
+    const smoothProgress = useSpring(stickyProgress, { mass: 0.1, stiffness: 100, damping: 12, restDelta: 0.001 });
 
     useEffect(() => {
         const canvas = canvasRef.current;
