@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { MotionValue, useMotionValueEvent } from 'framer-motion';
 
-// --- HANS ZIMMER ENGINE (Filter Modulation) ---
-// Source: User provided recording (ScreenRecording... -> HansZimmer_Final.mp3)
-// Logic: Starts deep/muffled (Lowpass), Opens up to full brightness at sculpture.
-// Default: OFF.
+// --- HANS ZIMMER ENGINE (Short Version + Infinite Depth) ---
+// Source: HansZimmer_Short.mp3
+// Logic: 
+// - Start: Deep/Muffled (Lowpass 100Hz).
+// - Middle (Sculpture): Full Open (20kHz).
+// - End: Deep/Muffled again (Lowpass 100Hz). -> "Am Ende auch dumpfes Hintergrundgeräusch".
 
 interface AmbientSoundProps {
     scrollProgress: MotionValue<number>;
@@ -39,8 +41,8 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         const ctx = new Ctx();
         audioContextRef.current = ctx;
 
-        // 1. Source
-        const audio = new Audio("/HansZimmer_Final.mp3");
+        // 1. Source (New Short File)
+        const audio = new Audio("/HansZimmer_Short.mp3");
         audio.loop = true;
         audio.crossOrigin = "anonymous";
         audioElementRef.current = audio;
@@ -50,7 +52,7 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         // 2. Filter (The "Depth" Effect)
         const filter = ctx.createBiquadFilter();
         filter.type = "lowpass";
-        filter.frequency.value = 100; // Start Deep/Underwater
+        filter.frequency.value = 100; // Start Deep
         filter.Q.value = 1;
         filterNodeRef.current = filter;
 
@@ -65,7 +67,7 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         gain.connect(ctx.destination);
 
         // Play
-        audio.play().then(() => setIsMuted(false)).catch(e => console.error("Autoplay blocked (normal):", e));
+        audio.play().then(() => setIsMuted(false)).catch(e => console.error("Autoplay blocked:", e));
     };
 
     const toggleSound = () => {
@@ -90,45 +92,44 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         const now = audioContextRef.current.currentTime;
 
         // MAPPING:
-        // 0.0 - 0.2: DEEP (Freq: 150Hz, Vol: 0.3) -> Background Drone feel
-        // 0.2 - 0.8: CLIMAX (Freq: 20kHz, Vol: 1.0) -> Full Emotion
-        // 0.8 - 1.0: FADE OUT (Freq: 500Hz, Vol: 0.0)
+        // Parabolic Curve for Filter:
+        // 0.0 -> 100 Hz (Muffled)
+        // 0.5 -> 20,000 Hz (Bright - Animation Climax)
+        // 1.0 -> 100 Hz (Muffled)
 
-        let targetFreq = 150;
-        let targetVol = 0.3;
+        // Volume: Keeps constant presence, maybe louder at peak.
+        // 0.0 -> 0.4
+        // 0.5 -> 1.0
+        // 1.0 -> 0.4
 
-        if (latest < 0.2) {
-            targetFreq = 150;
-            targetVol = 0.3;
-        } else if (latest < 0.8) {
-            // BUILD UP
-            const p = (latest - 0.2) / 0.6;
-            // Exponential opening of filter matches human hearing better
-            targetFreq = 150 * Math.pow(100, p);
-            targetVol = 0.3 + (p * 0.7);
-        } else {
-            // FADE OUT
-            targetVol = 0;
-        }
+        // Distance from center (0.5)
+        const dist = Math.abs(latest - 0.5) * 2; // 0 (at center) to 1 (at edges)
 
-        // Clamp
-        targetFreq = Math.max(20, Math.min(22000, targetFreq));
-        targetVol = Math.max(0, Math.min(1, targetVol));
+        // Invert for "Intensity at Center"
+        const intensity = 1.0 - dist;
 
-        // Smooth Ramp (Avoid clicking)
-        filterNodeRef.current.frequency.setTargetAtTime(targetFreq, now, 0.1);
+        // Exponential Frequency Map
+        // Low: 100Hz, High: 20000Hz
+        const targetFreq = 100 * Math.pow(200, intensity);
+
+        const targetVol = 0.4 + (intensity * 0.6);
+
+        // Safety Clamp
+        const safeFreq = Math.max(20, Math.min(22000, targetFreq));
+
+        // Smooth Ramp
+        filterNodeRef.current.frequency.setTargetAtTime(safeFreq, now, 0.1);
         gainNodeRef.current.gain.setTargetAtTime(targetVol, now, 0.1);
     });
 
     return (
         <button
             onClick={toggleSound}
-            className="fixed bottom-8 right-8 z-[100] p-4 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all group flex items-center gap-3"
+            // Button: Icon Only, Clean, Bottom Right
+            // Increased tap target for mobile
+            className="fixed bottom-6 right-6 z-[100] w-12 h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center"
         >
-            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-            <span className="text-[10px] uppercase tracking-[0.2em] font-[family-name:var(--font-outfit)]">
-                {isMuted ? "Ton an" : "Ton aus"}
-            </span>
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </button>
     );
 }
