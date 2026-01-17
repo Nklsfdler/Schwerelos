@@ -36,72 +36,64 @@ function MouseTrail() {
 // --- LIVING CRYSTAL LETTER (Organic & Permanent) ---
 // No boxes. No static borders. Just living, breathing light.
 const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number }) => {
-    // Levitation Animation Definition
-    const floatAnim = { y: [0, -30, 0] }; // Increased range slightly for more "breath"
-    const floatTransition = {
-        duration: 7,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: index * 0.05 // Slight wave across the word
-    };
-
     return (
-        <div className="relative inline-block cursor-default select-none px-[0.1vw] py-4">
-            {/* 
-                THE GHOST TRAIL (Trace Effect) 
-                Follows the main letter but with a delay, creating a "motion blur" feel.
-             */}
+        <div className="relative inline-block cursor-default select-none px-[0.2vw] py-4"> {/* Added padding for "s" cutoff */}
+
+            {/* 1. Base Text (Transparent with clipping) */}
+            <span className="
+                relative z-10 block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
+                text-transparent bg-clip-text bg-white/10
+            ">
+                {letter}
+
+                {/* 2. The EPIK GLAS FADE (Moving Sheen) */}
+                <motion.span
+                    className="absolute inset-0 block text-transparent bg-clip-text"
+                    style={{
+                        backgroundImage: 'linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.9) 50%, transparent 70%)',
+                        backgroundSize: '200% 100%',
+                    }}
+                    animate={{ baseFrequency: 0 }} // Dummy to force render
+                // We animate background-position from -100% to 200%
+                >
+                    <motion.span
+                        className="absolute inset-0 block bg-clip-text text-transparent"
+                        style={{
+                            backgroundImage: 'inherit',
+                            backgroundSize: 'inherit',
+                        }}
+                        animate={{
+                            backgroundPosition: ['100% 0%', '-100% 0%']
+                        }}
+                        transition={{
+                            duration: 6,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: index * 0.15
+                        }}
+                    >
+                        {letter}
+                    </motion.span>
+                </motion.span>
+            </span>
+
+            {/* 3. The Glow Aura (Behind) - "Moving Fade that follows" */}
             <motion.span
                 className="
                     absolute inset-0 z-[-1]
                     block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/30 blur-[8px] mix-blend-screen
+                    text-white/30 blur-[25px]
                 "
-                animate={floatAnim}
-                transition={{
-                    ...floatTransition,
-                    delay: (index * 0.05) + 0.4 // LAGS behind the main letter
-                }}
-            >
-                {letter}
-            </motion.span>
-
-            {/* The Living Light (Aurora Gradient) - FRONT LAYER */}
-            <motion.span
-                className="
-                    relative z-10
-                    block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-transparent bg-clip-text
-                "
-                style={{
-                    backgroundImage: 'linear-gradient(120deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,1) 20%, rgba(200,220,255,0.8) 40%, rgba(255,255,255,0.8) 60%, rgba(255,255,255,1) 80%)',
-                    backgroundSize: '200% auto',
-                }}
                 animate={{
-                    ...floatAnim, // Moves up/down
-                    backgroundPosition: ["0% 50%", "200% 50%"] // Shimmers internally
+                    opacity: [0.2, 0.6, 0.2],
+                    x: [-5, 5, -5], // Subtle lateral movement "following" the sheen
                 }}
                 transition={{
-                    y: floatTransition,
-                    backgroundPosition: {
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                    }
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.15
                 }}
-            >
-                {letter}
-            </motion.span>
-
-            {/* DEEP GLOW (Atmosphere) - Static relative to main, moves with it */}
-            <motion.span
-                className="
-                    absolute inset-0 z-[-2]
-                    block text-[14vw] md:text-[13vw] font-[family-name:var(--font-outfit)] font-black tracking-[-0.05em] leading-[0.8]
-                    text-white/20 blur-[30px]
-                "
-                animate={floatAnim}
-                transition={floatTransition}
             >
                 {letter}
             </motion.span>
@@ -256,10 +248,10 @@ export default function Home() {
             </nav>
 
             {/* 1. HERO SECTION (LIVING CRYSTAL) */}
-            <header className="relative h-[120vh] flex flex-col items-center justify-center z-20 w-full overflow-visible bg-transparent perspective-[1000px]">
+            <header className="snap-section relative h-screen flex flex-col items-center justify-center z-20 w-full overflow-hidden bg-transparent perspective-[1000px]">
                 <motion.div
                     style={{ opacity: opacityHero, y: ySlow }}
-                    className="text-center relative flex flex-col items-center w-full px-4 md:px-20"
+                    className="text-center relative flex flex-col items-center w-full px-4"
                 >
                     <motion.span
                         initial={{ opacity: 0 }}
@@ -270,19 +262,24 @@ export default function Home() {
                         Studio NF — 2026
                     </motion.span>
 
-                    {/* HERO TITLE: LIVING CRYSTAL (Refactored) */}
+                    {/* HERO TITLE: LIVING CRYSTAL (NO BOXES, PERMANENT LOOP) */}
                     <motion.div
                         initial={{ opacity: 0, filter: "blur(20px)" }}
                         animate={{
                             opacity: 1,
                             filter: "blur(0px)",
-                            // Levitation removed here, moved to letters
+                            y: [0, -20, 0], // The "True Weightless" Levitation
                         }}
                         transition={{
                             opacity: { duration: 2, ease: "easeOut" },
                             filter: { duration: 2, ease: "easeOut" },
+                            y: {
+                                duration: 8,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }
                         }}
-                        className="w-full flex justify-center flex-wrap px-8 py-20"
+                        className="w-full flex justify-center flex-wrap px-8 py-10"
                     >
                         {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
                             <LivingCrystalLetter key={i} letter={char} index={i} />
@@ -302,7 +299,7 @@ export default function Home() {
             </header>
 
             {/* 2. SCROLL SECTION */}
-            <section ref={sculptureSectionRef} id="skulptur" className="relative h-[1000vh] z-20 pointer-events-none">
+            <section ref={sculptureSectionRef} id="skulptur" className="snap-section relative h-[1000vh] z-20 pointer-events-none">
                 <div className="sticky top-0 h-screen w-full flex items-center justify-center">
                     <div className="absolute inset-0 flex flex-col justify-center">
                         <div className="max-w-[1600px] mx-auto w-full px-8 relative h-full">
@@ -327,7 +324,7 @@ export default function Home() {
             </section>
 
             {/* 3. BENTO GRID */}
-            <section id="aesthetik" className="relative z-30 bg-[#030303] py-32 px-4 md:px-8">
+            <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-32 px-4 md:px-8 min-h-screen flex items-center">
                 <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6">
 
                     {/* TILE 1: DESIGN DETAIL (Form Aesthetics) */}

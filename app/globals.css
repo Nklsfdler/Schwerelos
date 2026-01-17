@@ -4,29 +4,34 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 5, 5, 5;
-  --background-end-rgb: 5, 5, 5;
+  --background-start-rgb: 3, 3, 3;
+  --background-end-rgb: 0, 0, 0;
+}
+
+/* Premium Scroll Snapping */
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory; /* "Premium" guided feel */
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: #050505;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; 
-  overflow-x: hidden;
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-/* Custom scrollbar to match the dark aesthetic */
-::-webkit-scrollbar {
-  width: 8px;
+/* Utilities for Scroll Snap Sections */
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
-::-webkit-scrollbar-track {
-  background: #050505;
-}
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
