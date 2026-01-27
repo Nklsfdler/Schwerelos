@@ -5,8 +5,8 @@ import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-
 import { clsx } from "clsx";
 
 // Configuration
-const FRAME_COUNT = 104;
-const IMAGE_PATH_PREFIX = "/sequence/ezgif-frame-";
+const FRAME_COUNT = 200;
+const IMAGE_PATH_PREFIX = "/sequence/schwerelos/Design_ohne_Titel_";
 const IMAGE_EXTENSION = ".jpg";
 
 // Epic Narrative - Keywords Only

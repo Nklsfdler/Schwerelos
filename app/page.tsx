@@ -5,9 +5,17 @@ import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotio
 import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 
-const FRAME_COUNT = 104;
-const IMAGE_PATH_PREFIX = "/sequence/ezgif-frame-";
+const FRAME_COUNT = 200;
+const IMAGE_PATH_PREFIX = "/sequence/schwerelos/Design_ohne_Titel_";
 const IMAGE_EXTENSION = ".jpg";
+
+// Epic Narrative - Keywords Only (Restored)
+const NARRATIVE_POINTS = [
+    { text: "SCHWERELOS", start: 0.0, end: 0.15 },
+    { text: "AUFSTIEG", start: 0.2, end: 0.35 },
+    { text: "IMPULS", start: 0.45, end: 0.6 },
+    { text: "AUFLÖSUNG", start: 0.7, end: 0.85 },
+];
 
 // --- HAWAII TRAIL (Desktop Only) ---
 function MouseTrail() {
@@ -139,6 +147,35 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             />
             <div className="relative h-full">{children}</div>
         </div>
+    );
+}
+
+// --- RESTORED: Narrative Text Component ---
+function NarrativeText({ data, scrollYProgress }: { data: any, scrollYProgress: any }) {
+    const opacity = useTransform(
+        scrollYProgress,
+        [data.start, data.start + 0.05, data.end - 0.05, data.end],
+        [0, 1, 1, 0]
+    );
+
+    const scale = useTransform(
+        scrollYProgress,
+        [data.start, data.end],
+        [0.8, 1.2]
+    );
+
+    const y = useTransform(
+        scrollYProgress,
+        [data.start, data.end],
+        [100, -100]
+    );
+
+    return (
+        <motion.div style={{ opacity, scale, y }} className="absolute w-full text-center">
+            <h1 className="font-[family-name:var(--font-outfit)] text-[15vw] font-black text-white leading-none tracking-tighter uppercase blur-sm md:blur-0 sm:text-[18vw] mix-blend-difference">
+                {data.text}
+            </h1>
+        </motion.div>
     );
 }
 
@@ -295,19 +332,11 @@ export default function Home() {
             <section ref={sculptureSectionRef} id="skulptur" className="snap-section relative h-[1000vh] z-20 pointer-events-none">
                 <div className="sticky top-0 h-screen w-full flex items-center justify-center">
                     <div className="absolute inset-0 flex flex-col justify-center">
-                        <div className="max-w-[1600px] mx-auto w-full px-8 relative h-full">
-                            <motion.div style={{ opacity: useTransform(stickyProgress, [0.1, 0.2], [0, 1]) }} className="absolute top-[20%] left-4 md:left-24 max-w-sm">
-                                <span className="text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] text-white/30 mb-2 block">Phase 1</span>
-                                <h2 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-thin tracking-tighter text-white mb-4">Ursprung</h2>
-                            </motion.div>
-                            <motion.div style={{ opacity: useTransform(stickyProgress, [0.4, 0.5], [0, 1]) }} className="absolute top-[45%] right-4 md:right-24 max-w-sm text-right">
-                                <span className="text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] text-white/30 mb-2 block">Phase 2</span>
-                                <h2 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-thin tracking-tighter text-white mb-4">Struktur</h2>
-                            </motion.div>
-                            <motion.div style={{ opacity: useTransform(stickyProgress, [0.75, 0.85], [0, 1]) }} className="absolute bottom-[20%] left-4 md:left-24 max-w-sm">
-                                <span className="text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] text-white/30 mb-2 block">Phase 3</span>
-                                <h2 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-thin tracking-tighter text-white mb-4">Finale</h2>
-                            </motion.div>
+                        <div className="max-w-[1600px] mx-auto w-full px-8 relative h-full flex items-center justify-center mix-blend-difference z-30">
+                            {/* RESTORED: Narrative Text Overlay (Glass Effect) */}
+                            {NARRATIVE_POINTS.map((point, index) => (
+                                <NarrativeText key={index} data={point} scrollYProgress={stickyProgress} />
+                            ))}
                         </div>
                     </div>
                 </div>
