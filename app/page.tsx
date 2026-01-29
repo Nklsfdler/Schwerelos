@@ -4,6 +4,11 @@ import React, { useRef, useEffect, useState, MouseEvent } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
+import ModelSection from './components/ModelSection';
+import ProductSection from './components/ProductSection';
+import { CartProvider } from './context/CartContext';
+import { CartOverlay, CheckoutOverlay } from './components/CheckoutOverlay';
+import { SectionSeparator } from "./components/SectionSeparator";
 
 const FRAME_COUNT = 200;
 const IMAGE_PATH_PREFIX = "/sequence/schwerelos/Design_ohne_Titel_";
@@ -11,10 +16,10 @@ const IMAGE_EXTENSION = ".jpg";
 
 // Epic Narrative - Keywords Only (Restored)
 const NARRATIVE_POINTS = [
-    { text: "SCHWERELOS", start: 0.0, end: 0.15 },
-    { text: "AUFSTIEG", start: 0.2, end: 0.35 },
-    { text: "IMPULS", start: 0.45, end: 0.6 },
-    { text: "AUFLÖSUNG", start: 0.7, end: 0.85 },
+    { text: "SCHWERELOS", start: 0.1, end: 0.25 }, // Starts earlier, overlaps with hero fade
+    { text: "AUFSTIEG", start: 0.3, end: 0.45 },
+    { text: "IMPULS", start: 0.55, end: 0.7 },
+    { text: "AUFLÖSUNG", start: 0.8, end: 0.95 },
 ];
 
 // --- HAWAII TRAIL (Desktop Only) ---
@@ -58,14 +63,14 @@ const LivingCrystalLetter = ({ letter, index }: { letter: string, index: number 
                     backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(200,220,255,0.8) 50%, rgba(255,255,255,0.9) 100%)',
                 }}
                 animate={{
-                    scaleY: [1, 1.08, 1],
-                    y: [0, -2, 0],
+                    scaleY: [1, 1.15, 1], // More stretch
+                    y: [0, -15, 0], // Deeper float (was -2)
                 }}
                 transition={{
-                    duration: 3,
+                    duration: 6, // Much slower (was 3)
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.15
+                    delay: index * 0.2 // Slower ripple
                 }}
             >
                 {letter}
@@ -171,8 +176,8 @@ function NarrativeText({ data, scrollYProgress }: { data: any, scrollYProgress: 
     );
 
     return (
-        <motion.div style={{ opacity, scale, y }} className="absolute w-full text-center">
-            <h1 className="font-[family-name:var(--font-outfit)] text-[15vw] font-black text-white leading-none tracking-tighter uppercase blur-sm md:blur-0 sm:text-[18vw] mix-blend-difference">
+        <motion.div style={{ opacity, scale, y }} className="absolute w-full text-center flex justify-center items-center">
+            <h1 className="font-[family-name:var(--font-outfit)] text-[12vw] font-black text-white leading-none tracking-tighter uppercase blur-sm md:blur-0 mix-blend-difference">
                 {data.text}
             </h1>
         </motion.div>
@@ -191,7 +196,7 @@ export default function Home() {
     });
 
     const ySlow = useTransform(scrollYProgress, [0, 1], [0, -200]);
-    const opacityHero = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+    const opacityHero = useTransform(scrollYProgress, [0, 0.4], [1, 0]); // Fade out later for overlap
 
     // Image Preloader
     useEffect(() => {
@@ -264,168 +269,208 @@ export default function Home() {
 
     return (
         // MOBILE FIX: Cursor-none only on md+ screens. Touch devices need normal cursor/feedback.
-        <div ref={containerRef} className="bg-[#030303] text-slate-200 font-sans selection:bg-white/20 overflow-x-hidden relative md:cursor-none cursor-auto">
+        <CartProvider>
+            <div ref={containerRef} className="bg-[#030303] text-slate-200 font-sans selection:bg-white/20 overflow-x-hidden relative md:cursor-none cursor-auto">
 
-            {/* ETHEREAL MOUSE TRAIL (Desktop Only) */}
-            <MouseTrail />
+                {/* ETHEREAL MOUSE TRAIL (Desktop Only) */}
+                <MouseTrail />
 
-            {/* FIXED CANVAS LAYER */}
-            <motion.div style={{ opacity: canvasOpacity }} className="fixed inset-0 w-full h-full z-[15] pointer-events-none">
-                <canvas ref={canvasRef} className="w-full h-full object-cover" />
-            </motion.div>
-
-            {/* LOADING (Soft Fade) */}
-            <div className={`fixed inset-0 z-[200] bg-[#030303] flex flex-col items-center justify-center transition-opacity duration-[2000ms] pointer-events-none ${isLoaded ? 'opacity-0' : 'opacity-100'}`}>
-                <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/50 to-transparent animate-pulse" />
-            </div>
-
-            {/* BACKGROUND ATMOSPHERE */}
-            <div className="fixed inset-0 pointer-events-none z-[1]">
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
-                <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#030303] opacity-80" />
-            </div>
-
-            {/* NAV - STUDIO NF */}
-            <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12">
-                <span className="font-[family-name:var(--font-outfit)] font-light text-xs uppercase tracking-[0.2em] text-white/50">Studio NF</span>
-                <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
-                    <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
-                    <a href="#aesthetik" className="cursor-pointer hover:text-white transition-colors duration-500">Ästhetik</a>
-                    <a href="#kontakt" className="cursor-pointer hover:text-white transition-colors duration-500">Kontakt</a>
-                </div>
-            </nav>
-
-            {/* 1. HERO SECTION */}
-            <header className="snap-section relative h-screen flex flex-col items-center justify-center z-20 w-full overflow-hidden bg-transparent perspective-[1000px]">
-                <motion.div
-                    style={{ opacity: opacityHero, y: ySlow }}
-                    className="text-center relative flex flex-col items-center w-full px-4"
-                >
-                    <motion.span
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.4 }}
-                        transition={{ delay: 1, duration: 3 }}
-                        className="text-[10px] md:text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.8em] text-white/40 mb-16 block"
-                    >
-                        Studio NF — 2026
-                    </motion.span>
-
-                    <div className="w-full flex justify-center flex-wrap px-8 py-10">
-                        {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
-                            <LivingCrystalLetter key={i} letter={char} index={i} />
-                        ))}
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3, duration: 2 }}
-                        className="mt-24 flex flex-col items-center"
-                    >
-                        <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 tracking-widest uppercase">
-                            Wenn Materie zu atmen beginnt
-                        </p>
-                        <div className="w-px h-12 bg-gradient-to-b from-white/20 to-transparent mt-8" />
-                    </motion.div>
+                {/* FIXED CANVAS LAYER */}
+                <motion.div style={{ opacity: canvasOpacity }} className="fixed inset-0 w-full h-full z-[15] pointer-events-none">
+                    <canvas ref={canvasRef} className="w-full h-full object-cover" />
                 </motion.div>
-            </header>
 
-            {/* 2. SCROLL SECTION */}
-            <section ref={sculptureSectionRef} id="skulptur" className="snap-section relative h-[1000vh] z-20 pointer-events-none">
-                <div className="sticky top-0 h-screen w-full flex items-center justify-center">
-                    <div className="absolute inset-0 flex flex-col justify-center">
-                        <div className="max-w-[1600px] mx-auto w-full px-8 relative h-full flex items-center justify-center mix-blend-difference z-30">
-                            {/* RESTORED: Narrative Text Overlay (Glass Effect) */}
-                            {NARRATIVE_POINTS.map((point, index) => (
-                                <NarrativeText key={index} data={point} scrollYProgress={stickyProgress} />
+                {/* LOADING (Soft Fade) */}
+                <div className={`fixed inset-0 z-[200] bg-[#030303] flex flex-col items-center justify-center transition-opacity duration-[2000ms] pointer-events-none ${isLoaded ? 'opacity-0' : 'opacity-100'}`}>
+                    <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/50 to-transparent animate-pulse" />
+                </div>
+
+                {/* BACKGROUND ATMOSPHERE */}
+                <div className="fixed inset-0 pointer-events-none z-[1]">
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+                    <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#030303] opacity-80" />
+                </div>
+
+                {/* NAV - STUDIO NF */}
+                <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12">
+                    <span className="font-[family-name:var(--font-outfit)] font-light text-xs uppercase tracking-[0.2em] text-white/50">Studio NF</span>
+                    <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
+                        <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
+                        <a href="#aesthetik" className="cursor-pointer hover:text-white transition-colors duration-500">Ästhetik</a>
+                        <a href="#kontakt" className="cursor-pointer hover:text-white transition-colors duration-500">Kontakt</a>
+                    </div>
+                </nav>
+
+                {/* 1. HERO SECTION */}
+                <header className="snap-section relative h-screen flex flex-col items-center justify-center z-20 w-full overflow-hidden bg-transparent perspective-[1000px]">
+                    <motion.div
+                        style={{ opacity: opacityHero, y: ySlow }}
+                        className="text-center relative flex flex-col items-center w-full px-4"
+                    >
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.4 }}
+                            transition={{ delay: 1, duration: 3 }}
+                            className="text-[10px] md:text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.8em] text-white/40 mb-16 block"
+                        >
+                            Studio NF — 2026
+                        </motion.span>
+
+                        <div className="w-full flex justify-center flex-wrap px-8 py-10">
+                            {['S', 'c', 'h', 'w', 'e', 'r', 'e', 'l', 'o', 's'].map((char, i) => (
+                                <LivingCrystalLetter key={i} letter={char} index={i} />
                             ))}
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* 3. BENTO GRID */}
-            <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-32 px-4 md:px-8 min-h-screen flex items-center">
-                <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6">
-
-                    {/* TILE 1: DESIGN DETAIL */}
-                    <SpotlightCard colSpan="md:col-span-8" rowSpan="md:row-span-2" className="min-h-[600px] md:min-h-[800px]">
-                        <div className="absolute inset-0 z-0">
-                            <img src="/sequence/schwerelos/Whisk_48428d02bced16aba50421a4775f0ffedr.jpeg" alt="Design Detail" className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-1000 pointer-events-none" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303]" />
-                        </div>
-                        <div className="absolute top-0 left-0 p-8 md:p-12 w-full md:w-2/3 z-10">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm mb-6">
-                                <Sparkles className="w-3 h-3 text-white/60" />
-                                <span className="text-[9px] uppercase tracking-widest text-white/60">Ästhetik</span>
-                            </div>
-                            <h3 className="text-5xl md:text-8xl font-[family-name:var(--font-outfit)] font-bold text-white mb-8 leading-none">Organische <br /> Geometrie.</h3>
-                            <p className="font-[family-name:var(--font-dm)] text-lg text-white/50 leading-relaxed max-w-xl pb-6">
-                                Meine Formsprache folgt dem Instinkt des Aufstiegs. Dynamische, organische Windungen und hauchdünne Verbindungen bilden eine Geometrie, die atmet.
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3, duration: 2 }}
+                            className="mt-24 flex flex-col items-center"
+                        >
+                            <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 tracking-widest uppercase">
+                                Wenn Materie zu atmen beginnt
                             </p>
-                        </div>
-                    </SpotlightCard>
+                            <div className="w-px h-12 bg-gradient-to-b from-white/20 to-transparent mt-8" />
+                        </motion.div>
+                    </motion.div>
+                </header>
 
-                    {/* TILE 2: PHILOSOPHY */}
-                    <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[400px]">
-                        <div className="p-10 flex flex-col justify-between h-full relative z-10">
-                            <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
-                            <div>
-                                <span className="text-[9px] uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
-                            </div>
-                            <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
-                                <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
-                            </div>
-                        </div>
-                    </SpotlightCard>
-
-                    {/* TILE 3: ARTIST */}
-                    <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[600px]">
-                        <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-top filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
-                        <div className="absolute bottom-0 left-0 p-10 w-full">
-                            <div className="h-px w-12 bg-white/20 mb-6" />
-                            <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
-                            <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
-                            <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
-                                <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
+                {/* 2. SCROLL SECTION */}
+                <section ref={sculptureSectionRef} id="skulptur" className="snap-section relative h-[1000vh] z-20 pointer-events-none">
+                    <div className="sticky top-0 h-screen w-full flex items-center justify-center">
+                        <div className="absolute inset-0 flex flex-col justify-center">
+                            <div className="max-w-[1600px] mx-auto w-full px-8 relative h-full flex items-center justify-center mix-blend-difference z-30">
+                                {/* RESTORED: Narrative Text Overlay (Glass Effect) */}
+                                {NARRATIVE_POINTS.map((point, index) => (
+                                    <NarrativeText key={index} data={point} scrollYProgress={stickyProgress} />
+                                ))}
                             </div>
                         </div>
-                    </SpotlightCard>
+                    </div>
+                </section>
 
-                    {/* TILE 4: CONTEXT */}
-                    <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] bg-white text-black border-none">
-                        <div className="bg-white absolute inset-0 text-black p-10 flex flex-col justify-between transition-colors hover:bg-neutral-100">
-                            <div className="flex justify-between items-start">
-                                <div className="space-y-1">
-                                    <span className="text-[9px] uppercase tracking-widest font-bold opacity-30">Context</span>
-                                    <h5 className="text-2xl font-[family-name:var(--font-outfit)] font-bold">B.Sc. Technisches<br /> Design</h5>
+                {/* 3. BENTO GRID */}
+                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-32 px-4 md:px-8 min-h-screen flex items-center">
+                    <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6">
+
+                        {/* TILE 1: DESIGN DETAIL */}
+                        <SpotlightCard colSpan="md:col-span-8" rowSpan="md:row-span-2" className="min-h-[600px] md:min-h-[800px]">
+                            <div className="absolute inset-0 z-0">
+                                <img src="/sequence/schwerelos/Whisk_48428d02bced16aba50421a4775f0ffedr.jpeg" alt="Design Detail" className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-1000 pointer-events-none" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303]" />
+                            </div>
+                            <div className="absolute top-0 left-0 p-8 md:p-12 w-full md:w-2/3 z-10">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm mb-6">
+                                    <Sparkles className="w-3 h-3 text-white/60" />
+                                    <span className="text-[9px] uppercase tracking-widest text-white/60">Ästhetik</span>
                                 </div>
-                                <div className="w-1.5 h-1.5 bg-black rounded-full" />
+                                <h3 className="text-5xl md:text-8xl font-[family-name:var(--font-outfit)] font-bold text-white mb-8 leading-none">Organische <br /> Geometrie.</h3>
+                                <p className="font-[family-name:var(--font-dm)] text-lg text-white/50 leading-relaxed max-w-xl pb-6">
+                                    Meine Formsprache folgt dem Instinkt des Aufstiegs. Dynamische, organische Windungen und hauchdünne Verbindungen bilden eine Geometrie, die atmet.
+                                </p>
                             </div>
-                            <div className="border-t border-black/5 pt-4 mt-4">
-                                <p className="text-xs font-[family-name:var(--font-dm)] opacity-50">🇩🇪 TH Ingolstadt<br /> Semesterprojekt 2026</p>
+                        </SpotlightCard>
+
+                        {/* TILE 2: PHILOSOPHY */}
+                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[400px]">
+                            <div className="p-10 flex flex-col justify-between h-full relative z-10">
+                                <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
+                                <div>
+                                    <span className="text-[9px] uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
+                                    <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
+                                </div>
+                                <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
+                                    <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                                </div>
                             </div>
-                        </div>
-                    </SpotlightCard>
+                        </SpotlightCard>
 
-                    {/* TILE 5: CONTACT */}
-                    <SpotlightCard id="kontakt" colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px]">
-                        <div className="p-10 flex flex-col justify-center h-full items-center text-center relative z-10">
-                            <MousePointer2 className="w-6 h-6 text-white/80 mb-6" />
-                            <h3 className="text-2xl font-[family-name:var(--font-outfit)] text-white mb-2">Projekt anfragen</h3>
-                            <a href="mailto:niklas@studio-nf.com" className="px-8 py-3 rounded-full border border-white/10 text-[10px] text-white uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all mt-6 inline-block">Contact</a>
-                        </div>
-                    </SpotlightCard>
-                </div>
-            </section>
+                        {/* TILE 3: ARTIST */}
+                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[600px]">
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-top filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
+                            <div className="absolute bottom-0 left-0 p-10 w-full">
+                                <div className="h-px w-12 bg-white/20 mb-6" />
+                                <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
+                                <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
+                                <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
+                                    <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
+                                </div>
+                            </div>
+                        </SpotlightCard>
 
-            <footer className="py-24 border-t border-white/5 bg-[#030303] text-center relative z-20">
-                <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
-                <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 Studio NF</p>
-            </footer>
+                        {/* TILE 4: CONTEXT (UPDATED WITH BLUE FADE & DETAILS) */}
+                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border-none overflow-hidden relative">
+                            {/* Blue Fade Background */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-black p-10 flex flex-col justify-between transition-all hover:scale-[1.02] duration-500">
+                                <div>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-[9px] uppercase tracking-widest font-bold opacity-40">Studium & Kontext</span>
+                                        <div className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-pulse" />
+                                    </div>
+                                    <h5 className="text-3xl font-[family-name:var(--font-outfit)] font-bold leading-tight">B.Sc. Technisches<br /> Design</h5>
+                                </div>
 
-            {/* GENERATIVE AUDIO SYSTEM */}
-            <AmbientSound scrollProgress={smoothProgress} />
-        </div>
+                                <div className="space-y-6">
+                                    <div className="border-t border-black/10 pt-4">
+                                        <p className="text-xs font-[family-name:var(--font-dm)] opacity-70 leading-relaxed font-medium">
+                                            Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
+                                        </p>
+                                    </div>
+
+                                    {/* LOGOS INTEGRATION */}
+                                    <div className="flex items-center gap-8 pt-2">
+                                        {/* THI Logo - New Black Version */}
+                                        <img
+                                            src="/logos/thi.png"
+                                            alt="THI Logo"
+                                            className="h-10 w-auto object-contain transition-transform"
+                                        />
+
+                                        <div className="h-8 w-px bg-black/10" />
+
+                                        {/* Audi Academy */}
+                                        <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-12 w-auto object-contain" />
+                                    </div>
+                                </div>
+                            </div>
+                        </SpotlightCard>
+
+                        {/* TILE 5: CONTACT */}
+                        <SpotlightCard id="kontakt" colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px]">
+                            <div className="p-10 flex flex-col justify-center h-full items-center text-center relative z-10">
+                                <MousePointer2 className="w-6 h-6 text-white/80 mb-6" />
+                                <h3 className="text-2xl font-[family-name:var(--font-outfit)] text-white mb-2">Projekt anfragen</h3>
+                                <a href="mailto:niklas@studio-nf.com" className="px-8 py-3 rounded-full border border-white/10 text-[10px] text-white uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all mt-6 inline-block">Contact</a>
+                            </div>
+                        </SpotlightCard>
+                    </div>
+                </section>
+
+                <SectionSeparator />
+
+                {/* 4. 3D ANTIGRAVITY SECTION */}
+                <ModelSection />
+
+                <SectionSeparator />
+
+                {/* 5. PRODUCT ORDER SECTION */}
+                <ProductSection />
+
+                <CartOverlay />
+                <CheckoutOverlay />
+
+                <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20">
+                    <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
+                    <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 Studio NF</p>
+                    <div className="flex justify-center gap-6 mt-6">
+                        <a href="/impressum" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Impressum</a>
+                        <a href="/datenschutz" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Datenschutz</a>
+                    </div>
+                </footer>
+
+                {/* GENERATIVE AUDIO SYSTEM */}
+                <AmbientSound scrollProgress={smoothProgress} />
+            </div>
+        </CartProvider >
     );
 }

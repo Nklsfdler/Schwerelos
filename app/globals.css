@@ -11,17 +11,15 @@
 /* Premium Scroll Snapping */
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory; /* "Premium" guided feel */
+  scroll-snap-type: y mandatory;
+  /* "Premium" guided feel */
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 /* Utilities for Scroll Snap Sections */
@@ -34,4 +32,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Hide Model Viewer Progress Bar */
+model-viewer::part(default-progress-bar) {
+  display: none;
 }
