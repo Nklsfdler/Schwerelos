@@ -327,7 +327,7 @@ export default function Home() {
                         src="/logos/NFD SW.png"
                         alt="NFD Logo"
                         style={{ opacity: logoOpacity, scale: logoScale, originX: 0, originY: 0 }}
-                        className="h-12 md:h-16 w-auto object-contain pointer-events-auto"
+                        className="h-10 md:h-12 w-auto object-contain pointer-events-auto"
                     />
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
