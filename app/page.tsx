@@ -317,7 +317,7 @@ export default function Home() {
 
                 {/* NAV - STUDIO NF (REPLACED WITH LOGO) */}
                 <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12">
-                    <img src="/logos/NFD Weiß.png" alt="NFD Logo" className="h-4 md:h-5 w-auto object-contain opacity-80" />
+                    <img src="/logos/NFD Weiß.png" alt="NFD Logo" className="h-20 md:h-24 w-auto object-contain" />
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
                         <a href="#aesthetik" className="cursor-pointer hover:text-white transition-colors duration-500">Ästhetik</a>
