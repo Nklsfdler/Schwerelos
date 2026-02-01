@@ -21,7 +21,7 @@ export default function RootLayout({
         <html lang="de" className="scroll-smooth">
             <body className={`${outfit.variable} ${dmSans.variable} font-sans antialiased`}>
                 {children}
-                <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js" />
+                <Script strategy="lazyOnload" type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js" />
             </body>
         </html>
     );

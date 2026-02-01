@@ -4,11 +4,17 @@ import React, { useRef, useEffect, useState, MouseEvent } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
-import ModelSection from './components/ModelSection';
-import ProductSection from './components/ProductSection';
-import { CartProvider } from './context/CartContext';
-import { CartOverlay, CheckoutOverlay } from './components/CheckoutOverlay';
+import dynamic from 'next/dynamic';
 import { SectionSeparator } from "./components/SectionSeparator";
+
+const ModelSection = dynamic(() => import('./components/ModelSection'), {
+    loading: () => <div className="h-screen bg-[#111]" />,
+    ssr: false
+});
+const ProductSection = dynamic(() => import('./components/ProductSection'), { ssr: false });
+const CartOverlay = dynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CartOverlay), { ssr: false });
+const CheckoutOverlay = dynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CheckoutOverlay), { ssr: false });
+import { CartProvider } from './context/CartContext';
 
 const FRAME_COUNT = 200;
 const IMAGE_PATH_PREFIX = "/sequence/schwerelos/Design_ohne_Titel_";
@@ -198,29 +204,47 @@ export default function Home() {
     const ySlow = useTransform(scrollYProgress, [0, 1], [0, -200]);
     const opacityHero = useTransform(scrollYProgress, [0, 0.4], [1, 0]); // Fade out later for overlap
 
-    // Image Preloader
+    // Image Preloader - Batched Strategy for Speed
     useEffect(() => {
-        const loadImages = async () => {
-            const loaded: HTMLImageElement[] = [];
+        const loadBatch = async (start: number, end: number) => {
             const promises = [];
-
-            for (let i = 1; i <= FRAME_COUNT; i++) {
+            for (let i = start; i <= end; i++) {
+                if (i > FRAME_COUNT) break;
                 const promise = new Promise<void>((resolve) => {
                     const img = new Image();
                     const paddedIndex = i.toString().padStart(3, "0");
                     img.src = `${IMAGE_PATH_PREFIX}${paddedIndex}${IMAGE_EXTENSION}`;
-                    img.onload = () => resolve();
+                    img.onload = () => {
+                        setImages(prev => {
+                            const newImages = [...prev];
+                            newImages[i - 1] = img;
+                            return newImages;
+                        });
+                        resolve();
+                    };
                     img.onerror = () => resolve();
-                    loaded[i - 1] = img;
                 });
                 promises.push(promise);
             }
-
             await Promise.all(promises);
-            setImages(loaded.filter(Boolean));
-            setIsLoaded(true);
         };
-        loadImages();
+
+        const initLoad = async () => {
+            // 1. Priority Batch: First 30 frames (Immediate interaction)
+            await loadBatch(1, 30);
+            setIsLoaded(true);
+
+            // 2. Background Batch: Rest of the sequence
+            // Using requestIdleCallback if available, or setTimeout to yield to main thread
+            const loadRest = () => loadBatch(31, FRAME_COUNT);
+            if ('requestIdleCallback' in window) {
+                (window as any).requestIdleCallback(loadRest);
+            } else {
+                setTimeout(loadRest, 100);
+            }
+        };
+
+        initLoad();
     }, []);
 
     // Canvas Renderer
