@@ -383,11 +383,11 @@ export default function Home() {
                             <div className="p-10 flex flex-col justify-between h-full relative z-10">
                                 <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
                                 <div>
-                                    <span className="text-[9px] uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
+                                    <span className="text-[10px] uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
                                     <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
                                 </div>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
-                                    <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                                    <p className="text-lg">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                 </div>
                             </div>
                         </SpotlightCard>
@@ -401,7 +401,7 @@ export default function Home() {
                                 <h3 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
                                 <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
-                                    <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
+                                    <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4 text-base">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
                             </div>
                         </SpotlightCard>
@@ -416,9 +416,9 @@ export default function Home() {
                                 {/* Header Group - Tighter Spacing */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-[9px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
+                                        <span className="text-[10px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white">
+                                    <h5 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -430,39 +430,34 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: Original Colors (assuming logo has red) or filter if needed. 
-                                        User asked for "White Audi with Red writing". 
-                                        If the PNG is black text + red icon, 'invert' makes it white text + cyan icon. 
-                                        If it's already colored, we should just show it. 
-                                        Let's try a brightness adjustment to pop it on dark background without full invert if it has color.
-                                        Or if it is a black logo, we invert it. 
-                                        Let's assume standard invert for the text part, but if it has red, invert messes it up.
-                                        Safest bet for "Red" preservation on dark bg: Filter to brightness/contrast or Specific Hue Rotate?
-                                        Actually, simpler: use 'brightness(0) invert(1)' for white text, but that kills red.
-                                        Let's just use opacity-90 and hope the source asset is adequate, or stick to invert if it was black.
-                                        User said "weißes audi logo mit roten schriftzug".
-                                        Let's try standard render first, maybe the logo IS red/white. 
-                                        If previous was 'invert', it was likely black. 
-                                        Let's stick to invert for now as refined base.
-                                    */}
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain invert opacity-90" />
+                                    {/* Audi: Invert + Hue Rotate 180 (Cyan -> Red) */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-180 opacity-90" />
                                 </div>
 
                                 {/* Text Content - Tighter */}
                                 <div className="mt-4 pt-4 border-t border-white/5">
-                                    <p className="text-xs font-[family-name:var(--font-dm)] text-white/50 leading-relaxed font-medium">
+                                    <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
                                         Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                     </p>
                                 </div>
                             </div>
                         </SpotlightCard>
 
-                        {/* TILE 5: CONTACT */}
-                        <SpotlightCard id="kontakt" colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px]">
-                            <div className="p-10 flex flex-col justify-center h-full items-center text-center relative z-10">
-                                <MousePointer2 className="w-6 h-6 text-white/80 mb-6" />
-                                <h3 className="text-2xl font-[family-name:var(--font-outfit)] text-white mb-2">Projekt anfragen</h3>
-                                <a href="mailto:niklas@studio-nf.com" className="px-8 py-3 rounded-full border border-white/10 text-[10px] text-white uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all mt-6 inline-block">Contact</a>
+                        {/* TILE 5: CONTACT (MOVED DOWN & ENHANCED) */}
+                        <SpotlightCard id="kontakt" colSpan="md:col-span-12" rowSpan="md:row-span-1" className="min-h-[250px] border border-white/10 relative overflow-hidden bg-[#0a0a0a]">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-purple-900/20 opacity-50" />
+                            <div className="p-10 flex flex-col md:flex-row justify-between items-center h-full relative z-10">
+                                <div className="text-center md:text-left mb-6 md:mb-0">
+                                    <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
+                                        <MousePointer2 className="w-6 h-6 text-white/80" />
+                                        <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white">Projekt anfragen</h3>
+                                    </div>
+                                    <p className="text-white/40 font-[family-name:var(--font-dm)] text-sm">Bereit für den nächsten Schritt?</p>
+                                </div>
+
+                                <a href="mailto:niklas@studio-nf.com" className="px-10 py-4 rounded-full bg-white text-black text-xs font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                                    Contact Studio
+                                </a>
                             </div>
                         </SpotlightCard>
                     </div>

@@ -109,7 +109,7 @@ export default function ModelSection() {
                 </div>
 
                 {/* 2. MIDDLE: MODEL VIEWER (Expanded) */}
-                <div className="relative z-10 w-full flex-grow min-h-[40vh] md:min-h-0 cursor-grab active:cursor-grabbing">
+                <div className="relative z-10 w-full flex-grow min-h-[500px] md:min-h-0 h-[50vh] cursor-grab active:cursor-grabbing">
                     <div className="absolute top-4 left-6 z-50 pointer-events-none opacity-50">
                         <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 border border-white/10 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">Interactive 3D</span>
                     </div>
