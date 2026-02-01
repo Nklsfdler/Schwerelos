@@ -316,11 +316,11 @@ export default function Home() {
                 </div>
 
                 {/* NAV - STUDIO NF (REPLACED WITH LOGO) */}
-                <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 mix-blend-difference">
+                <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12">
                     <img
                         src="/logos/NFD SW.png"
                         alt="NFD Logo"
-                        className="h-24 md:h-32 w-auto object-contain invert mix-blend-screen"
+                        className="h-24 md:h-32 w-auto object-contain"
                     />
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
