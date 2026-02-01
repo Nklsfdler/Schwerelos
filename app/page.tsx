@@ -196,6 +196,12 @@ export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
 
     // --- SCROLL LOGIC ---
+    // Global scroll for logo opacity
+    const { scrollY } = useScroll();
+    const logoOpacity = useTransform(scrollY, [0, 200], [1, 0.4]);
+    // Logo Scale (Optional nice touch): Shrink slightly on scroll
+    const logoScale = useTransform(scrollY, [0, 200], [1, 0.9]);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"]
@@ -316,11 +322,12 @@ export default function Home() {
                 </div>
 
                 {/* NAV - STUDIO NF (REPLACED WITH LOGO) */}
-                <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12">
-                    <img
+                <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 pointer-events-none">
+                    <motion.img
                         src="/logos/NFD SW.png"
                         alt="NFD Logo"
-                        className="h-24 md:h-32 w-auto object-contain"
+                        style={{ opacity: logoOpacity, scale: logoScale, originX: 0, originY: 0 }}
+                        className="h-16 md:h-24 w-auto object-contain pointer-events-auto"
                     />
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
