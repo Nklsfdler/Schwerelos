@@ -76,88 +76,95 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#111] flex flex-col md:flex-row items-center justify-center snap-section">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-20 px-4 md:px-12">
 
-            {/* Background Texture/Gradient */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-800/20 via-[#111] to-black pointer-events-none" />
+            {/* SEPARATE CARD CONTAINER */}
+            <div className="relative w-full max-w-[1600px] h-[90vh] bg-[#020205] border border-white/5 rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
 
-            {/* 3D VISUALIZER - Mobile: Shifted UP aggressively to leave bottom empty for UI */}
-            {/* 3D VISUALIZER - Mobile: Fixed 60vh Height */}
-            <div className="w-full h-[60vh] relative order-1 md:h-full md:w-3/5 md:order-1 cursor-grab active:cursor-grabbing z-10">
-                <model-viewer
-                    ref={modelViewerRef}
-                    src="/schwerelos.glb?v=11"
-                    poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
-                    alt="Schwerelos Skulptur 3D"
-                    bounds="tight"
-                    shadow-intensity="1.0"
-                    exposure="1.0"
-                    tone-mapping="aces"
-                    camera-controls
-                    auto-rotate={activeIndex === null}
-                    camera-orbit={currentData.orbit}
-                    camera-target={currentData.target}
-                    field-of-view={currentData.fov}
-                    min-camera-orbit="auto auto 0%"
-                    min-field-of-view="2deg"
-                    interaction-prompt="none"
-                    style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                    interpolation-decay="200"
-                />
-            </div>
+                {/* Background Texture/Gradient INSIDE Card */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-800/20 via-[#020205] to-black pointer-events-none" />
 
-            {/* INTERACTIVE TEXT / TABS */}
-            {/* INTERACTIVE TEXT / TABS - Mobile: Bottom 40%, Full Width */}
-            {/* INTERACTIVE TEXT / TABS - Mobile: Auto Height (Grows with content), No Internal Scroll */}
-            <div className="w-full h-auto min-h-[40vh] relative order-2 md:h-full md:w-2/5 p-6 md:p-12 flex flex-col justify-start md:justify-center md:order-2 bg-black md:bg-transparent pointer-events-auto z-30">
-
-                {/* Floating Tabs Navigation */}
-                <div className="flex flex-wrap gap-x-2 gap-y-2 mb-6 justify-start">
-                    {DATA.map((item, index) => (
-                        <TabButton
-                            key={index}
-                            active={index === activeIndex}
-                            onClick={() => setActiveIndex(index)}
-                            label={item.title}
-                            index={index}
-                        />
-                    ))}
+                {/* 3D VISUALIZER - Mobile: Shifted UP aggressively to leave bottom empty for UI */}
+                {/* 3D VISUALIZER - Mobile: Fixed 60vh Height */}
+                <div className="w-full h-[60vh] relative order-1 md:h-full md:w-3/5 md:order-1 cursor-grab active:cursor-grabbing z-10">
+                    <div className="absolute top-4 left-6 z-50 pointer-events-none">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 border border-white/10 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">Interactive 3D</span>
+                    </div>
+                    <model-viewer
+                        ref={modelViewerRef}
+                        src="/schwerelos.glb?v=11"
+                        poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
+                        alt="Schwerelos Skulptur 3D"
+                        bounds="tight"
+                        shadow-intensity="1.0"
+                        exposure="1.0"
+                        tone-mapping="aces"
+                        camera-controls
+                        auto-rotate={activeIndex === null}
+                        camera-orbit={currentData.orbit}
+                        camera-target={currentData.target}
+                        field-of-view={currentData.fov}
+                        min-camera-orbit="auto auto 0%"
+                        min-field-of-view="2deg"
+                        interaction-prompt="none"
+                        style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
+                        interpolation-decay="200"
+                    />
                 </div>
 
-                {/* Animated Description */}
-                <div className="min-h-[200px] relative">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeIndex ?? "initial"}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="absolute top-0 left-0 w-full"
-                        >
-                            <span className="text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] text-white/70 font-bold mb-4 block">
-                                Semantische Beschreibung
-                            </span>
-                            <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-8 tracking-tight">
-                                {currentData.title}
-                            </h3>
+                {/* INTERACTIVE TEXT / TABS */}
+                {/* INTERACTIVE TEXT / TABS - Mobile: Bottom 40%, Full Width */}
+                {/* INTERACTIVE TEXT / TABS - Mobile: Auto Height (Grows with content), No Internal Scroll */}
+                <div className="w-full h-auto min-h-[40vh] relative order-2 md:h-full md:w-2/5 p-6 md:p-12 flex flex-col justify-start md:justify-center md:order-2 bg-black md:bg-transparent pointer-events-auto z-30 border-t md:border-t-0 md:border-l border-white/5">
 
-                            {/* Standard Text */}
-                            <WaveText text={currentData.text} />
+                    {/* Floating Tabs Navigation */}
+                    <div className="flex flex-wrap gap-x-2 gap-y-2 mb-6 justify-start">
+                        {DATA.map((item, index) => (
+                            <TabButton
+                                key={index}
+                                active={index === activeIndex}
+                                onClick={() => setActiveIndex(index)}
+                                label={item.title}
+                                index={index}
+                            />
+                        ))}
+                    </div>
 
-                            {activeIndex !== null && (
-                                <button
-                                    onClick={() => setActiveIndex(null)}
-                                    className="mt-8 px-6 py-2 border border-white/20 rounded-full text-xs text-white/60 uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all cursor-pointer font-[family-name:var(--font-outfit)] font-bold"
-                                >
-                                    ← Zur Gesamtansicht
-                                </button>
-                            )}
-                        </motion.div>
-                    </AnimatePresence>
+                    {/* Animated Description */}
+                    <div className="min-h-[200px] relative">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeIndex ?? "initial"}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                className="absolute top-0 left-0 w-full"
+                            >
+                                <span className="text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] text-white/70 font-bold mb-4 block">
+                                    Semantische Beschreibung
+                                </span>
+                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-8 tracking-tight">
+                                    {currentData.title}
+                                </h3>
+
+                                {/* Standard Text */}
+                                <WaveText text={currentData.text} />
+
+                                {activeIndex !== null && (
+                                    <button
+                                        onClick={() => setActiveIndex(null)}
+                                        className="mt-8 px-6 py-2 border border-white/20 rounded-full text-xs text-white/60 uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all cursor-pointer font-[family-name:var(--font-outfit)] font-bold"
+                                    >
+                                        ← Zur Gesamtansicht
+                                    </button>
+                                )}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </section>
     );
 }

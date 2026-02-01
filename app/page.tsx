@@ -376,23 +376,7 @@ export default function Home() {
                 <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-32 px-4 md:px-8 min-h-screen flex items-center">
                     <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6">
 
-                        {/* TILE 1: DESIGN DETAIL */}
-                        <SpotlightCard colSpan="md:col-span-8" rowSpan="md:row-span-2" className="min-h-[600px] md:min-h-[800px]">
-                            <div className="absolute inset-0 z-0">
-                                <img src="/sequence/schwerelos/Whisk_48428d02bced16aba50421a4775f0ffedr.jpeg" alt="Design Detail" className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-1000 pointer-events-none" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303]" />
-                            </div>
-                            <div className="absolute top-0 left-0 p-8 md:p-12 w-full md:w-2/3 z-10">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm mb-6">
-                                    <Sparkles className="w-3 h-3 text-white/60" />
-                                    <span className="text-[9px] uppercase tracking-widest text-white/60">Ästhetik</span>
-                                </div>
-                                <h3 className="text-5xl md:text-8xl font-[family-name:var(--font-outfit)] font-bold text-white mb-8 leading-none">Organische <br /> Geometrie.</h3>
-                                <p className="font-[family-name:var(--font-dm)] text-lg text-white/50 leading-relaxed max-w-xl pb-6">
-                                    Meine Formsprache folgt dem Instinkt des Aufstiegs. Dynamische, organische Windungen und hauchdünne Verbindungen bilden eine Geometrie, die atmet.
-                                </p>
-                            </div>
-                        </SpotlightCard>
+
 
                         {/* TILE 2: PHILOSOPHY */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[400px]">
@@ -422,39 +406,32 @@ export default function Home() {
                             </div>
                         </SpotlightCard>
 
-                        {/* TILE 4: CONTEXT (UPDATED WITH BLUE FADE & DETAILS) */}
-                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border-none overflow-hidden relative">
-                            {/* Blue Fade Background */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-black p-10 flex flex-col justify-between transition-all hover:scale-[1.02] duration-500">
-                                <div>
+                        {/* TILE 4: CONTEXT (Dark Mode, Tight Spacing) */}
+                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border border-white/10 relative bg-[#080808]">
+                            <div className="p-8 flex flex-col h-full relative z-10">
+
+                                {/* Header Group - Tighter Spacing */}
+                                <div className="mb-2">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-[9px] uppercase tracking-widest font-bold opacity-40">Studium & Kontext</span>
-                                        <div className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-pulse" />
+                                        <span className="text-[9px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl font-[family-name:var(--font-outfit)] font-bold leading-tight">B.Sc. Technisches<br /> Design</h5>
+                                    <h5 className="text-2xl md:text-3xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white">
+                                        B.Sc. Technisches<br /> Design
+                                    </h5>
                                 </div>
 
-                                <div className="space-y-6">
-                                    <div className="border-t border-black/10 pt-4">
-                                        <p className="text-xs font-[family-name:var(--font-dm)] opacity-70 leading-relaxed font-medium">
-                                            Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
-                                        </p>
-                                    </div>
+                                {/* LOGOS - Top Right Absolute */}
+                                <div className="absolute top-8 right-8 flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                                    <img src="/logos/thi.png" alt="THI Logo" className="h-6 w-auto object-contain invert" />
+                                    <div className="h-4 w-px bg-white/20" />
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain invert" />
+                                </div>
 
-                                    {/* LOGOS INTEGRATION */}
-                                    <div className="flex items-center gap-8 pt-2">
-                                        {/* THI Logo - New Black Version */}
-                                        <img
-                                            src="/logos/thi.png"
-                                            alt="THI Logo"
-                                            className="h-10 w-auto object-contain transition-transform"
-                                        />
-
-                                        <div className="h-8 w-px bg-black/10" />
-
-                                        {/* Audi Academy */}
-                                        <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-12 w-auto object-contain" />
-                                    </div>
+                                {/* Text Content - Tighter */}
+                                <div className="mt-4 pt-4 border-t border-white/5">
+                                    <p className="text-xs font-[family-name:var(--font-dm)] text-white/50 leading-relaxed font-medium">
+                                        Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
+                                    </p>
                                 </div>
                             </div>
                         </SpotlightCard>
@@ -494,7 +471,7 @@ export default function Home() {
 
                 {/* GENERATIVE AUDIO SYSTEM */}
                 <AmbientSound scrollProgress={smoothProgress} />
-            </div>
+            </div >
         </CartProvider >
     );
 }
