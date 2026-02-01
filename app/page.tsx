@@ -434,27 +434,25 @@ export default function Home() {
                                     <h5 className="text-3xl font-[family-name:var(--font-outfit)] font-bold leading-tight">B.Sc. Technisches<br /> Design</h5>
                                 </div>
 
-                                <div className="space-y-6">
-                                    <div className="border-t border-black/10 pt-4">
-                                        <p className="text-xs font-[family-name:var(--font-dm)] opacity-70 leading-relaxed font-medium">
-                                            Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
-                                        </p>
-                                    </div>
+                                {/* LOGOS INTEGRATION - NOW TOP RIGHT */}
+                                <div className="absolute top-10 right-10 flex items-center gap-6">
+                                    {/* THI Logo */}
+                                    <img
+                                        src="/logos/thi.png"
+                                        alt="THI Logo"
+                                        className="h-8 w-auto object-contain transition-transform opacity-80"
+                                    />
 
-                                    {/* LOGOS INTEGRATION */}
-                                    <div className="flex items-center gap-8 pt-2">
-                                        {/* THI Logo - New Black Version */}
-                                        <img
-                                            src="/logos/thi.png"
-                                            alt="THI Logo"
-                                            className="h-10 w-auto object-contain transition-transform"
-                                        />
+                                    <div className="h-6 w-px bg-black/10" />
 
-                                        <div className="h-8 w-px bg-black/10" />
+                                    {/* Audi Academy */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-10 w-auto object-contain opacity-80" />
+                                </div>
 
-                                        {/* Audi Academy */}
-                                        <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-12 w-auto object-contain" />
-                                    </div>
+                                <div className="border-t border-black/10 pt-4 mt-auto">
+                                    <p className="text-xs font-[family-name:var(--font-dm)] opacity-70 leading-relaxed font-medium">
+                                        Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
+                                    </p>
                                 </div>
                             </div>
                         </SpotlightCard>
@@ -494,7 +492,7 @@ export default function Home() {
 
                 {/* GENERATIVE AUDIO SYSTEM */}
                 <AmbientSound scrollProgress={smoothProgress} />
-            </div>
+            </div >
         </CartProvider >
     );
 }
