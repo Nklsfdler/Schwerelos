@@ -10,9 +10,9 @@ export function SectionSeparator() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ margin: "-20%" }}
                 transition={{ duration: 2.5, ease: "easeInOut" }}
-                className="w-[120vw] h-[60vh] bg-blue-900/10 blur-[150px] rounded-[100%] mix-blend-screen pointer-events-none absolute"
+                className="w-[100vw] h-[40vh] bg-blue-600/20 blur-[120px] rounded-[100%] mix-blend-screen pointer-events-none absolute"
                 style={{
-                    background: "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15) 0%, rgba(30, 64, 175, 0.05) 40%, transparent 65%)"
+                    background: "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.25) 0%, rgba(37, 99, 235, 0.1) 40%, transparent 70%)"
                 }}
             />
         </div>
