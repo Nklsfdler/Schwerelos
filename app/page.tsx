@@ -388,7 +388,7 @@ export default function Home() {
                                     <span className="text-[9px] uppercase tracking-widest text-white/60">Ästhetik</span>
                                 </div>
                                 <h3 className="text-5xl md:text-8xl font-[family-name:var(--font-outfit)] font-bold text-white mb-8 leading-none">Organische <br /> Geometrie.</h3>
-                                <p className="font-[family-name:var(--font-dm)] text-xl md:text-2xl text-white/50 leading-relaxed max-w-xl pb-6">
+                                <p className="font-[family-name:var(--font-dm)] text-lg text-white/50 leading-relaxed max-w-xl pb-6">
                                     Meine Formsprache folgt dem Instinkt des Aufstiegs. Dynamische, organische Windungen und hauchdünne Verbindungen bilden eine Geometrie, die atmet.
                                 </p>
                             </div>
@@ -403,7 +403,7 @@ export default function Home() {
                                     <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
                                 </div>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
-                                    <p className="text-base md:text-lg">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                                    <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                 </div>
                             </div>
                         </SpotlightCard>
@@ -425,7 +425,7 @@ export default function Home() {
                         {/* TILE 4: CONTEXT (UPDATED WITH BLUE FADE & DETAILS) */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border-none overflow-hidden relative">
                             {/* Blue Fade Background */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-black p-10 flex flex-col justify-between transition-all hover:scale-[1.02] duration-500">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-black p-10 flex flex-col transition-all hover:scale-[1.02] duration-500">
                                 <div>
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-[9px] uppercase tracking-widest font-bold opacity-40">Studium & Kontext</span>
@@ -450,7 +450,7 @@ export default function Home() {
                                 </div>
 
                                 <div className="border-t border-black/10 pt-4 mt-8">
-                                    <p className="text-sm md:text-base font-[family-name:var(--font-dm)] opacity-70 leading-relaxed font-medium">
+                                    <p className="text-xs font-[family-name:var(--font-dm)] opacity-70 leading-relaxed font-medium">
                                         Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                     </p>
                                 </div>
