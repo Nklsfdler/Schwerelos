@@ -76,13 +76,14 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full h-screen bg-[#111] overflow-hidden flex flex-col md:flex-row items-center justify-center snap-section">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#111] flex flex-col md:flex-row items-center justify-center snap-section">
 
             {/* Background Texture/Gradient */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-800/20 via-[#111] to-black pointer-events-none" />
 
-            {/* 3D VISUALIZER */}
-            <div className="w-full h-[50vh] md:h-full md:w-3/5 relative order-2 md:order-1 cursor-grab active:cursor-grabbing z-10">
+            {/* 3D VISUALIZER - Mobile: Shifted UP aggressively to leave bottom empty for UI */}
+            {/* 3D VISUALIZER - Mobile: Fixed 60vh Height */}
+            <div className="w-full h-[60vh] relative order-1 md:h-full md:w-3/5 md:order-1 cursor-grab active:cursor-grabbing z-10">
                 <model-viewer
                     ref={modelViewerRef}
                     src="/schwerelos.glb?v=11"
@@ -106,10 +107,12 @@ export default function ModelSection() {
             </div>
 
             {/* INTERACTIVE TEXT / TABS */}
-            <div className="w-full h-[50vh] md:h-full md:w-2/5 p-8 md:p-12 flex flex-col justify-center relative z-20 order-1 md:order-2 bg-gradient-to-b from-transparent to-black/40 md:to-transparent">
+            {/* INTERACTIVE TEXT / TABS - Mobile: Bottom 40%, Full Width */}
+            {/* INTERACTIVE TEXT / TABS - Mobile: Auto Height (Grows with content), No Internal Scroll */}
+            <div className="w-full h-auto min-h-[40vh] relative order-2 md:h-full md:w-2/5 p-6 md:p-12 flex flex-col justify-start md:justify-center md:order-2 bg-black md:bg-transparent pointer-events-auto z-30">
 
                 {/* Floating Tabs Navigation */}
-                <div className="flex flex-wrap gap-x-4 gap-y-4 mb-16">
+                <div className="flex flex-wrap gap-x-2 gap-y-2 mb-6 justify-start">
                     {DATA.map((item, index) => (
                         <TabButton
                             key={index}
