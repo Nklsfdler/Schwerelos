@@ -24,3 +24,5 @@ export function SectionSeparator() {
                 />
             </div>
         </div>
+    );
+}
