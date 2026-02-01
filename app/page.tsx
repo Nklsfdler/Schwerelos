@@ -315,9 +315,9 @@ export default function Home() {
                     <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#030303] opacity-80" />
                 </div>
 
-                {/* NAV - STUDIO NF */}
+                {/* NAV - STUDIO NF (REPLACED WITH LOGO) */}
                 <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12">
-                    <span className="font-[family-name:var(--font-outfit)] font-light text-xs uppercase tracking-[0.2em] text-white/50">Studio NF</span>
+                    <img src="/logos/NFD Weiß.png" alt="NFD Logo" className="h-4 md:h-5 w-auto object-contain opacity-80" />
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
                         <a href="#aesthetik" className="cursor-pointer hover:text-white transition-colors duration-500">Ästhetik</a>
@@ -337,7 +337,7 @@ export default function Home() {
                             transition={{ delay: 1, duration: 3 }}
                             className="text-[10px] md:text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.8em] text-white/40 mb-16 block"
                         >
-                            Studio NF — 2026
+                            NFD — 2026
                         </motion.span>
 
                         <div className="w-full flex justify-center flex-wrap px-8 py-10">
@@ -478,7 +478,7 @@ export default function Home() {
 
                 <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20">
                     <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
-                    <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 Studio NF</p>
+                    <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 NFD Niklas Fiedler Design</p>
                     <div className="flex justify-center gap-6 mt-6">
                         <a href="/impressum" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Impressum</a>
                         <a href="/datenschutz" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Datenschutz</a>
