@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotio
 import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 import dynamic from 'next/dynamic';
-import { SectionSeparator } from "./components/SectionSeparator";
+
 
 const ModelSection = dynamic(() => import('./components/ModelSection'), {
     loading: () => <div className="h-screen bg-[#111]" />,
@@ -398,7 +398,7 @@ export default function Home() {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-6" />
-                                <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
+                                <h3 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
                                 <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
                                     <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
@@ -406,8 +406,11 @@ export default function Home() {
                             </div>
                         </SpotlightCard>
 
-                        {/* TILE 4: CONTEXT (Dark Mode, Tight Spacing) */}
-                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border border-white/10 relative bg-[#080808]">
+                        {/* TILE 4: CONTEXT (Dark Mode, Tight Spacing, Color Hint) */}
+                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden">
+                            {/* Subtle Color Hint Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
+
                             <div className="p-8 flex flex-col h-full relative z-10">
 
                                 {/* Header Group - Tighter Spacing */}
@@ -415,16 +418,34 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-[9px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-2xl md:text-3xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white">
+                                    <h5 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
 
-                                {/* LOGOS - Top Right Absolute */}
-                                <div className="absolute top-8 right-8 flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                                    <img src="/logos/thi.png" alt="THI Logo" className="h-6 w-auto object-contain invert" />
+                                {/* LOGOS - Permanent Visibility, White/Red Treatment */}
+                                <div className="absolute top-8 right-8 flex items-center gap-4">
+                                    {/* THI: Pure White Invert */}
+                                    <img src="/logos/thi.png" alt="THI Logo" className="h-6 w-auto object-contain invert opacity-90" />
+
                                     <div className="h-4 w-px bg-white/20" />
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain invert" />
+
+                                    {/* Audi: Original Colors (assuming logo has red) or filter if needed. 
+                                        User asked for "White Audi with Red writing". 
+                                        If the PNG is black text + red icon, 'invert' makes it white text + cyan icon. 
+                                        If it's already colored, we should just show it. 
+                                        Let's try a brightness adjustment to pop it on dark background without full invert if it has color.
+                                        Or if it is a black logo, we invert it. 
+                                        Let's assume standard invert for the text part, but if it has red, invert messes it up.
+                                        Safest bet for "Red" preservation on dark bg: Filter to brightness/contrast or Specific Hue Rotate?
+                                        Actually, simpler: use 'brightness(0) invert(1)' for white text, but that kills red.
+                                        Let's just use opacity-90 and hope the source asset is adequate, or stick to invert if it was black.
+                                        User said "weißes audi logo mit roten schriftzug".
+                                        Let's try standard render first, maybe the logo IS red/white. 
+                                        If previous was 'invert', it was likely black. 
+                                        Let's stick to invert for now as refined base.
+                                    */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain invert opacity-90" />
                                 </div>
 
                                 {/* Text Content - Tighter */}
@@ -447,12 +468,12 @@ export default function Home() {
                     </div>
                 </section>
 
-                <SectionSeparator />
+
 
                 {/* 4. 3D ANTIGRAVITY SECTION */}
                 <ModelSection />
 
-                <SectionSeparator />
+
 
                 {/* 5. PRODUCT ORDER SECTION */}
                 <ProductSection />

@@ -78,17 +78,40 @@ export default function ModelSection() {
     return (
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-20 px-4 md:px-12">
 
-            {/* SEPARATE CARD CONTAINER */}
-            <div className="relative w-full max-w-[1600px] h-[90vh] bg-[#020205] border border-white/5 rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+            {/* SEPARATE CARD CONTAINER - LIGHTER STYLE */}
+            <div className="relative w-full max-w-[1200px] h-auto md:h-[85vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
 
-                {/* Background Texture/Gradient INSIDE Card */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-800/20 via-[#020205] to-black pointer-events-none" />
+                {/* Background Texture/Gradient - Lighter & More Transparent */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 3D VISUALIZER - Mobile: Shifted UP aggressively to leave bottom empty for UI */}
-                {/* 3D VISUALIZER - Mobile: Fixed 60vh Height */}
-                <div className="w-full h-[60vh] relative order-1 md:h-full md:w-3/5 md:order-1 cursor-grab active:cursor-grabbing z-10">
-                    <div className="absolute top-4 left-6 z-50 pointer-events-none">
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 border border-white/10 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">Interactive 3D</span>
+                {/* 1. TOP: TEXT DESCRIPTION */}
+                <div className="relative z-30 w-full p-8 md:p-12 text-center flex flex-col items-center">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeIndex ?? "initial"}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.5 }}
+                            className="max-w-2xl"
+                        >
+                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold mb-4 block">
+                                Semantische Beschreibung
+                            </span>
+                            <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-6 tracking-tight">
+                                {currentData.title}
+                            </h3>
+                            <div className="flex justify-center">
+                                <WaveText text={currentData.text} />
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+
+                {/* 2. MIDDLE: MODEL VIEWER (Expanded) */}
+                <div className="relative z-10 w-full flex-grow min-h-[40vh] md:min-h-0 cursor-grab active:cursor-grabbing">
+                    <div className="absolute top-4 left-6 z-50 pointer-events-none opacity-50">
+                        <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 border border-white/10 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">Interactive 3D</span>
                     </div>
                     <model-viewer
                         ref={modelViewerRef}
@@ -96,9 +119,9 @@ export default function ModelSection() {
                         poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
                         alt="Schwerelos Skulptur 3D"
                         bounds="tight"
-                        shadow-intensity="1.0"
-                        exposure="1.0"
-                        tone-mapping="aces"
+                        shadow-intensity="1.5"
+                        exposure="1.2"
+                        tone-mapping="neutral"
                         camera-controls
                         auto-rotate={activeIndex === null}
                         camera-orbit={currentData.orbit}
@@ -112,13 +135,9 @@ export default function ModelSection() {
                     />
                 </div>
 
-                {/* INTERACTIVE TEXT / TABS */}
-                {/* INTERACTIVE TEXT / TABS - Mobile: Bottom 40%, Full Width */}
-                {/* INTERACTIVE TEXT / TABS - Mobile: Auto Height (Grows with content), No Internal Scroll */}
-                <div className="w-full h-auto min-h-[40vh] relative order-2 md:h-full md:w-2/5 p-6 md:p-12 flex flex-col justify-start md:justify-center md:order-2 bg-black md:bg-transparent pointer-events-auto z-30 border-t md:border-t-0 md:border-l border-white/5">
-
-                    {/* Floating Tabs Navigation */}
-                    <div className="flex flex-wrap gap-x-2 gap-y-2 mb-6 justify-start">
+                {/* 3. BOTTOM: BUTTONS */}
+                <div className="relative z-30 w-full p-8 md:p-12 border-t border-white/5 bg-[#0a0a0a]/50 backdrop-blur-sm">
+                    <div className="flex flex-wrap gap-3 justify-center">
                         {DATA.map((item, index) => (
                             <TabButton
                                 key={index}
@@ -130,38 +149,16 @@ export default function ModelSection() {
                         ))}
                     </div>
 
-                    {/* Animated Description */}
-                    <div className="min-h-[200px] relative">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={activeIndex ?? "initial"}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="absolute top-0 left-0 w-full"
+                    {activeIndex !== null && (
+                        <div className="flex justify-center mt-6">
+                            <button
+                                onClick={() => setActiveIndex(null)}
+                                className="px-5 py-2 border border-white/10 rounded-full text-[10px] text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-pointer font-bold"
                             >
-                                <span className="text-xs font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] text-white/70 font-bold mb-4 block">
-                                    Semantische Beschreibung
-                                </span>
-                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-8 tracking-tight">
-                                    {currentData.title}
-                                </h3>
-
-                                {/* Standard Text */}
-                                <WaveText text={currentData.text} />
-
-                                {activeIndex !== null && (
-                                    <button
-                                        onClick={() => setActiveIndex(null)}
-                                        className="mt-8 px-6 py-2 border border-white/20 rounded-full text-xs text-white/60 uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all cursor-pointer font-[family-name:var(--font-outfit)] font-bold"
-                                    >
-                                        ← Zur Gesamtansicht
-                                    </button>
-                                )}
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
+                                Reset View
+                            </button>
+                        </div>
+                    )}
                 </div>
 
             </div>
