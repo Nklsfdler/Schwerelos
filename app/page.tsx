@@ -414,8 +414,8 @@ export default function Home() {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
-                                <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
-                                <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
+                                <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">Niklas Fiedler</h3>
+                                <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[150px] group-hover:opacity-100 transition-all duration-500 overflow-hidden">
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
@@ -431,10 +431,10 @@ export default function Home() {
 
                                 {/* Header Group - Tighter Spacing */}
                                 <div className="mb-2">
-                                    <div className="flex justify-between items-start mb-2">
+                                    <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10">
+                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -454,7 +454,7 @@ export default function Home() {
                                         className="h-8 w-auto object-contain opacity-100"
                                         style={{ filter: "brightness(0) saturate(100%) invert(16%) sepia(96%) saturate(6838%) hue-rotate(357deg) brightness(96%) contrast(126%)" }}
                                     />
-                                </div>
+                                    {/* Animated Equalizer Icon */}</div>
 
                                 {/* Text Content - Tighter & Hover Only */}
                                 <div className="mt-4 pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">

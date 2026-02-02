@@ -123,13 +123,27 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
     });
 
     return (
-        <button
-            onClick={toggleSound}
-            // Button: Icon Only, Clean, Bottom Right
-            // Increased tap target for mobile
-            className="fixed bottom-6 right-6 z-[100] w-12 h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center"
-        >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-        </button>
+        <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-4">
+            {/* HINT ARROW (Visible if Muted & Top of Page) */}
+            {isMuted && scrollProgress.get() < 0.05 && (
+                <div
+                    className="flex items-center gap-3 pointer-events-none animate-pulse"
+                >
+                    <span className="text-[10px] uppercase tracking-widest text-white/50 font-bold hidden md:block">Sound On</span>
+                    {/* Arrow Pointing Right to the button */}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white/50 w-6 h-6 -rotate-90">
+                        <path d="M12 5v14" />
+                        <path d="M19 12l-7 7-7-7" />
+                    </svg>
+                </div>
+            )}
+
+            <button
+                onClick={toggleSound}
+                className="w-12 h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center"
+            >
+                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            </button>
+        </div>
     );
 }

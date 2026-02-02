@@ -112,7 +112,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="1000"
+                        interpolation-decay="2000"
                     />
                 </div>
 
