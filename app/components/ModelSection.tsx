@@ -76,7 +76,7 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-12 px-4 md:px-0">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-4 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER */}
             <div className="relative w-full max-w-[1400px] h-[85vh] md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
@@ -90,7 +90,7 @@ export default function ModelSection() {
                         Interactive 3D
                     </span>
                     <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tighter leading-none">
-                        3D-MODELL SEMANTIK
+                        3D-MODELL BESCHREIBUNG
                     </h3>
                 </div>
 
@@ -131,7 +131,7 @@ export default function ModelSection() {
                             transition={{ duration: 0.3 }}
                             className="w-full mb-8 max-w-2xl"
                         >
-                            <h4 className="text-xl md:text-2xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2 tracking-tight">
+                            <h4 className="text-xl md:text-2xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">
                                 {currentData.title}
                             </h4>
                             <div className="text-sm md:text-base text-white/60 font-[family-name:var(--font-dm)] leading-relaxed">
@@ -154,9 +154,10 @@ export default function ModelSection() {
                         {activeIndex !== null && (
                             <button
                                 onClick={() => setActiveIndex(null)}
-                                className="ml-4 px-4 py-2 border-b border-white/30 text-[10px] text-white/50 uppercase tracking-widest hover:text-white hover:border-white transition-all cursor-pointer font-bold"
+                                className="ml-4 w-8 h-8 flex items-center justify-center rounded-full border border-white/20 text-white/50 hover:bg-white hover:text-black transition-all"
+                                title="Reset View"
                             >
-                                Reset View
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
                             </button>
                         )}
                     </div>

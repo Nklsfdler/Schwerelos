@@ -16,7 +16,7 @@ export default function ProductSection() {
     const [currentImage, setCurrentImage] = useState(0);
 
     return (
-        <section id="shop" className="relative w-full min-h-screen bg-[#020205] border-t border-white/5 text-white py-32 px-4 md:px-12 flex flex-col items-center justify-center z-30">
+        <section id="shop" className="relative w-full min-h-screen bg-[#020205] border-t border-white/5 text-white py-12 px-4 md:px-12 flex flex-col items-center justify-center z-30">
 
             {/* Background Glow */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(50,50,50,0.1),transparent_70%)] pointer-events-none" />
@@ -68,10 +68,10 @@ export default function ProductSection() {
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
                             <div className="flex items-center gap-2 mb-2">
-                                <span className="px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/10 text-[10px] uppercase tracking-widest text-blue-400 font-bold">
+                                <span className="px-2 py-0.5 rounded border border-indigo-900 bg-indigo-950 text-[10px] uppercase tracking-widest text-indigo-200 font-bold shadow-[0_0_10px_rgba(99,102,241,0.2)]">
                                     Limited Edition
                                 </span>
-                                <span className="text-[10px] uppercase tracking-widest text-white/40">1 of 10</span>
+                                <span className="text-[10px] uppercase tracking-widest text-white/40">1 of 50</span>
                             </div>
 
                             <div className="flex items-center gap-2 mb-8">
