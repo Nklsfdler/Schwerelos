@@ -121,7 +121,7 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
             {/* HINT ARROW (Visible if Muted & Top of Page) */}
             {isMuted && showHint && (
                 <div
-                    className="flex items-center gap-2 pointer-events-none"
+                    className="flex items-center gap-2 pointer-events-none opacity-60 hover:opacity-100 transition-opacity duration-300"
                     style={{ zIndex: 200 }}
                 >
                     <span className="text-sm text-white/90 font-medium font-[family-name:var(--font-outfit)] whitespace-nowrap drop-shadow-md">Ton einschalten</span>

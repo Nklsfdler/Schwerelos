@@ -143,13 +143,17 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: Touch Fingerprint (Subtle Pulse) */}
-            <div className="absolute top-6 right-6 z-20 opacity-0 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none animate-pulse">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
-                    <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
-                    <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
-                    <path d="M7 5a7 7 0 0 1 10 0" />
-                </svg>
+            {/* AFFORDANCE: CENTRAL TOUCH ICON (Large, Imposing, Hides on Hover) */}
+            <div className="absolute inset-0 z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none">
+                <div className="relative">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white animate-pulse">
+                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
+                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
+                        <path d="M7 5a7 7 0 0 1 10 0" />
+                    </svg>
+                    {/* Ripple Effect */}
+                    <div className="absolute inset-0 bg-white/10 rounded-full blur-xl animate-ping" />
+                </div>
             </div>
 
             {/* Spotlight only visible on hover (Desktop) */}
@@ -465,11 +469,12 @@ export default function Home() {
 
                                     {/* Audi: WHITE SYMBOL + RED TEXT (Calibrated) */}
                                     {/* Audi: DEEP RED TEXT / WHITE ICON (Refined) */}
+                                    {/* Audi: TRUE RED CALIBRATED (#C8102E Matrix) */}
                                     <img
                                         src="/logos/Audi Academy.png"
                                         alt="Audi Academy"
                                         className="h-8 w-auto object-contain transition-all duration-500 hover:scale-105"
-                                        style={{ filter: "invert(1) hue-rotate(180deg) saturate(300%) contrast(120%) brightness(85%)" }}
+                                        style={{ filter: "brightness(0) saturate(100%) invert(18%) sepia(95%) saturate(7000%) hue-rotate(358deg) brightness(95%) contrast(115%)" }}
                                     />
                                     {/* Animated Equalizer Icon */}</div>
 
@@ -498,9 +503,11 @@ export default function Home() {
 
 
                 {/* 5. PRODUCT ORDER SECTION */}
-                <ProductSection />
-                {/* 6. CONTACT SECTION */}
-                <section id="kontakt" className="py-6 px-2 md:px-12 bg-[#020205] flex justify-center">
+                <div className="mb-2 w-full max-w-[1400px]">
+                    <ProductSection />
+                </div>
+                {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */}
+                <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-2">
                     <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[200px] flex items-center shadow-2xl">
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 opacity-60" />
                         <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-center h-full relative z-10 w-full">

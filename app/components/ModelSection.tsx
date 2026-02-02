@@ -55,7 +55,7 @@ const INITIAL_STATE = {
     title: "Schwerelos",
     text: "Eine Studie der Leichtigkeit. Wähle einen Bereich, um die Details zu erkunden.",
     // INITIAL ORBIT: Must match the hardcoded prop in model-viewer to prevent jump
-    orbit: "45deg 75deg 140%",
+    orbit: "45deg 75deg 160%",
     target: "0m 1.5m 0m",
     fov: "auto"
 };
@@ -87,7 +87,7 @@ export default function ModelSection() {
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
                 <div className="relative z-30 w-full p-4 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-sm text-blue-200 font-[family-name:var(--font-outfit)] font-medium block mb-2 border border-blue-900 px-4 py-1 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
+                    <span className="text-xl md:text-2xl text-blue-100 font-[family-name:var(--font-outfit)] font-bold block mb-2 border border-blue-900/50 px-6 py-2 rounded-full bg-blue-950/60 backdrop-blur-md shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>
                 </div>
@@ -106,9 +106,9 @@ export default function ModelSection() {
                         tone-mapping="neutral"
                         camera-controls
                         auto-rotate={activeIndex === null}
-                        rotation-per-second="30deg" // Faster rotation
+                        rotation-per-second="15deg" // Slower rotation
                         // HARDCODED INITIAL STATE: matches INITIAL_STATE const to prevent jump on mount/reset
-                        camera-orbit={activeIndex === null ? "45deg 75deg 140%" : currentData.orbit}
+                        camera-orbit={activeIndex === null ? "45deg 75deg 160%" : currentData.orbit}
                         camera-target={activeIndex === null ? "0m 1.5m 0m" : currentData.target}
                         field-of-view={currentData.fov}
                         min-camera-orbit="auto auto 5%"
@@ -159,7 +159,7 @@ export default function ModelSection() {
                                 className="ml-4 flex items-center gap-3 h-10 px-2 rounded-full text-white/50 hover:text-white transition-all group"
                                 title="Reset View"
                             >
-                                <span className="text-[10px] uppercase tracking-widest font-bold hidden md:block group-hover:text-white transition-colors duration-300">Ansicht zurücksetzen</span>
+                                <span className="text-xs uppercase tracking-widest font-bold group-hover:text-white transition-colors duration-300">Ansicht zurücksetzen</span>
                                 <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/20 text-white/50 group-hover:bg-white group-hover:text-black transition-all">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
                                 </div>
