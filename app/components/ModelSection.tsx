@@ -76,48 +76,41 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-0 px-0 md:px-0">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-10 px-4 md:px-0">
 
-            {/* FULL SCREEN IMMERSIVE CONTAINER */}
-            <div className="relative w-full h-full md:h-screen w-screen bg-[#050505] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+            {/* SEPARATE CARD CONTAINER - BOLD STYLE, STACKED */}
+            <div className="relative w-full max-w-[1400px] h-auto md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
 
-                {/* 1. LEFT/TOP: TEXT (NOW OVERLAY OR SIDE) */}
-                <div className="relative z-30 w-full md:w-1/3 p-8 md:p-16 flex flex-col justify-center order-2 md:order-1 bg-gradient-to-r from-black via-black/80 to-transparent pointer-events-none md:pointer-events-auto">
+                {/* Background Texture */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
+
+                {/* 1. TOP: TITLE & DESCRIPTION (LEFT ALIGNED, BOLD) */}
+                <div className="relative z-30 w-full p-8 md:p-12 md:pb-0 flex flex-col items-start text-left bg-gradient-to-b from-black/50 to-transparent">
+                    <span className="text-xs uppercase tracking-[0.2em] text-white/50 font-bold block mb-4 border border-white/10 px-3 py-1 rounded-full bg-white/5">
+                        Interactive 3D
+                    </span>
+
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeIndex ?? "initial"}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.4 }}
-                            className="max-w-xl"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                            className="w-full"
                         >
-                            <span className="text-xs uppercase tracking-[0.4em] text-white/50 font-bold block mb-4">
-                                {currentData.title}
-                            </span>
-
-                            <h3 className="text-5xl md:text-8xl font-[family-name:var(--font-outfit)] font-black text-white mb-8 tracking-tighter leading-[0.85]">
-                                {activeIndex === null ? "SCHWERE\nLOS" : currentData.title.split('. ')[1] || currentData.title}
+                            <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-6 tracking-tighter leading-[0.9]">
+                                {activeIndex === null ? "3D-MODELL SEMANTIK" : currentData.title.toUpperCase()}
                             </h3>
-
-                            <div className="flex md:block">
+                            <div className="max-w-3xl">
                                 <WaveText text={currentData.text} />
                             </div>
-
-                            {activeIndex !== null && (
-                                <button
-                                    onClick={() => setActiveIndex(null)}
-                                    className="mt-8 px-6 py-3 border border-white/20 rounded-full text-xs text-white/60 uppercase tracking-widest hover:bg-white hover:text-black transition-all cursor-pointer font-bold pointer-events-auto"
-                                >
-                                    Zurück zur Übersicht
-                                </button>
-                            )}
                         </motion.div>
                     </AnimatePresence>
                 </div>
 
-                {/* 2. RIGHT/CENTER: MODEL VIEWER (HUGE) */}
-                <div className="absolute inset-0 md:relative md:w-2/3 h-[60vh] md:h-full cursor-grab active:cursor-grabbing order-1 md:order-2 z-10 md:z-0">
+                {/* 2. MIDDLE: MODEL VIEWER (HUGE, CENTERED) */}
+                <div className="relative z-10 w-full flex-grow min-h-[40vh] md:min-h-0 cursor-grab active:cursor-grabbing">
                     <model-viewer
                         ref={modelViewerRef}
                         src="/schwerelos.glb?v=11"
@@ -139,22 +132,33 @@ export default function ModelSection() {
                         interpolation-decay="200"
                     />
                     {/* Gradient Overlay for Text Readability on Mobile */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent md:hidden pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none md:hidden" />
                 </div>
 
-                {/* 3. FLOATING TABS (BOTTOM RIGHT) */}
-                <div className="absolute bottom-12 right-0 md:right-12 w-full md:w-auto p-6 md:p-0 z-40 flex justify-center md:justify-end">
-                    <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end max-w-lg">
+                {/* 3. BOTTOM: BUTTONS */}
+                <div className="relative z-30 w-full p-6 md:p-10 border-t border-white/5 bg-[#0a0a0a]">
+                    <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
                         {DATA.map((item, index) => (
                             <TabButton
                                 key={index}
                                 active={index === activeIndex}
                                 onClick={() => setActiveIndex(index)}
-                                label={`0${index + 1}`}
+                                label={item.title}
                                 index={index}
                             />
                         ))}
                     </div>
+
+                    {activeIndex !== null && (
+                        <div className="flex justify-center md:justify-start mt-4 md:mt-6">
+                            <button
+                                onClick={() => setActiveIndex(null)}
+                                className="px-5 py-2 border border-white/10 rounded-full text-[10px] text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-pointer font-bold"
+                            >
+                                Reset View
+                            </button>
+                        </div>
+                    )}
                 </div>
 
             </div>

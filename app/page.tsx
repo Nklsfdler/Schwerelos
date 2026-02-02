@@ -327,8 +327,11 @@ export default function Home() {
                     className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 transition-none"
                 >
                     <div className="font-[family-name:var(--font-outfit)] text-white tracking-widest uppercase flex items-center gap-2 cursor-default select-none">
-                        <span className="font-black text-2xl md:text-3xl leading-none pt-1">©</span>
-                        <span className="font-black text-lg md:text-xl">NF DESIGN</span>
+                        <span className="font-bold text-2xl md:text-3xl leading-none flex items-center h-full pt-1">©</span>
+                        <div className="flex items-baseline">
+                            <span className="font-bold text-lg md:text-xl">NF</span>
+                            <span className="font-light text-lg md:text-xl ml-1">DESIGN</span>
+                        </div>
                     </div>
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
@@ -385,8 +388,8 @@ export default function Home() {
                 </section>
 
                 {/* 3. BENTO GRID */}
-                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-32 px-4 md:px-8 min-h-screen flex items-center">
-                    <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6">
+                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-20 px-4 md:px-6 min-h-screen flex items-center">
+                    <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-4">
 
 
 
@@ -395,8 +398,8 @@ export default function Home() {
                             <div className="p-10 flex flex-col justify-between h-full relative z-10">
                                 <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
                                 <div>
-                                    <span className="text-[10px] uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                    <h4 className="text-3xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
+                                    <span className="text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
+                                    <h4 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
                                 </div>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-sm font-[family-name:var(--font-dm)] text-white/40 leading-relaxed">
                                     <p className="text-lg">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
@@ -406,11 +409,11 @@ export default function Home() {
 
                         {/* TILE 3: ARTIST */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[600px]">
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-[40%_50%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-6" />
-                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
+                                <h3 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
                                 <p className="text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
                                     <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4 text-base">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
@@ -428,15 +431,15 @@ export default function Home() {
                                 {/* Header Group - Tighter Spacing */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-[10px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
+                                        <span className="text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-0 tracking-tight">
+                                    <h5 className="text-5xl md:text-6xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
 
-                                {/* LOGOS - Permanent Visibility, White/Red Treatment */}
-                                <div className="absolute top-8 right-8 flex items-center gap-4">
+                                {/* LOGOS - Moved up to avoid overlap */}
+                                <div className="absolute top-6 right-6 flex items-center gap-4">
                                     {/* THI: Pure White Invert */}
                                     <img src="/logos/thi.png" alt="THI Logo" className="h-6 w-auto object-contain invert opacity-90" />
 
@@ -496,7 +499,7 @@ export default function Home() {
                 <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20 flex flex-col items-center">
                     {/* NFD Logo in Footer */}
                     {/* NFD Logo in Footer (White Asset, No Filters) */}
-                    <img src="/logos/NFD Weiß.png" alt="NFD Logo" className="h-20 md:h-24 w-auto object-contain mb-8 opacity-100" />
+                    <img src="/logos/NFD SW.png" alt="NFD Logo" className="h-20 md:h-24 w-auto object-contain mb-8 filter invert opacity-80" />
 
                     <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
                     <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 NFD Niklas Fiedler Design</p>
