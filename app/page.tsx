@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState, MouseEvent } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
+import { CartProvider } from './context/CartContext';
 import dynamic from 'next/dynamic';
 
 
@@ -14,7 +15,6 @@ const ModelSection = dynamic(() => import('./components/ModelSection'), {
 const ProductSection = dynamic(() => import('./components/ProductSection'), { ssr: false });
 const CartOverlay = dynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CartOverlay), { ssr: false });
 const CheckoutOverlay = dynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CheckoutOverlay), { ssr: false });
-import { CartProvider } from './context/CartContext';
 
 const FRAME_COUNT = 200;
 const IMAGE_PATH_PREFIX = "/sequence/schwerelos/Design_ohne_Titel_";
@@ -143,7 +143,7 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Centered Bottom - Soft/Slow) */}
+            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Framer Motion - Organic/Slow) */}
             <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-8 left-1/2 -translate-x-1/2">
                 <div className="relative">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
@@ -151,9 +151,17 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
                         <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
                         <path d="M7 5a7 7 0 0 1 10 0" />
                     </svg>
-                    {/* Ripple Effects (Very Slow & Gentle) */}
-                    <div className="absolute inset-0 bg-white/20 rounded-full animate-ping delay-75 duration-[3000ms]" />
-                    <div className="absolute inset-0 bg-white/10 rounded-full animate-ping delay-500 duration-[4000ms] scale-150" />
+                    {/* Ripple Effects (Organic Wave) */}
+                    <motion.div
+                        className="absolute inset-0 bg-white/20 rounded-full"
+                        animate={{ scale: [1, 2.5], opacity: [0.4, 0] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.div
+                        className="absolute inset-0 bg-white/10 rounded-full"
+                        animate={{ scale: [1, 3], opacity: [0.3, 0] }}
+                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    />
                 </div>
             </div>
 

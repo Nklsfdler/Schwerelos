@@ -79,16 +79,15 @@ export default function ModelSection() {
     return (
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
-            {/* SEPARATE CARD CONTAINER */}
-            <div className="relative w-full max-w-[1400px] h-[90vh] md:h-[95vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+            {/* SEPARATE CARD CONTAINER - Taller/Rectangular */}
+            <div className="relative w-full max-w-[1400px] h-[95vh] md:h-[105vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
 
                 {/* Background Texture */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: STATIC HEADER (Badge Only) */}
-                {/* 1. TOP: STATIC HEADER (Badge Only) */}
-                <div className="relative z-30 w-full p-4 md:p-4 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-xl md:text-2xl text-blue-100 font-[family-name:var(--font-outfit)] font-bold block mb-2 border border-blue-900/50 px-6 py-2 rounded-full bg-blue-950/60 backdrop-blur-md shadow-lg shadow-blue-900/20">
+                {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
+                <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                    <span className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-outfit)] font-bold uppercase tracking-[0.2em] block mb-2 pl-2">
                         Interactive 3D Model
                     </span>
                 </div>
@@ -157,21 +156,19 @@ export default function ModelSection() {
                     </div>
                 </div>
 
-                {/* RESET BUTTON (MOVED TO TOP RIGHT) */}
+                {/* RESET BUTTON (Minimalist - Top Right) */}
                 <AnimatePresence>
                     {activeIndex !== null && (
                         <motion.button
-                            initial={{ opacity: 0, scale: 0.8 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
                             onClick={() => setActiveIndex(null)}
-                            className="absolute top-8 right-8 z-50 flex items-center gap-3 h-12 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl hover:bg-white/20 transition-all group"
+                            className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-2 h-8 px-4 rounded-full bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all group"
                             title="Reset View"
                         >
-                            <div className="w-6 h-6 flex items-center justify-center rounded-full border border-white/50 text-white group-hover:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
-                            </div>
-                            <span className="text-xs uppercase tracking-widest font-bold font-[family-name:var(--font-outfit)]">Ansicht zurücksetzen</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                            <span className="text-[10px] uppercase tracking-[0.15em] font-bold font-[family-name:var(--font-outfit)]">Reset</span>
                         </motion.button>
                     )}
                 </AnimatePresence>
