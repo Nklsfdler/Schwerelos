@@ -85,8 +85,8 @@ export default function ModelSection() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
-                <div className="relative z-30 w-full p-8 md:p-12 pb-0 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-xs uppercase tracking-[0.2em] text-blue-200 font-bold block mb-2 border border-blue-900 px-4 py-1.5 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
+                <div className="relative z-30 w-full p-4 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                    <span className="text-xs uppercase tracking-[0.2em] text-blue-200 font-black block mb-2 border border-blue-900 px-4 py-1.5 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>
                 </div>

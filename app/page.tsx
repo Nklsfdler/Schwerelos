@@ -327,10 +327,10 @@ export default function Home() {
                     className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 transition-none"
                 >
                     <div className="font-[family-name:var(--font-outfit)] text-white tracking-widest uppercase flex items-baseline gap-1.5 cursor-default select-none">
-                        <span className="font-bold text-2xl md:text-3xl leading-none translate-y-[1px]">©</span>
+                        <span className="font-bold text-xl md:text-2xl leading-none translate-y-[1px]">©</span>
                         <div className="flex items-baseline">
-                            <span className="font-bold text-lg md:text-xl">NF</span>
-                            <span className="font-light text-lg md:text-xl ml-1">DESIGN</span>
+                            <span className="font-bold text-base md:text-lg">NF</span>
+                            <span className="font-light text-base md:text-lg ml-1">DESIGN</span>
                         </div>
                     </div>
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
@@ -409,13 +409,13 @@ export default function Home() {
 
                         {/* TILE 3: ARTIST */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[500px] md:min-h-[600px]">
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-[30%_50%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-[20%_50%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
-                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
-                                <p className="text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
-                                <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
+                                <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
+                                <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
+                                <div className="max-h-0 opacity-0 group-hover:max-h-[150px] group-hover:opacity-100 transition-all duration-500 overflow-hidden">
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
                             </div>
@@ -431,9 +431,9 @@ export default function Home() {
                                 {/* Header Group - Tighter Spacing */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
+                                        <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10">
+                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -445,8 +445,8 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: Stronger Dark Red (Hue Rotate + Saturation Boost + Brightness Drop) */}
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-[170deg] saturate-150 brightness-75 contrast-125 opacity-100" />
+                                    {/* Audi: COMPLETELY RED (Sepia + Saturation + Hue Shift) */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter grayscale(100%) sepia(100%) hue-rotate-[320deg] saturate-[500%] brightness-[.8] contrast-[1.2] opacity-100" />
                                 </div>
 
                                 {/* Text Content - Tighter & Hover Only */}
