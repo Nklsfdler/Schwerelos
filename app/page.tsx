@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue, useMotionValueEvent } from 'framer-motion';
-import { Wind, Sparkles, MousePointer2, Volume2, VolumeX } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
+import { Wind, MousePointer2 } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 import { CartProvider } from './context/CartContext';
 import dynamic from 'next/dynamic';
@@ -297,7 +297,8 @@ export default function Home() {
         if (!canvas || !isLoaded || images.length === 0) return;
         const ctx = canvas.getContext("2d", { alpha: true });
         if (!ctx) return;
-        const dpr = window.devicePixelRatio || 1;
+        // OPTIMIZATION: Cap DPR at 2. Higher values (3x, 4x) kill performance on mobile with negligible visual gain.
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const render = () => {
             const p = smoothProgress.get();
             const clamped = Math.max(0, Math.min(1, p));
@@ -440,7 +441,7 @@ export default function Home() {
                         {/* TILE 3: ARTIST */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[500px] md:min-h-[600px]">
                             {/* ROUND 12: FORCE CENTER */}
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
@@ -470,17 +471,18 @@ export default function Home() {
                                 </div>
 
                                 {/* LOGOS - Moved up to avoid overlap */}
-                                <div className="absolute top-6 right-6 flex items-center gap-4">
+                                <div className="absolute top-6 right-6 flex items-center gap-4 flex-wrap justify-end max-w-[50%]">
                                     {/* THI: Pure White Invert */}
-                                    <img src="/logos/thi.png" alt="THI Logo" className="h-6 w-auto object-contain invert opacity-90" />
+                                    <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-10 w-auto object-contain invert opacity-90" />
 
-                                    <div className="h-4 w-px bg-white/20" />
+                                    <div className="h-6 w-px bg-white/20 hidden md:block" />
 
                                     {/* Audi: FINAL PNG (No Filters) */}
                                     <img
                                         src="/logos/Audie Akademie.png"
                                         alt="Audi Academy"
-                                        className="h-8 w-auto object-contain transition-all duration-500 hover:scale-105"
+                                        loading="lazy" decoding="async"
+                                        className="h-10 md:h-12 w-auto object-contain transition-all duration-500 hover:scale-105"
                                     />
                                 </div>
 
