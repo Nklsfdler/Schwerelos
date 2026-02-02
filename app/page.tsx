@@ -326,10 +326,9 @@ export default function Home() {
                     style={{ opacity: headerOpacity, pointerEvents: headerPointerEvents }}
                     className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 transition-none"
                 >
-                    <div className="font-[family-name:var(--font-outfit)] text-white/90 text-sm tracking-widest uppercase flex items-center gap-1 cursor-default select-none">
-                        <span className="font-bold">NF</span>
-                        <span className="font-light">Design</span>
-                        <span className="text-white/40">©</span>
+                    <div className="font-[family-name:var(--font-outfit)] text-white tracking-widest uppercase flex items-center gap-2 cursor-default select-none">
+                        <span className="font-black text-2xl md:text-3xl leading-none pt-1">©</span>
+                        <span className="font-black text-lg md:text-xl">NF DESIGN</span>
                     </div>
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
@@ -411,8 +410,8 @@ export default function Home() {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-6" />
-                                <h3 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">Niklas Fiedler</h3>
-                                <p className="text-sm font-[family-name:var(--font-dm)] text-white/40 mb-6">Creator & Designer</p>
+                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
+                                <p className="text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
                                     <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed border-l border-white/10 pl-4 text-base">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
@@ -431,7 +430,7 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-[10px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white mt-auto md:mt-0">
+                                    <h5 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-0 tracking-tight">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -447,8 +446,8 @@ export default function Home() {
                                     <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-180 contrast-125 opacity-100" />
                                 </div>
 
-                                {/* Text Content - Tighter */}
-                                <div className="mt-4 pt-4 border-t border-white/5">
+                                {/* Text Content - Tighter & Hover Only */}
+                                <div className="mt-4 pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                     <p className="text-sm font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
                                         Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                     </p>
@@ -457,23 +456,7 @@ export default function Home() {
                         </SpotlightCard>
 
 
-                        {/* TILE 5: CONTACT (MOVED DOWN & ENHANCED) - Now spans full width at bottom of grid */}
-                        <SpotlightCard id="kontakt" colSpan="md:col-span-12" rowSpan="md:row-span-1" className="min-h-[250px] border border-white/10 relative overflow-hidden bg-[#0a0a0a]">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-purple-900/20 opacity-50" />
-                            <div className="p-10 flex flex-col md:flex-row justify-between items-center h-full relative z-10">
-                                <div className="text-center md:text-left mb-6 md:mb-0">
-                                    <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
-                                        <MousePointer2 className="w-6 h-6 text-white/80" />
-                                        <h3 className="text-4xl font-[family-name:var(--font-outfit)] font-bold text-white">Projekt anfragen</h3>
-                                    </div>
-                                    <p className="text-white/40 font-[family-name:var(--font-dm)] text-sm">Bereit für den nächsten Schritt?</p>
-                                </div>
 
-                                <a href="mailto:nif3527@thi.de" className="px-10 py-4 rounded-full bg-white text-black text-xs font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-                                    Contact Studio
-                                </a>
-                            </div>
-                        </SpotlightCard>
                     </div>
                 </section>
 
@@ -487,12 +470,33 @@ export default function Home() {
                 {/* 5. PRODUCT ORDER SECTION */}
                 <ProductSection />
 
+                {/* 6. CONTACT SECTION (Moved here) */}
+                <section id="kontakt" className="py-20 px-4 md:px-12 bg-[#020205] flex justify-center">
+                    <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[300px] flex items-center shadow-2xl">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 opacity-60" />
+                        <div className="p-10 md:p-16 flex flex-col md:flex-row justify-between items-center h-full relative z-10 w-full">
+                            <div className="text-center md:text-left mb-8 md:mb-0">
+                                <div className="flex items-center justify-center md:justify-start gap-6 mb-4">
+                                    <MousePointer2 className="w-8 h-8 text-white" />
+                                    <h3 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tighter">Projekt<br />anfragen</h3>
+                                </div>
+                                <p className="text-white/50 font-[family-name:var(--font-dm)] text-base max-w-md">Lass uns gemeinsam etwas Großartiges erschaffen. Der nächste Schritt ist nur einen Klick entfernt.</p>
+                            </div>
+
+                            <a href="mailto:nif3527@thi.de" className="px-12 py-6 rounded-full bg-white text-black text-sm font-black uppercase tracking-[0.2em] hover:scale-105 transition-transform shadow-[0_0_50px_rgba(255,255,255,0.4)] hover:shadow-[0_0_80px_rgba(255,255,255,0.6)]">
+                                Contact Studio
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
                 <CartOverlay />
                 <CheckoutOverlay />
 
                 <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20 flex flex-col items-center">
                     {/* NFD Logo in Footer */}
-                    <img src="/logos/NFD SW.png" alt="NFD Logo" className="h-16 w-auto object-contain invert mix-blend-screen opacity-50 mb-8" />
+                    {/* NFD Logo in Footer (White Asset, No Filters) */}
+                    <img src="/logos/NFD Weiß.png" alt="NFD Logo" className="h-20 md:h-24 w-auto object-contain mb-8 opacity-100" />
 
                     <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
                     <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 NFD Niklas Fiedler Design</p>
