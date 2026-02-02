@@ -76,7 +76,7 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-4 px-2 md:px-0">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER */}
             <div className="relative w-full max-w-[1400px] h-[85vh] md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
@@ -96,6 +96,7 @@ export default function ModelSection() {
 
                 {/* 2. MIDDLE: MODEL VIEWER (FLEX GROW) */}
                 <div className="relative z-10 w-full flex-grow cursor-grab active:cursor-grabbing min-h-0">
+                    {/* Increased interpolation-decay for smoother transitions */}
                     <model-viewer
                         ref={modelViewerRef}
                         src="/schwerelos.glb?v=11"
@@ -114,7 +115,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="200"
+                        interpolation-decay="300"
                     />
                 </div>
 
@@ -131,10 +132,11 @@ export default function ModelSection() {
                             transition={{ duration: 0.3 }}
                             className="w-full mb-8 max-w-2xl"
                         >
-                            <h4 className="text-xl md:text-2xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">
+                            {/* Larger Dynamic Title */}
+                            <h4 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">
                                 {currentData.title}
                             </h4>
-                            <div className="text-sm md:text-base text-white/60 font-[family-name:var(--font-dm)] leading-relaxed">
+                            <div className="text-base md:text-lg text-white/60 font-[family-name:var(--font-dm)] leading-relaxed">
                                 {currentData.text}
                             </div>
                         </motion.div>
@@ -154,10 +156,10 @@ export default function ModelSection() {
                         {activeIndex !== null && (
                             <button
                                 onClick={() => setActiveIndex(null)}
-                                className="ml-4 w-8 h-8 flex items-center justify-center rounded-full border border-white/20 text-white/50 hover:bg-white hover:text-black transition-all"
+                                className="ml-4 w-10 h-10 flex items-center justify-center rounded-full border border-white/20 text-white/50 hover:bg-white hover:text-black transition-all"
                                 title="Reset View"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
                             </button>
                         )}
                     </div>

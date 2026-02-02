@@ -326,8 +326,8 @@ export default function Home() {
                     style={{ opacity: headerOpacity, pointerEvents: headerPointerEvents }}
                     className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 transition-none"
                 >
-                    <div className="font-[family-name:var(--font-outfit)] text-white tracking-widest uppercase flex items-center gap-3 cursor-default select-none h-full">
-                        <span className="font-bold text-2xl md:text-3xl leading-none flex items-center justify-center -translate-y-[2px] translate-x-[2px]">©</span>
+                    <div className="font-[family-name:var(--font-outfit)] text-white tracking-widest uppercase flex items-baseline gap-1.5 cursor-default select-none">
+                        <span className="font-bold text-2xl md:text-3xl leading-none">©</span>
                         <div className="flex items-baseline">
                             <span className="font-bold text-lg md:text-xl">NF</span>
                             <span className="font-light text-lg md:text-xl ml-1">DESIGN</span>
@@ -388,7 +388,7 @@ export default function Home() {
                 </section>
 
                 {/* 3. BENTO GRID */}
-                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-10 px-2 md:px-6 min-h-screen flex items-center">
+                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center">
                     <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3">
 
 
@@ -408,13 +408,13 @@ export default function Home() {
                         </SpotlightCard>
 
                         {/* TILE 3: ARTIST */}
-                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[600px]">
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[500px] md:min-h-[600px]">
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-[30%_50%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
-                            <div className="absolute bottom-0 left-0 p-8 md:p-10 w-full">
+                            <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
-                                <h3 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-semibold text-white mb-2 tracking-tight">Niklas Fiedler</h3>
-                                <p className="text-xl font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
+                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">Niklas Fiedler</h3>
+                                <p className="text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden">
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
@@ -433,7 +433,7 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-5xl md:text-6xl font-[family-name:var(--font-outfit)] font-semibold leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10">
+                                    <h5 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -445,8 +445,8 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: Stronger Red (Invert -> White -> Sepia -> Red shift -> Darken) */}
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert sepia saturate-[700%] hue-rotate-[300deg] brightness-[0.6] contrast-[2] opacity-100" />
+                                    {/* Audi: Standard Invert + Hue Rotate 180 (Black->White, Red->Cyan->Red) */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-180 opacity-100" />
                                 </div>
 
                                 {/* Text Content - Tighter & Hover Only */}
@@ -472,8 +472,8 @@ export default function Home() {
 
                 {/* 5. PRODUCT ORDER SECTION */}
                 <ProductSection />
-                {/* 6. CONTACT SECTION (Moved here) */}
-                <section id="kontakt" className="py-10 px-2 md:px-12 bg-[#020205] flex justify-center">
+                {/* 6. CONTACT SECTION */}
+                <section id="kontakt" className="py-6 px-2 md:px-12 bg-[#020205] flex justify-center">
                     <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[200px] flex items-center shadow-2xl">
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 opacity-60" />
                         <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-center h-full relative z-10 w-full">
