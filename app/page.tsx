@@ -143,22 +143,17 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Positioned per tile content) */}
-            <div className={`absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none ${
-                // Custom positioning based on grid area:
-                // If it's the "Niklas" tile (col-span-2 row-span-2), put it Bottom Center.
-                // Else (Psychology/Degree), put it Bottom Left.
-                colSpan.includes('col-span-2') ? 'bottom-20 left-1/2 -translate-x-1/2' : 'bottom-16 left-8'
-                }`}>
+            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Centered Bottom) */}
+            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-8 left-1/2 -translate-x-1/2">
                 <div className="relative">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white animate-pulse relative z-10">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
                         <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
                         <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
                         <path d="M7 5a7 7 0 0 1 10 0" />
                     </svg>
-                    {/* Ripple Effects (Waves) */}
-                    <div className="absolute inset-0 bg-white/20 rounded-full animate-ping delay-75" />
-                    <div className="absolute inset-0 bg-white/10 rounded-full animate-ping delay-150 duration-1000 scale-150" />
+                    {/* Ripple Effects (Slower) */}
+                    <div className="absolute inset-0 bg-white/20 rounded-full animate-ping delay-75 duration-[2000ms]" />
+                    <div className="absolute inset-0 bg-white/10 rounded-full animate-ping delay-300 duration-[2500ms] scale-150" />
                 </div>
             </div>
 

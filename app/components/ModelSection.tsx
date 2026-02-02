@@ -86,7 +86,8 @@ export default function ModelSection() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
-                <div className="relative z-30 w-full p-0 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                {/* 1. TOP: STATIC HEADER (Badge Only) */}
+                <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span className="text-xl md:text-2xl text-blue-100 font-[family-name:var(--font-outfit)] font-bold block mb-2 border border-blue-900/50 px-6 py-2 rounded-full bg-blue-950/60 backdrop-blur-md shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>
@@ -143,7 +144,7 @@ export default function ModelSection() {
                     </AnimatePresence>
 
                     {/* Buttons (Left Aligned) */}
-                    <div className="flex flex-wrap gap-2 md:gap-3 justify-start items-center">
+                    <div className="flex flex-wrap gap-2 md:gap-3 justify-start items-center relative z-50">
                         {DATA.map((item, index) => (
                             <TabButton
                                 key={index}
@@ -153,20 +154,27 @@ export default function ModelSection() {
                                 index={index}
                             />
                         ))}
-                        {activeIndex !== null && (
-                            <button
-                                onClick={() => setActiveIndex(null)}
-                                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 h-12 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl hover:bg-white/20 transition-all group z-40"
-                                title="Reset View"
-                            >
-                                <div className="w-6 h-6 flex items-center justify-center rounded-full border border-white/50 text-white group-hover:scale-110 transition-transform">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
-                                </div>
-                                <span className="text-xs uppercase tracking-widest font-bold font-[family-name:var(--font-outfit)]">Ansicht zurücksetzen</span>
-                            </button>
-                        )}
                     </div>
                 </div>
+
+                {/* RESET BUTTON (MOVED TO TOP RIGHT) */}
+                <AnimatePresence>
+                    {activeIndex !== null && (
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            onClick={() => setActiveIndex(null)}
+                            className="absolute top-8 right-8 z-50 flex items-center gap-3 h-12 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl hover:bg-white/20 transition-all group"
+                            title="Reset View"
+                        >
+                            <div className="w-6 h-6 flex items-center justify-center rounded-full border border-white/50 text-white group-hover:scale-110 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                            </div>
+                            <span className="text-xs uppercase tracking-widest font-bold font-[family-name:var(--font-outfit)]">Ansicht zurücksetzen</span>
+                        </motion.button>
+                    )}
+                </AnimatePresence>
 
             </div>
         </section >
@@ -192,10 +200,10 @@ function TabButton({ active, onClick, label, index }: { active: boolean, onClick
                 delay: index * 0.2
             }}
             className={`
-                px-4 py-2 rounded-full border text-xs uppercase tracking-[0.15em] transition-all duration-300 relative cursor-pointer font-[family-name:var(--font-outfit)]
+                px-4 py-2 rounded-full border-2 text-xs uppercase tracking-[0.15em] transition-all duration-300 relative cursor-pointer font-[family-name:var(--font-outfit)]
                 ${active
-                    ? "bg-white text-black border-white font-bold shadow-[0_0_20px_rgba(59,130,246,0.5)] ring-1 ring-blue-400"
-                    : "bg-blue-900/10 border-blue-500/20 text-blue-200 hover:bg-blue-500/20 hover:text-white hover:border-blue-400/50 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.1)]"
+                    ? "bg-white text-black border-white font-black shadow-[0_0_20px_rgba(59,130,246,0.5)] ring-1 ring-blue-400"
+                    : "bg-blue-900/10 border-blue-500/20 text-blue-100 hover:bg-blue-500/20 hover:text-white hover:border-blue-400/50 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.1)] font-bold"
                 }
             `}
         >
