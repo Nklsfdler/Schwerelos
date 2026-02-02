@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { MotionValue, useMotionValueEvent } from 'framer-motion';
+import { MotionValue, useMotionValueEvent, motion } from 'framer-motion';
 
 // --- HANS ZIMMER ENGINE (Short Version + Infinite Depth) ---
 // Source: HansZimmer_Short.mp3
@@ -121,13 +121,19 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
             {/* HINT ARROW (Visible if Muted & Top of Page) */}
             {isMuted && showHint && (
                 <div
-                    className="flex items-center gap-3 pointer-events-none animate-pulse"
+                    className="flex items-center gap-3 pointer-events-none"
+                    style={{ zIndex: 200 }}
                 >
-                    <span className="text-[10px] uppercase tracking-widest text-white/50 font-bold hidden md:block">Ton an für volles Erlebnis</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white/50 w-6 h-6 -rotate-90">
+                    <span className="text-[10px] uppercase tracking-widest text-white/80 font-bold font-[family-name:var(--font-outfit)] whitespace-nowrap drop-shadow-md">Ton an für volles Erlebnis</span>
+                    <motion.svg
+                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                        className="text-white w-6 h-6"
+                        animate={{ x: [-5, 0, -5] }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                    >
                         <path d="M12 5v14" />
                         <path d="M19 12l-7 7-7-7" />
-                    </svg>
+                    </motion.svg>
                 </div>
             )}
 

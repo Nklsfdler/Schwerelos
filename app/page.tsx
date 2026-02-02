@@ -143,6 +143,18 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
+            {/* AFFORDANCE: Plus Icon in Corner */}
+            <div className="absolute top-6 right-6 z-20 opacity-30 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+            </div>
+            {/* AFFORDANCE: Plus Icon in Corner */}
+            <div className="absolute top-6 right-6 z-20 opacity-30 group-hover:opacity-100 transition-opacity duration-500">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+            </div>
             {/* Spotlight only visible on hover (Desktop) */}
             <motion.div
                 className="pointer-events-none absolute -inset-px opacity-0 transition duration-500 group-hover:opacity-100"
@@ -455,11 +467,12 @@ export default function Home() {
                                     <div className="h-4 w-px bg-white/20" />
 
                                     {/* Audi: WHITE SYMBOL + RED TEXT (Calibrated) */}
+                                    {/* Audi: DEEP RED TEXT / WHITE ICON (Refined) */}
                                     <img
                                         src="/logos/Audi Academy.png"
                                         alt="Audi Academy"
                                         className="h-8 w-auto object-contain transition-all duration-500 hover:scale-105"
-                                        style={{ filter: "invert(1) hue-rotate(180deg) saturate(150%) contrast(150%) brightness(110%)" }}
+                                        style={{ filter: "invert(1) hue-rotate(180deg) saturate(300%) contrast(120%) brightness(85%)" }}
                                     />
                                     {/* Animated Equalizer Icon */}</div>
 
@@ -480,8 +493,8 @@ export default function Home() {
 
 
                 {/* 4. 3D ANTIGRAVITY SECTION */}
-                {/* Reduced padding for tighter layout */}
-                <div className="py-2 md:py-4">
+                {/* Minimal vertical padding - Tighter layout */}
+                <div className="py-0">
                     <ModelSection />
                 </div>
 

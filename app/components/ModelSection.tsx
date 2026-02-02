@@ -37,8 +37,8 @@ const DATA = [
     {
         title: "04. Fragile Verbindung",
         text: "Ein Dialog zwischen Innen und Außen. Zwei Helices tanzen umeinander, berühren sich fast, und bleiben doch ewig getrennt.",
-        orbit: "200deg 50deg 75%",  // CLOSER
-        target: "-0.1m 2.2m 0m",
+        orbit: "200deg 60deg 90%",  // Camera moved up/back to show tip
+        target: "-0.1m 4.0m 0m",
         fov: "30deg"
     },
     {
@@ -54,7 +54,8 @@ const DATA = [
 const INITIAL_STATE = {
     title: "Schwerelos",
     text: "Eine Studie der Leichtigkeit. Wähle einen Bereich, um die Details zu erkunden.",
-    orbit: "45deg 75deg 150%",
+    // INITIAL ORBIT: Zoomed out (140%) to show full model
+    orbit: "45deg 75deg 140%",
     target: "0m 1.5m 0m",
     fov: "auto"
 };
@@ -86,7 +87,7 @@ export default function ModelSection() {
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
                 <div className="relative z-30 w-full p-4 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-xs uppercase tracking-[0.2em] text-blue-200 font-black block mb-2 border border-blue-900 px-4 py-1.5 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
+                    <span className="text-xs uppercase tracking-[0.2em] text-blue-200 font-[family-name:var(--font-outfit)] font-black block mb-2 border border-blue-900 px-4 py-1.5 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>
                 </div>
@@ -108,7 +109,7 @@ export default function ModelSection() {
                         camera-orbit={currentData.orbit}
                         camera-target={currentData.target}
                         field-of-view={currentData.fov}
-                        min-camera-orbit="auto auto 110%"
+                        min-camera-orbit="auto auto 5%"
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
@@ -153,17 +154,20 @@ export default function ModelSection() {
                         {activeIndex !== null && (
                             <button
                                 onClick={() => setActiveIndex(null)}
-                                className="ml-4 w-10 h-10 flex items-center justify-center rounded-full border border-white/20 text-white/50 hover:bg-white hover:text-black transition-all"
+                                className="ml-4 flex items-center gap-3 h-10 px-2 rounded-full text-white/50 hover:text-white transition-all group"
                                 title="Reset View"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                                <span className="text-[10px] uppercase tracking-widest font-bold hidden md:block group-hover:text-white transition-colors duration-300">Ansicht zurücksetzen</span>
+                                <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/20 text-white/50 group-hover:bg-white group-hover:text-black transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                                </div>
                             </button>
                         )}
                     </div>
                 </div>
 
             </div>
-        </section>
+        </section >
     );
 }
 
