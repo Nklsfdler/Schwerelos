@@ -67,14 +67,16 @@ export default function ProductSection() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
-                            <div className="flex items-center gap-3 mb-8">
-                                <span className="px-4 py-1.5 bg-white text-black font-bold rounded-full text-[10px] uppercase tracking-[0.15em]">
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className="px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/10 text-[10px] uppercase tracking-widest text-blue-400 font-bold">
                                     Limited Edition
                                 </span>
-                                <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                                    Verfügbar
-                                </span>
+                                <span className="text-[10px] uppercase tracking-widest text-white/40">1 of 10</span>
+                            </div>
+
+                            <div className="flex items-center gap-2 mb-8">
+                                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-white/40">Verfügbar</span>
                             </div>
 
                             <h2 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-black mb-6 leading-none text-white tracking-tight">

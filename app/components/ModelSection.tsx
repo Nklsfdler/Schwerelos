@@ -76,41 +76,26 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-10 px-4 md:px-0">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-12 px-4 md:px-0">
 
-            {/* SEPARATE CARD CONTAINER - BOLD STYLE, STACKED */}
-            <div className="relative w-full max-w-[1400px] h-auto md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+            {/* SEPARATE CARD CONTAINER */}
+            <div className="relative w-full max-w-[1400px] h-[85vh] md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
 
                 {/* Background Texture */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: TITLE & DESCRIPTION (LEFT ALIGNED, BOLD) */}
-                <div className="relative z-30 w-full p-8 md:p-12 md:pb-0 flex flex-col items-start text-left bg-gradient-to-b from-black/50 to-transparent">
-                    <span className="text-xs uppercase tracking-[0.2em] text-white/50 font-bold block mb-4 border border-white/10 px-3 py-1 rounded-full bg-white/5">
+                {/* 1. TOP: STATIC HEADER */}
+                <div className="relative z-30 w-full p-8 md:p-12 pb-0 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                    <span className="text-xs uppercase tracking-[0.2em] text-white/50 font-bold block mb-2 border border-white/10 px-3 py-1 rounded-full bg-white/5">
                         Interactive 3D
                     </span>
-
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeIndex ?? "initial"}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.3 }}
-                            className="w-full"
-                        >
-                            <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-6 tracking-tighter leading-[0.9]">
-                                {activeIndex === null ? "3D-MODELL SEMANTIK" : currentData.title.toUpperCase()}
-                            </h3>
-                            <div className="max-w-3xl">
-                                <WaveText text={currentData.text} />
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
+                    <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tighter leading-none">
+                        3D-MODELL SEMANTIK
+                    </h3>
                 </div>
 
-                {/* 2. MIDDLE: MODEL VIEWER (HUGE, CENTERED) */}
-                <div className="relative z-10 w-full flex-grow min-h-[40vh] md:min-h-0 cursor-grab active:cursor-grabbing">
+                {/* 2. MIDDLE: MODEL VIEWER (FLEX GROW) */}
+                <div className="relative z-10 w-full flex-grow cursor-grab active:cursor-grabbing min-h-0">
                     <model-viewer
                         ref={modelViewerRef}
                         src="/schwerelos.glb?v=11"
@@ -131,34 +116,50 @@ export default function ModelSection() {
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
                         interpolation-decay="200"
                     />
-                    {/* Gradient Overlay for Text Readability on Mobile */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none md:hidden" />
                 </div>
 
-                {/* 3. BOTTOM: BUTTONS */}
-                <div className="relative z-30 w-full p-6 md:p-10 border-t border-white/5 bg-[#0a0a0a]">
-                    <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
+                {/* 3. BOTTOM: DYNAMIC CONTENT & BUTTONS */}
+                <div className="relative z-30 w-full p-6 md:p-12 pt-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent shrink-0">
+
+                    {/* Dynamic Text */}
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeIndex ?? "initial"}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                            className="w-full mb-8 max-w-2xl"
+                        >
+                            <h4 className="text-xl md:text-2xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2 tracking-tight">
+                                {currentData.title}
+                            </h4>
+                            <div className="text-sm md:text-base text-white/60 font-[family-name:var(--font-dm)] leading-relaxed">
+                                {currentData.text}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* Buttons (Left Aligned) */}
+                    <div className="flex flex-wrap gap-2 md:gap-3 justify-start items-center">
                         {DATA.map((item, index) => (
                             <TabButton
                                 key={index}
                                 active={index === activeIndex}
                                 onClick={() => setActiveIndex(index)}
-                                label={item.title}
+                                label={item.title.split('. ')[1] || item.title} // Short label
                                 index={index}
                             />
                         ))}
-                    </div>
-
-                    {activeIndex !== null && (
-                        <div className="flex justify-center md:justify-start mt-4 md:mt-6">
+                        {activeIndex !== null && (
                             <button
                                 onClick={() => setActiveIndex(null)}
-                                className="px-5 py-2 border border-white/10 rounded-full text-[10px] text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-pointer font-bold"
+                                className="ml-4 px-4 py-2 border-b border-white/30 text-[10px] text-white/50 uppercase tracking-widest hover:text-white hover:border-white transition-all cursor-pointer font-bold"
                             >
                                 Reset View
                             </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
 
             </div>
