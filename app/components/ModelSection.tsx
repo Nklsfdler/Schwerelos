@@ -87,7 +87,7 @@ export default function ModelSection() {
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
-                <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                <div className="relative z-30 w-full p-4 md:p-4 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span className="text-xl md:text-2xl text-blue-100 font-[family-name:var(--font-outfit)] font-bold block mb-2 border border-blue-900/50 px-6 py-2 rounded-full bg-blue-950/60 backdrop-blur-md shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>

@@ -143,7 +143,7 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Centered Bottom) */}
+            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Centered Bottom - Soft/Slow) */}
             <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-8 left-1/2 -translate-x-1/2">
                 <div className="relative">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
@@ -151,9 +151,9 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
                         <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
                         <path d="M7 5a7 7 0 0 1 10 0" />
                     </svg>
-                    {/* Ripple Effects (Slower) */}
-                    <div className="absolute inset-0 bg-white/20 rounded-full animate-ping delay-75 duration-[2000ms]" />
-                    <div className="absolute inset-0 bg-white/10 rounded-full animate-ping delay-300 duration-[2500ms] scale-150" />
+                    {/* Ripple Effects (Very Slow & Gentle) */}
+                    <div className="absolute inset-0 bg-white/20 rounded-full animate-ping delay-75 duration-[3000ms]" />
+                    <div className="absolute inset-0 bg-white/10 rounded-full animate-ping delay-500 duration-[4000ms] scale-150" />
                 </div>
             </div>
 
@@ -468,25 +468,15 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: SPLIT COLOR LOGO (White Rings + Red/White Text) */}
-                                    <div className="flex items-baseline gap-3 transition-transform duration-500 hover:scale-105">
-                                        {/* 1. Audi Rings (White SVG) */}
-                                        <svg viewBox="0 0 100 35" className="h-5 w-auto fill-none stroke-current text-white stroke-[3]">
-                                            <circle cx="15" cy="17.5" r="13" />
-                                            <circle cx="38" cy="17.5" r="13" />
-                                            <circle cx="61" cy="17.5" r="13" />
-                                            <circle cx="84" cy="17.5" r="13" />
-                                        </svg>
+                                    {/* Audi: FINAL PNG (No Filters) */}
+                                    <img
+                                        src="/logos/Audie Akademie.png"
+                                        alt="Audi Academy"
+                                        className="h-8 w-auto object-contain transition-all duration-500 hover:scale-105"
+                                    />
+                                </div>
 
-                                        {/* 2. Text: "Audi" (Red) + "Academy" (White) */}
-                                        <div className="flex items-baseline gap-1 font-[family-name:var(--font-outfit)] font-bold text-sm tracking-wide leading-none">
-                                            <span className="text-[#C8102E]">Audi</span>
-                                            <span className="text-white">Academy</span>
-                                        </div>
-                                    </div>
-                                    {/* Animated Equalizer Icon */}</div>
-
-                                {/* Text Content - Tighter & Hover Only */}
+                                {/* Text Content */}
                                 <div className="mt-4 pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
                                         Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
@@ -494,9 +484,6 @@ export default function Home() {
                                 </div>
                             </div>
                         </SpotlightCard>
-
-
-
                     </div>
                 </section>
 
