@@ -143,18 +143,15 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: Plus Icon in Corner */}
-            <div className="absolute top-6 right-6 z-20 opacity-30 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
-                    <path d="M12 5v14M5 12h14" />
+            {/* AFFORDANCE: Touch Fingerprint (Subtle Pulse) */}
+            <div className="absolute top-6 right-6 z-20 opacity-0 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none animate-pulse">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
+                    <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
+                    <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
+                    <path d="M7 5a7 7 0 0 1 10 0" />
                 </svg>
             </div>
-            {/* AFFORDANCE: Plus Icon in Corner */}
-            <div className="absolute top-6 right-6 z-20 opacity-30 group-hover:opacity-100 transition-opacity duration-500">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
-                    <path d="M12 5v14M5 12h14" />
-                </svg>
-            </div>
+
             {/* Spotlight only visible on hover (Desktop) */}
             <motion.div
                 className="pointer-events-none absolute -inset-px opacity-0 transition duration-500 group-hover:opacity-100"
@@ -493,8 +490,8 @@ export default function Home() {
 
 
                 {/* 4. 3D ANTIGRAVITY SECTION */}
-                {/* Minimal vertical padding - Tighter layout */}
-                <div className="py-0">
+                {/* Negative Top Margin for Tighter Connection */}
+                <div className="md:-mt-12 py-0 relative z-20">
                     <ModelSection />
                 </div>
 

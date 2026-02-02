@@ -54,7 +54,7 @@ const DATA = [
 const INITIAL_STATE = {
     title: "Schwerelos",
     text: "Eine Studie der Leichtigkeit. Wähle einen Bereich, um die Details zu erkunden.",
-    // INITIAL ORBIT: Zoomed out (140%) to show full model
+    // INITIAL ORBIT: Must match the hardcoded prop in model-viewer to prevent jump
     orbit: "45deg 75deg 140%",
     target: "0m 1.5m 0m",
     fov: "auto"
@@ -87,7 +87,7 @@ export default function ModelSection() {
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
                 <div className="relative z-30 w-full p-4 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-xs uppercase tracking-[0.2em] text-blue-200 font-[family-name:var(--font-outfit)] font-black block mb-2 border border-blue-900 px-4 py-1.5 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
+                    <span className="text-sm text-blue-200 font-[family-name:var(--font-outfit)] font-medium block mb-2 border border-blue-900 px-4 py-1 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>
                 </div>
@@ -106,8 +106,10 @@ export default function ModelSection() {
                         tone-mapping="neutral"
                         camera-controls
                         auto-rotate={activeIndex === null}
-                        camera-orbit={currentData.orbit}
-                        camera-target={currentData.target}
+                        rotation-per-second="30deg" // Faster rotation
+                        // HARDCODED INITIAL STATE: matches INITIAL_STATE const to prevent jump on mount/reset
+                        camera-orbit={activeIndex === null ? "45deg 75deg 140%" : currentData.orbit}
+                        camera-target={activeIndex === null ? "0m 1.5m 0m" : currentData.target}
                         field-of-view={currentData.fov}
                         min-camera-orbit="auto auto 5%"
                         min-field-of-view="2deg"
