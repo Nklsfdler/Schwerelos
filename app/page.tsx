@@ -446,13 +446,12 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: TRUE RED (Specific Filter Matrix for #FF0000) */}
-                                    {/* Removing Sepia/Hue combo, using precise filter */}
+                                    {/* Audi: WHITE SYMBOL + RED TEXT (Calibrated) */}
                                     <img
                                         src="/logos/Audi Academy.png"
                                         alt="Audi Academy"
-                                        className="h-8 w-auto object-contain opacity-100"
-                                        style={{ filter: "brightness(0) saturate(100%) invert(16%) sepia(96%) saturate(6838%) hue-rotate(357deg) brightness(96%) contrast(126%)" }}
+                                        className="h-8 w-auto object-contain transition-all duration-500 hover:scale-105"
+                                        style={{ filter: "invert(1) hue-rotate(180deg) saturate(150%) contrast(150%) brightness(110%)" }}
                                     />
                                     {/* Animated Equalizer Icon */}</div>
 
@@ -473,7 +472,10 @@ export default function Home() {
 
 
                 {/* 4. 3D ANTIGRAVITY SECTION */}
-                <ModelSection />
+                {/* Reduced padding for tighter layout */}
+                <div className="py-2 md:py-4">
+                    <ModelSection />
+                </div>
 
 
 

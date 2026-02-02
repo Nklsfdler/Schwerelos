@@ -123,7 +123,7 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
                 <div
                     className="flex items-center gap-3 pointer-events-none animate-pulse"
                 >
-                    <span className="text-[10px] uppercase tracking-widest text-white/50 font-bold hidden md:block">Sound On</span>
+                    <span className="text-[10px] uppercase tracking-widest text-white/50 font-bold hidden md:block">Ton an für volles Erlebnis</span>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white/50 w-6 h-6 -rotate-90">
                         <path d="M12 5v14" />
                         <path d="M19 12l-7 7-7-7" />
