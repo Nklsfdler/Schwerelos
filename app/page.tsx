@@ -426,6 +426,8 @@ export default function Home() {
 
                         {/* TILE 2: PHILOSOPHY */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[400px]">
+                            {/* Blue Theme Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
                             <div className="p-10 flex flex-col justify-between h-full relative z-10">
                                 <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
                                 <div>
@@ -443,6 +445,8 @@ export default function Home() {
                             {/* ROUND 12: FORCE CENTER */}
                             <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
+                            {/* Blue Theme Overlay */}
+                            <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay pointer-events-none" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
                                 <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">Niklas Fiedler</h3>
@@ -465,7 +469,8 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto md:mt-20 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                    {/* Spacing Fix: Pushed down for logos */}
+                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-16 md:pt-24 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -514,7 +519,8 @@ export default function Home() {
                 {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */}
                 <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-4">
                     <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[200px] flex items-center shadow-2xl">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 opacity-60" />
+                        {/* Enhanced Blue Gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-purple-900/10 opacity-80" />
                         <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-center h-full relative z-10 w-full">
                             <div className="text-center md:text-left mb-8 md:mb-0">
                                 <div className="flex items-center justify-center md:justify-start gap-6 mb-4">
