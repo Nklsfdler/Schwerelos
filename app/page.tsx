@@ -409,7 +409,8 @@ export default function Home() {
 
                         {/* TILE 3: ARTIST */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[500px] md:min-h-[600px]">
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-[20%_50%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                            {/* ROUND 12: FORCE CENTER */}
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
@@ -445,8 +446,14 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: COMPLETELY RED (Sepia + Saturation + Hue Shift) */}
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter grayscale(100%) sepia(100%) hue-rotate-[320deg] saturate-[500%] brightness-[.8] contrast-[1.2] opacity-100" />
+                                    {/* Audi: TRUE RED (Specific Filter Matrix for #FF0000) */}
+                                    {/* Removing Sepia/Hue combo, using precise filter */}
+                                    <img
+                                        src="/logos/Audi Academy.png"
+                                        alt="Audi Academy"
+                                        className="h-8 w-auto object-contain opacity-100"
+                                        style={{ filter: "brightness(0) saturate(100%) invert(16%) sepia(96%) saturate(6838%) hue-rotate(357deg) brightness(96%) contrast(126%)" }}
+                                    />
                                 </div>
 
                                 {/* Text Content - Tighter & Hover Only */}

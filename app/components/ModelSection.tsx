@@ -79,7 +79,7 @@ export default function ModelSection() {
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER */}
-            <div className="relative w-full max-w-[1400px] h-[85vh] md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+            <div className="relative w-full max-w-[1400px] h-[90vh] md:h-[95vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
 
                 {/* Background Texture */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
@@ -112,7 +112,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="300"
+                        interpolation-decay="1000"
                     />
                 </div>
 
