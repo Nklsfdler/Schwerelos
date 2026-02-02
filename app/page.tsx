@@ -473,8 +473,8 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    {/* Spacing Fix: Adjusted for Balance (not too low, not too high) */}
-                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-8 md:pt-12 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                    {/* Spacing Fix: Adjusted Higher (Round 27) */}
+                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-4 md:pt-6 mb-4 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
