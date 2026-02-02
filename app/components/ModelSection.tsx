@@ -116,6 +116,10 @@ export default function ModelSection() {
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
                         interpolation-decay="200"
+                        // PERFORMANCE: "Invisible" Boosts
+                        power-preference="high-performance" // Hints browser to use dGPU if available
+                        render-scale="auto" // Dynamically lowers resolution ONLY during movement if FPS drops
+                        touch-action="pan-y" // Improves scroll/touch handling
                     />
                 </div>
 
