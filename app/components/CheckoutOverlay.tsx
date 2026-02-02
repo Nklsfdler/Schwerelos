@@ -36,7 +36,7 @@ export function CartOverlay() {
                         {/* CART ITEM */}
                         <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 mb-4">
                             <div className="w-20 h-24 bg-neutral-800 rounded-lg overflow-hidden">
-                                <img src="/sequence/schwerelos/Design_ohne_Titel_100.jpg" className="w-full h-full object-cover opacity-80" />
+                                <img src="/Produktbilder/Produktbild.png" className="w-full h-full object-cover opacity-80" />
                             </div>
                             <div className="flex-1 flex flex-col justify-between">
                                 <div>
@@ -377,7 +377,7 @@ export function CheckoutOverlay() {
                             <h3 className="text-xs uppercase tracking-widest text-white/40 mb-10 font-[family-name:var(--font-outfit)] font-bold">Bestellübersicht</h3>
                             <div className="flex gap-5 items-center mb-8">
                                 <div className="w-20 h-20 bg-[#111] rounded-2xl overflow-hidden shadow-sm border border-white/10 p-1">
-                                    <img src="/sequence/schwerelos/Design_ohne_Titel_100.jpg" className="w-full h-full object-cover rounded-xl opacity-80" />
+                                    <img src="/Produktbilder/Produktbild.png" className="w-full h-full object-cover rounded-xl opacity-80" />
                                 </div>
                                 <div>
                                     <h3 className="font-[family-name:var(--font-outfit)] font-bold text-white text-lg">Schwerelos</h3>

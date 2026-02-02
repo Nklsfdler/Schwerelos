@@ -81,11 +81,11 @@ export default function ProductSection() {
                                 Schwerelos
                             </h2>
 
-                            <div className="flex items-baseline gap-4 mb-10 border-b border-white/10 pb-8">
-                                <p className="text-4xl font-[family-name:var(--font-dm)] font-light text-white">
+                            <div className="flex flex-row items-baseline gap-4 mb-10 border-b border-white/10 pb-8 flex-wrap">
+                                <p className="text-4xl font-[family-name:var(--font-dm)] font-light text-white whitespace-nowrap">
                                     159,00 €
                                 </p>
-                                <span className="text-sm text-white/40 uppercase tracking-widest">Inkl. Mwst. & Versand</span>
+                                <span className="text-sm text-white/40 uppercase tracking-widest whitespace-nowrap">Inkl. Mwst. & Versand</span>
                             </div>
 
                             <div className="space-y-4 mb-10">

@@ -76,40 +76,16 @@ export default function ModelSection() {
     }, [currentData]);
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-20 px-4 md:px-12">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-10 px-4 md:px-12">
 
             {/* SEPARATE CARD CONTAINER - LIGHTER STYLE */}
-            <div className="relative w-full max-w-[1200px] h-auto md:h-[85vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+            <div className="relative w-full max-w-[1200px] h-auto md:h-[90vh] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
 
                 {/* Background Texture/Gradient - Lighter & More Transparent */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: TEXT DESCRIPTION */}
-                <div className="relative z-30 w-full p-8 md:p-12 text-center flex flex-col items-center">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeIndex ?? "initial"}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.5 }}
-                            className="max-w-2xl"
-                        >
-                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold mb-4 block">
-                                Semantische Beschreibung
-                            </span>
-                            <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-6 tracking-tight">
-                                {currentData.title}
-                            </h3>
-                            <div className="flex justify-center">
-                                <WaveText text={currentData.text} />
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
-
-                {/* 2. MIDDLE: MODEL VIEWER (Expanded) */}
-                <div className="relative z-10 w-full flex-grow min-h-[500px] md:min-h-0 h-[50vh] cursor-grab active:cursor-grabbing">
+                {/* 1. TOP: MODEL VIEWER (Expanded) */}
+                <div className="relative z-10 w-full flex-grow min-h-[40vh] md:min-h-0 h-[40vh] cursor-grab active:cursor-grabbing order-1">
                     <div className="absolute top-4 left-6 z-50 pointer-events-none opacity-50">
                         <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 border border-white/10 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">Interactive 3D</span>
                     </div>
@@ -135,9 +111,35 @@ export default function ModelSection() {
                     />
                 </div>
 
+                {/* 2. MIDDLE: TEXT DESCRIPTION */}
+                <div className="relative z-30 w-full p-8 md:p-10 text-center flex flex-col items-center order-2 bg-gradient-to-t from-[#0a0a0a] to-transparent">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeIndex ?? "initial"}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.5 }}
+                            className="max-w-2xl"
+                        >
+                            <h3 className="text-2xl md:text-3xl font-[family-name:var(--font-outfit)] font-bold text-white mb-4 tracking-tight">
+                                Semantische Beschreibung
+                            </h3>
+                            <div className="flex justify-center mb-2">
+                                <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-bold block">
+                                    {currentData.title}
+                                </span>
+                            </div>
+                            <div className="flex justify-center">
+                                <WaveText text={currentData.text} />
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+
                 {/* 3. BOTTOM: BUTTONS */}
-                <div className="relative z-30 w-full p-8 md:p-12 border-t border-white/5 bg-[#0a0a0a]/50 backdrop-blur-sm">
-                    <div className="flex flex-wrap gap-3 justify-center">
+                <div className="relative z-30 w-full p-6 md:p-10 border-t border-white/5 bg-[#0a0a0a] order-3">
+                    <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
                         {DATA.map((item, index) => (
                             <TabButton
                                 key={index}
@@ -150,7 +152,7 @@ export default function ModelSection() {
                     </div>
 
                     {activeIndex !== null && (
-                        <div className="flex justify-center mt-6">
+                        <div className="flex justify-center mt-4 md:mt-6">
                             <button
                                 onClick={() => setActiveIndex(null)}
                                 className="px-5 py-2 border border-white/10 rounded-full text-[10px] text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-pointer font-bold"

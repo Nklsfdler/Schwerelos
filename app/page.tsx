@@ -196,11 +196,11 @@ export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
 
     // --- SCROLL LOGIC ---
-    // Global scroll for logo opacity
+    // Header Visibility: Hide when leaving Hero Section (approx 800px)
     const { scrollY } = useScroll();
-    const logoOpacity = useTransform(scrollY, [0, 200], [1, 0.4]);
-    // Logo Scale (Optional nice touch): Shrink slightly on scroll
-    const logoScale = useTransform(scrollY, [0, 200], [1, 0.9]);
+    // Opacity: 1 -> 0 between 80vh and 100vh
+    const headerOpacity = useTransform(scrollY, [600, 800], [1, 0]);
+    const headerPointerEvents = useTransform(scrollY, (y) => y > 800 ? "none" : "auto");
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -321,20 +321,22 @@ export default function Home() {
                     <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#030303] opacity-80" />
                 </div>
 
-                {/* NAV - STUDIO NF (REPLACED WITH LOGO) */}
-                <nav className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 pointer-events-none">
-                    <motion.img
-                        src="/logos/NFD SW.png"
-                        alt="NFD Logo"
-                        style={{ opacity: logoOpacity, scale: logoScale, originX: 0, originY: 0 }}
-                        className="h-8 md:h-10 w-auto object-contain pointer-events-auto"
-                    />
+                {/* NAV - TEXT BRANDING (HIDES ON SCROLL) */}
+                <motion.nav
+                    style={{ opacity: headerOpacity, pointerEvents: headerPointerEvents }}
+                    className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 transition-none"
+                >
+                    <div className="font-[family-name:var(--font-outfit)] text-white/90 text-sm tracking-widest uppercase flex items-center gap-1 cursor-default select-none">
+                        <span className="font-bold">NF</span>
+                        <span className="font-light">Design</span>
+                        <span className="text-white/40">©</span>
+                    </div>
                     <div className="hidden md:flex gap-12 font-[family-name:var(--font-dm)] text-xs uppercase tracking-[0.2em] text-white/30">
                         <a href="#skulptur" className="cursor-pointer hover:text-white transition-colors duration-500">Skulptur</a>
                         <a href="#aesthetik" className="cursor-pointer hover:text-white transition-colors duration-500">Ästhetik</a>
                         <a href="#kontakt" className="cursor-pointer hover:text-white transition-colors duration-500">Kontakt</a>
                     </div>
-                </nav>
+                </motion.nav>
 
                 {/* 1. HERO SECTION */}
                 <header className="snap-section relative h-screen flex flex-col items-center justify-center z-20 w-full overflow-hidden bg-transparent perspective-[1000px]">
@@ -405,7 +407,7 @@ export default function Home() {
 
                         {/* TILE 3: ARTIST */}
                         <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[600px]">
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-top filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" className="absolute inset-0 w-full h-full object-cover object-[40%_50%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute bottom-0 left-0 p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-6" />
@@ -429,7 +431,7 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2">
                                         <span className="text-[10px] uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white">
+                                    <h5 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white mt-auto md:mt-0">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -441,8 +443,8 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: Invert + Hue Rotate 180 (Cyan -> Red) */}
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-180 opacity-90" />
+                                    {/* Audi: Stronger Red (Contrast Boost + Invert + Hue Rotate) */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-180 contrast-125 opacity-100" />
                                 </div>
 
                                 {/* Text Content - Tighter */}
@@ -454,7 +456,8 @@ export default function Home() {
                             </div>
                         </SpotlightCard>
 
-                        {/* TILE 5: CONTACT (MOVED DOWN & ENHANCED) */}
+
+                        {/* TILE 5: CONTACT (MOVED DOWN & ENHANCED) - Now spans full width at bottom of grid */}
                         <SpotlightCard id="kontakt" colSpan="md:col-span-12" rowSpan="md:row-span-1" className="min-h-[250px] border border-white/10 relative overflow-hidden bg-[#0a0a0a]">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-purple-900/20 opacity-50" />
                             <div className="p-10 flex flex-col md:flex-row justify-between items-center h-full relative z-10">
@@ -466,7 +469,7 @@ export default function Home() {
                                     <p className="text-white/40 font-[family-name:var(--font-dm)] text-sm">Bereit für den nächsten Schritt?</p>
                                 </div>
 
-                                <a href="mailto:niklas@studio-nf.com" className="px-10 py-4 rounded-full bg-white text-black text-xs font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                                <a href="mailto:nif3527@thi.de" className="px-10 py-4 rounded-full bg-white text-black text-xs font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.3)]">
                                     Contact Studio
                                 </a>
                             </div>
@@ -487,7 +490,10 @@ export default function Home() {
                 <CartOverlay />
                 <CheckoutOverlay />
 
-                <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20">
+                <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20 flex flex-col items-center">
+                    {/* NFD Logo in Footer */}
+                    <img src="/logos/NFD SW.png" alt="NFD Logo" className="h-16 w-auto object-contain invert mix-blend-screen opacity-50 mb-8" />
+
                     <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
                     <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 NFD Niklas Fiedler Design</p>
                     <div className="flex justify-center gap-6 mt-6">
