@@ -10,6 +10,10 @@ const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm" });
 export const metadata: Metadata = {
     title: "Schwerelos | NFD Niklas Fiedler Design",
     description: "Eine semantische Studie der Leichtigkeit von NFD Niklas Fiedler Design.",
+    icons: {
+        icon: "/logos/NFD SW.PNG",
+        apple: "/logos/NFD SW.PNG",
+    },
 };
 
 export default function RootLayout({
