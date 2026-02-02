@@ -8,12 +8,15 @@ import { CartProvider } from './context/CartContext';
 import dynamic from 'next/dynamic';
 
 
+// LOADER COMPONENT (Extracted for Stability)
+const ModelLoader = () => (
+    <div className="h-screen bg-[#111] flex items-center justify-center">
+        <span className="text-white/30 text-xs uppercase tracking-widest animate-pulse">Loading Model...</span>
+    </div>
+);
+
 const ModelSection = dynamic(() => import('./components/ModelSection'), {
-    loading: () => (
-        <div className="h-screen bg-[#111] flex items-center justify-center">
-            <span className="text-white/30 text-xs uppercase tracking-widest animate-pulse">Loading Model...</span>
-        </div>
-    ),
+    loading: ModelLoader,
     ssr: false
 });
 const ProductSection = dynamic(() => import('./components/ProductSection'), { ssr: false });
