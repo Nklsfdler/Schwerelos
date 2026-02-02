@@ -236,8 +236,16 @@ export default function Home() {
         };
 
         const initLoad = async () => {
+            // SAFETY TIMEOUT: Ensure site always opens after 4s (prevent infinite loading)
+            const safetyTimer = setTimeout(() => {
+                console.warn("Preloader timeout - Forcing entry");
+                setIsLoaded(true);
+            }, 4000);
+
             // 1. Priority Batch: First 30 frames (Immediate interaction)
             await loadBatch(1, 30);
+
+            clearTimeout(safetyTimer); // Cancel safety timer if fast enough
             setIsLoaded(true);
 
             // 2. Background Batch: Rest of the sequence
