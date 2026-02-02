@@ -143,27 +143,7 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Framer Motion - Organic/Slow) */}
-            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-8 left-1/2 -translate-x-1/2">
-                <div className="relative">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
-                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
-                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
-                        <path d="M7 5a7 7 0 0 1 10 0" />
-                    </svg>
-                    {/* Ripple Effects (Organic Wave) */}
-                    <motion.div
-                        className="absolute inset-0 bg-white/20 rounded-full"
-                        animate={{ scale: [1, 2.5], opacity: [0.4, 0] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    <motion.div
-                        className="absolute inset-0 bg-white/10 rounded-full"
-                        animate={{ scale: [1, 3], opacity: [0.3, 0] }}
-                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    />
-                </div>
-            </div>
+            {/* REMOVED: Old centralized Touch Icon (Now per-tile) */}
 
             {/* Spotlight only visible on hover (Desktop) */}
             <motion.div
@@ -438,6 +418,18 @@ export default function Home() {
                                     <p className="text-lg">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                 </div>
                             </div>
+                            {/* TOUCH ICON: Bottom Right */}
+                            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-6 right-6">
+                                <div className="relative">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
+                                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
+                                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
+                                        <path d="M7 5a7 7 0 0 1 10 0" />
+                                    </svg>
+                                    <motion.div className="absolute inset-0 bg-white/20 rounded-full" animate={{ scale: [1, 2.5], opacity: [0.4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
+                                    <motion.div className="absolute inset-0 bg-white/10 rounded-full" animate={{ scale: [1, 3], opacity: [0.3, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
+                                </div>
+                            </div>
                         </SpotlightCard>
 
                         {/* TILE 3: ARTIST */}
@@ -455,6 +447,18 @@ export default function Home() {
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
                             </div>
+                            {/* TOUCH ICON: Bottom Right */}
+                            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-6 right-6">
+                                <div className="relative">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
+                                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
+                                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
+                                        <path d="M7 5a7 7 0 0 1 10 0" />
+                                    </svg>
+                                    <motion.div className="absolute inset-0 bg-white/20 rounded-full" animate={{ scale: [1, 2.5], opacity: [0.4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
+                                    <motion.div className="absolute inset-0 bg-white/10 rounded-full" animate={{ scale: [1, 3], opacity: [0.3, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
+                                </div>
+                            </div>
                         </SpotlightCard>
 
                         {/* TILE 4: CONTEXT (Dark Mode, Tight Spacing, Color Hint) */}
@@ -469,8 +473,8 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    {/* Spacing Fix: Pushed down for logos */}
-                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-16 md:pt-24 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                    {/* Spacing Fix: Adjusted for Balance (not too low, not too high) */}
+                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-8 md:pt-12 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -496,6 +500,18 @@ export default function Home() {
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
                                         Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                     </p>
+                                </div>
+                            </div>
+                            {/* TOUCH ICON: Bottom Right */}
+                            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-6 right-6">
+                                <div className="relative">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
+                                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
+                                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
+                                        <path d="M7 5a7 7 0 0 1 10 0" />
+                                    </svg>
+                                    <motion.div className="absolute inset-0 bg-white/20 rounded-full" animate={{ scale: [1, 2.5], opacity: [0.4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
+                                    <motion.div className="absolute inset-0 bg-white/10 rounded-full" animate={{ scale: [1, 3], opacity: [0.3, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
                                 </div>
                             </div>
                         </SpotlightCard>
