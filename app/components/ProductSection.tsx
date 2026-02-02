@@ -68,7 +68,7 @@ export default function ProductSection() {
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
                             <div className="flex items-center gap-3 mb-2">
-                                <span className="px-3 py-1 rounded-full border border-cyan-800 bg-cyan-950/50 text-[10px] uppercase tracking-widest text-cyan-400 font-bold shadow-[0_0_15px_rgba(34,211,238,0.15)]">
+                                <span className="px-3 py-1 rounded-full border border-[#1e2a4a] bg-[#0a102b] text-[10px] uppercase tracking-widest text-[#8ba4d6] font-bold shadow-[0_0_15px_rgba(30,42,74,0.3)]">
                                     Limited Edition
                                 </span>
                                 <span className="text-[10px] uppercase tracking-widest text-white/40">1 of 50</span>

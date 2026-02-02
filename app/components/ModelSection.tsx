@@ -84,14 +84,11 @@ export default function ModelSection() {
                 {/* Background Texture */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: STATIC HEADER */}
+                {/* 1. TOP: STATIC HEADER (Badge Only) */}
                 <div className="relative z-30 w-full p-8 md:p-12 pb-0 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-xs uppercase tracking-[0.2em] text-white/50 font-bold block mb-2 border border-white/10 px-3 py-1 rounded-full bg-white/5">
-                        Interactive 3D
+                    <span className="text-xs uppercase tracking-[0.2em] text-blue-200 font-bold block mb-2 border border-blue-900 px-4 py-1.5 rounded-full bg-blue-950/80 shadow-lg shadow-blue-900/20">
+                        Interactive 3D Model
                     </span>
-                    <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tighter leading-none">
-                        3D-MODELL BESCHREIBUNG
-                    </h3>
                 </div>
 
                 {/* 2. MIDDLE: MODEL VIEWER (FLEX GROW) */}
@@ -103,15 +100,15 @@ export default function ModelSection() {
                         poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
                         alt="Schwerelos Skulptur 3D"
                         bounds="tight"
-                        shadow-intensity="2"
-                        exposure="1.5"
+                        shadow-intensity="4"
+                        exposure="1.0"
                         tone-mapping="neutral"
                         camera-controls
                         auto-rotate={activeIndex === null}
                         camera-orbit={currentData.orbit}
                         camera-target={currentData.target}
                         field-of-view={currentData.fov}
-                        min-camera-orbit="auto auto 0%"
+                        min-camera-orbit="auto auto 110%"
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}

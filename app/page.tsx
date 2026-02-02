@@ -327,7 +327,7 @@ export default function Home() {
                     className="fixed top-0 w-full z-[100] flex justify-between items-center p-8 md:p-12 transition-none"
                 >
                     <div className="font-[family-name:var(--font-outfit)] text-white tracking-widest uppercase flex items-baseline gap-1.5 cursor-default select-none">
-                        <span className="font-bold text-2xl md:text-3xl leading-none">©</span>
+                        <span className="font-bold text-2xl md:text-3xl leading-none translate-y-[1px]">©</span>
                         <div className="flex items-baseline">
                             <span className="font-bold text-lg md:text-xl">NF</span>
                             <span className="font-light text-lg md:text-xl ml-1">DESIGN</span>
@@ -389,7 +389,7 @@ export default function Home() {
 
                 {/* 3. BENTO GRID */}
                 <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center">
-                    <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3">
+                    <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-1.5 md:gap-3">
 
 
 
@@ -445,8 +445,8 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: Standard Invert + Hue Rotate 180 (Black->White, Red->Cyan->Red) */}
-                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-180 opacity-100" />
+                                    {/* Audi: Stronger Dark Red (Hue Rotate + Saturation Boost + Brightness Drop) */}
+                                    <img src="/logos/Audi Academy.png" alt="Audi Academy" className="h-8 w-auto object-contain filter invert hue-rotate-[170deg] saturate-150 brightness-75 contrast-125 opacity-100" />
                                 </div>
 
                                 {/* Text Content - Tighter & Hover Only */}
