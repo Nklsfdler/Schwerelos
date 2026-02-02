@@ -143,16 +143,22 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
             className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
             onMouseMove={handleMouseMove}
         >
-            {/* AFFORDANCE: CENTRAL TOUCH ICON (Large, Imposing, Hides on Hover) */}
-            <div className="absolute inset-0 z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none">
+            {/* AFFORDANCE: TOUCH ICON WITH WAVES (Positioned per tile content) */}
+            <div className={`absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none ${
+                // Custom positioning based on grid area:
+                // If it's the "Niklas" tile (col-span-2 row-span-2), put it Bottom Center.
+                // Else (Psychology/Degree), put it Bottom Left.
+                colSpan.includes('col-span-2') ? 'bottom-20 left-1/2 -translate-x-1/2' : 'bottom-16 left-8'
+                }`}>
                 <div className="relative">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white animate-pulse">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white animate-pulse relative z-10">
                         <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
                         <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
                         <path d="M7 5a7 7 0 0 1 10 0" />
                     </svg>
-                    {/* Ripple Effect */}
-                    <div className="absolute inset-0 bg-white/10 rounded-full blur-xl animate-ping" />
+                    {/* Ripple Effects (Waves) */}
+                    <div className="absolute inset-0 bg-white/20 rounded-full animate-ping delay-75" />
+                    <div className="absolute inset-0 bg-white/10 rounded-full animate-ping delay-150 duration-1000 scale-150" />
                 </div>
             </div>
 
@@ -467,15 +473,22 @@ export default function Home() {
 
                                     <div className="h-4 w-px bg-white/20" />
 
-                                    {/* Audi: WHITE SYMBOL + RED TEXT (Calibrated) */}
-                                    {/* Audi: DEEP RED TEXT / WHITE ICON (Refined) */}
-                                    {/* Audi: TRUE RED CALIBRATED (#C8102E Matrix) */}
-                                    <img
-                                        src="/logos/Audi Academy.png"
-                                        alt="Audi Academy"
-                                        className="h-8 w-auto object-contain transition-all duration-500 hover:scale-105"
-                                        style={{ filter: "brightness(0) saturate(100%) invert(18%) sepia(95%) saturate(7000%) hue-rotate(358deg) brightness(95%) contrast(115%)" }}
-                                    />
+                                    {/* Audi: SPLIT COLOR LOGO (White Rings + Red/White Text) */}
+                                    <div className="flex items-baseline gap-3 transition-transform duration-500 hover:scale-105">
+                                        {/* 1. Audi Rings (White SVG) */}
+                                        <svg viewBox="0 0 100 35" className="h-5 w-auto fill-none stroke-current text-white stroke-[3]">
+                                            <circle cx="15" cy="17.5" r="13" />
+                                            <circle cx="38" cy="17.5" r="13" />
+                                            <circle cx="61" cy="17.5" r="13" />
+                                            <circle cx="84" cy="17.5" r="13" />
+                                        </svg>
+
+                                        {/* 2. Text: "Audi" (Red) + "Academy" (White) */}
+                                        <div className="flex items-baseline gap-1 font-[family-name:var(--font-outfit)] font-bold text-sm tracking-wide leading-none">
+                                            <span className="text-[#C8102E]">Audi</span>
+                                            <span className="text-white">Academy</span>
+                                        </div>
+                                    </div>
                                     {/* Animated Equalizer Icon */}</div>
 
                                 {/* Text Content - Tighter & Hover Only */}
@@ -507,7 +520,7 @@ export default function Home() {
                     <ProductSection />
                 </div>
                 {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */}
-                <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-2">
+                <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-4">
                     <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[200px] flex items-center shadow-2xl">
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 opacity-60" />
                         <div className="p-8 md:p-12 flex flex-col md:flex-row justify-between items-center h-full relative z-10 w-full">

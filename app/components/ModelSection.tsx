@@ -86,7 +86,7 @@ export default function ModelSection() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800/10 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
                 {/* 1. TOP: STATIC HEADER (Badge Only) */}
-                <div className="relative z-30 w-full p-4 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                <div className="relative z-30 w-full p-0 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span className="text-xl md:text-2xl text-blue-100 font-[family-name:var(--font-outfit)] font-bold block mb-2 border border-blue-900/50 px-6 py-2 rounded-full bg-blue-950/60 backdrop-blur-md shadow-lg shadow-blue-900/20">
                         Interactive 3D Model
                     </span>
@@ -106,16 +106,16 @@ export default function ModelSection() {
                         tone-mapping="neutral"
                         camera-controls
                         auto-rotate={activeIndex === null}
-                        rotation-per-second="15deg" // Slower rotation
-                        // HARDCODED INITIAL STATE: matches INITIAL_STATE const to prevent jump on mount/reset
-                        camera-orbit={activeIndex === null ? "45deg 75deg 160%" : currentData.orbit}
+                        rotation-per-second="15deg"
+                        // DYNAMIC ORBIT: Only enforce orbit when active. When null (idle), remove prop to let auto-rotate flow naturally.
+                        camera-orbit={activeIndex === null ? undefined : currentData.orbit}
                         camera-target={activeIndex === null ? "0m 1.5m 0m" : currentData.target}
                         field-of-view={currentData.fov}
                         min-camera-orbit="auto auto 5%"
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="500"
+                        interpolation-decay="200"
                     />
                 </div>
 
@@ -156,13 +156,13 @@ export default function ModelSection() {
                         {activeIndex !== null && (
                             <button
                                 onClick={() => setActiveIndex(null)}
-                                className="ml-4 flex items-center gap-3 h-10 px-2 rounded-full text-white/50 hover:text-white transition-all group"
+                                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 h-12 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl hover:bg-white/20 transition-all group z-40"
                                 title="Reset View"
                             >
-                                <span className="text-xs uppercase tracking-widest font-bold group-hover:text-white transition-colors duration-300">Ansicht zurücksetzen</span>
-                                <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/20 text-white/50 group-hover:bg-white group-hover:text-black transition-all">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                                <div className="w-6 h-6 flex items-center justify-center rounded-full border border-white/50 text-white group-hover:scale-110 transition-transform">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
                                 </div>
+                                <span className="text-xs uppercase tracking-widest font-bold font-[family-name:var(--font-outfit)]">Ansicht zurücksetzen</span>
                             </button>
                         )}
                     </div>
