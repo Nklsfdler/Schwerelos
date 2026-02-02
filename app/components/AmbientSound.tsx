@@ -86,51 +86,44 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
         }
     };
 
-    // --- LIVE MODULATION ---
+    // --- HINT LOGIC ---
+    const [showHint, setShowHint] = useState(false);
+
     useMotionValueEvent(scrollProgress, "change", (latest) => {
+        // Toggle hint based on scroll position (Top 5%)
+        setShowHint(latest < 0.05);
+
+        // ... existing audio logic ...
         if (!audioContextRef.current || !filterNodeRef.current || !gainNodeRef.current) return;
         const now = audioContextRef.current.currentTime;
-
-        // MAPPING:
-        // Parabolic Curve for Filter:
-        // 0.0 -> 100 Hz (Muffled)
-        // 0.5 -> 20,000 Hz (Bright - Animation Climax)
-        // 1.0 -> 100 Hz (Muffled)
-
-        // Volume: Keeps constant presence, maybe louder at peak.
-        // 0.0 -> 0.4
-        // 0.5 -> 1.0
-        // 1.0 -> 0.4
-
-        // Distance from center (0.5)
-        const dist = Math.abs(latest - 0.5) * 2; // 0 (at center) to 1 (at edges)
-
-        // Invert for "Intensity at Center"
+        const dist = Math.abs(latest - 0.5) * 2;
         const intensity = 1.0 - dist;
-
-        // Exponential Frequency Map
-        // Low: 100Hz, High: 20000Hz
         const targetFreq = 100 * Math.pow(200, intensity);
-
         const targetVol = 0.4 + (intensity * 0.6);
-
-        // Safety Clamp
         const safeFreq = Math.max(20, Math.min(22000, targetFreq));
-
-        // Smooth Ramp
         filterNodeRef.current.frequency.setTargetAtTime(safeFreq, now, 0.1);
         gainNodeRef.current.gain.setTargetAtTime(targetVol, now, 0.1);
     });
 
+    // Initial check on mount
+    useEffect(() => {
+        const checkScroll = () => {
+            const current = scrollProgress.get();
+            setShowHint(current < 0.05);
+        };
+        // Small delay to ensure motion value is initialized
+        const timer = setTimeout(checkScroll, 100);
+        return () => clearTimeout(timer);
+    }, [scrollProgress]);
+
     return (
         <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-4">
             {/* HINT ARROW (Visible if Muted & Top of Page) */}
-            {isMuted && scrollProgress.get() < 0.05 && (
+            {isMuted && showHint && (
                 <div
                     className="flex items-center gap-3 pointer-events-none animate-pulse"
                 >
                     <span className="text-[10px] uppercase tracking-widest text-white/50 font-bold hidden md:block">Sound On</span>
-                    {/* Arrow Pointing Right to the button */}
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white/50 w-6 h-6 -rotate-90">
                         <path d="M12 5v14" />
                         <path d="M19 12l-7 7-7-7" />
