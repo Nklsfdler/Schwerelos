@@ -87,7 +87,10 @@ export default function ModelSection() {
 
                 {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-outfit)] font-black uppercase tracking-[0.2em] block mb-2 pl-2">
+                    <span
+                        className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] block mb-2 pl-2"
+                        style={{ fontWeight: 900 }} // INLINE FORCE BOLD
+                    >
                         Interactive 3D Model
                     </span>
                 </div>
@@ -115,7 +118,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="4000" // ROUND 37: Extreme Slow (Verification Mode)
+                        interpolation-decay="600" // ROUND 38: Safe Smoothness (Deployment Check)
                         // PERFORMANCE: Quality over Aggressive Scaling
                         // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"
