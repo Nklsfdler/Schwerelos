@@ -115,7 +115,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="200" // ROUND 36: Compromise (Faster than 500, Slower than 100)
+                        interpolation-decay="4000" // ROUND 37: Extreme Slow (Verification Mode)
                         // PERFORMANCE: Quality over Aggressive Scaling
                         // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"
