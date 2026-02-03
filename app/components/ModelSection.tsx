@@ -115,7 +115,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="50" // ROUND 30: Ultra-Slow / Floaty Transition
+                        interpolation-decay="30" // ROUND 31: Super-Slow Kinetic Drift
                         // PERFORMANCE: Quality over Aggressive Scaling
                         power-preference="high-performance"
                         touch-action="pan-y"
@@ -146,12 +146,13 @@ export default function ModelSection() {
                     </AnimatePresence>
 
                     {/* Buttons (Left Aligned) */}
-                    <div className="flex flex-wrap gap-2 md:gap-3 justify-start items-center relative z-50">
+                    <div className="flex flex-wrap gap-3 md:gap-4 justify-start items-center relative z-50">
                         {DATA.map((item, index) => (
                             <TabButton
                                 key={index}
                                 active={index === activeIndex}
                                 onClick={() => setActiveIndex(index)}
+                                number={`0${index + 1}`}
                                 label={item.title.split('. ')[1] || item.title} // Short label
                                 index={index}
                             />
@@ -182,7 +183,7 @@ export default function ModelSection() {
 }
 
 // Drifting "Buoy" Button - Enhanced Design (Buttons look clickable)
-function TabButton({ active, onClick, label, index }: { active: boolean, onClick: () => void, label: string, index: number }) {
+function TabButton({ active, onClick, number, label, index }: { active: boolean, onClick: () => void, number: string, label: string, index: number }) {
     // Subtle float
     const duration = 5 + (index % 3);
     const yOffset = 3 + (index % 2) * 2;
@@ -200,14 +201,21 @@ function TabButton({ active, onClick, label, index }: { active: boolean, onClick
                 delay: index * 0.2
             }}
             className={`
-                px-4 py-2 rounded-full border-2 text-xs uppercase tracking-[0.15em] transition-all duration-300 relative cursor-pointer font-[family-name:var(--font-outfit)]
+                px-5 py-2.5 rounded-full border-2 text-xs uppercase tracking-[0.1em] transition-all duration-300 relative cursor-pointer font-[family-name:var(--font-outfit)] flex items-center gap-3
                 ${active
-                    ? "bg-white text-black border-white font-black shadow-[0_0_20px_rgba(59,130,246,0.5)] ring-1 ring-blue-400"
-                    : "bg-blue-900/10 border-blue-500/20 text-blue-100 hover:bg-blue-500/20 hover:text-white hover:border-blue-400/50 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.1)] font-bold"
+                    ? "bg-white text-black border-white font-black shadow-[0_0_20px_rgba(59,130,246,0.5)] ring-1 ring-blue-400 scale-105"
+                    : "bg-blue-900/10 border-blue-500/20 text-blue-100 hover:bg-blue-500/20 hover:text-white hover:border-blue-400/50 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.1)] font-bold opacity-80 hover:opacity-100"
                 }
             `}
         >
-            {label}
+            {/* Number Badge */}
+            <span className={`text-[10px] opacity-60 ${active ? "font-bold text-black" : "font-normal text-blue-200"}`}>{number}</span>
+            <span>{label}</span>
+
+            {/* Interaction Hint (Pulsing Ring for unselected) */}
+            {!active && (
+                <span className="absolute inset-0 rounded-full border border-blue-400/30 animate-pulse opacity-50" />
+            )}
         </motion.button>
     )
 }
