@@ -88,8 +88,7 @@ export default function ModelSection() {
                 {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span
-                        className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] block mb-2 pl-2"
-                        style={{ fontWeight: 900 }} // INLINE FORCE BOLD
+                        className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-dm)] font-bold uppercase tracking-[0.2em] block mb-2 pl-2"
                     >
                         Interactive 3D Model
                     </span>
@@ -110,8 +109,8 @@ export default function ModelSection() {
                         camera-controls
                         auto-rotate={activeIndex === null}
                         rotation-per-second="15deg"
-                        // DYNAMIC ORBIT: Only enforce orbit when active. When null (idle), remove prop to let auto-rotate flow naturally.
-                        camera-orbit={activeIndex === null ? undefined : currentData.orbit}
+                        // DYNAMIC ORBIT: Always provide a value. Fallback to INITIAL_STATE to prevent "snap" when activeIndex becomes null.
+                        camera-orbit={currentData.orbit || "45deg 75deg 160%"}
                         camera-target={activeIndex === null ? "0m 1.5m 0m" : currentData.target}
                         field-of-view={currentData.fov}
                         min-camera-orbit="auto auto 5%"
