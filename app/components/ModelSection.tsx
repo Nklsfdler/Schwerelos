@@ -66,15 +66,8 @@ export default function ModelSection() {
 
     const currentData = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
 
-    // FORCE UPDATE: Ensure model-viewer reacts to changes immediately
-    React.useEffect(() => {
-        if (modelViewerRef.current) {
-            const viewer = modelViewerRef.current;
-            viewer.cameraTarget = currentData.target;
-            viewer.cameraOrbit = currentData.orbit;
-            viewer.fieldOfView = currentData.fov;
-        }
-    }, [currentData]);
+    // FORCE UPDATE: REMOVED (Conflicted with React Props)
+    // React.useEffect(() => { ... }) replaced by direct prop binding below
 
     return (
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">

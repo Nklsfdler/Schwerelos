@@ -5,7 +5,7 @@ import "./globals.css";
 import Script from "next/script";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
-const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm" });
+const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700", "900"], variable: "--font-dm" });
 
 export const metadata: Metadata = {
     title: "Schwerelos | NFD Niklas Fiedler Design",
