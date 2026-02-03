@@ -322,12 +322,6 @@ export default function Home() {
         <CartProvider>
             <div ref={containerRef} className="bg-[#030303] text-slate-200 font-sans selection:bg-white/20 overflow-x-hidden relative md:cursor-none cursor-auto">
 
-                {/* CRITICAL DEBUG BANNER - REMOVE AFTER FIX */}
-                <div className="fixed top-0 left-0 w-full h-2 bg-red-600 z-[9999] pointer-events-none" />
-                <div className="fixed top-2 left-2 z-[9999] bg-red-600 text-white font-bold p-2 text-xs">
-                    DEBUG v0.1.12: FORCE UPDATE
-                </div>
-
                 {/* ETHEREAL MOUSE TRAIL (Desktop Only) */}
                 <MouseTrail />
 
@@ -588,7 +582,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.12-force-dynamic
+                    v0.1.13-smooth-800
                 </div>
             </div >
         </CartProvider >
