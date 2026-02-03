@@ -580,7 +580,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.10-fov-fix
+                    v0.1.11-no-rotate
                 </div>
             </div >
         </CartProvider >

@@ -81,7 +81,7 @@ export default function ModelSection() {
                 {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span
-                        className="text-xl md:text-2xl text-blue-200/50 font-[family-name:var(--font-dm)] font-black tracking-wide block mb-2 pl-2"
+                        className="text-3xl md:text-5xl text-blue-200/50 font-[family-name:var(--font-dm)] font-black tracking-wide block mb-2 pl-2"
                     >
                         Interactive 3D Model
                     </span>
@@ -100,7 +100,7 @@ export default function ModelSection() {
                         exposure="1.0"
                         tone-mapping="neutral"
                         camera-controls
-                        auto-rotate={activeIndex === null}
+                        auto-rotate={false} // ROUND 46: DISABLED to test if this causes the jump
                         rotation-per-second="15deg"
                         // DYNAMIC ORBIT: Always provide a value. Fallback to INITIAL_STATE to prevent "snap" when activeIndex becomes null.
                         camera-orbit={currentData.orbit || "45deg 75deg 160%"}
