@@ -81,7 +81,7 @@ export default function ModelSection() {
                 {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span
-                        className="text-2xl md:text-4xl text-blue-200/50 font-[family-name:var(--font-outfit)] font-black tracking-wide block mb-2 pl-2"
+                        className="text-3xl md:text-5xl text-blue-200/50 font-[family-name:var(--font-dm)] font-black tracking-wide block mb-2 pl-2"
                     >
                         Interactive 3D Model
                     </span>
@@ -96,11 +96,12 @@ export default function ModelSection() {
                         poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
                         alt="Schwerelos Skulptur 3D"
                         bounds="tight"
-                        shadow-intensity="4"
+                        shadow-intensity="1" // ROUND 48: Reduced from 4 for Performance
+                        shadow-softness="0"  // ROUND 48: Hard shadows are cheaper
                         exposure="1.0"
                         tone-mapping="neutral"
                         camera-controls
-                        auto-rotate={activeIndex === null}
+                        auto-rotate={false}
                         rotation-per-second="15deg"
                         // DYNAMIC ORBIT: Always provide a value. Fallback to INITIAL_STATE to prevent "snap" when activeIndex becomes null.
                         camera-orbit={currentData.orbit || "45deg 75deg 160%"}
@@ -110,7 +111,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="800" // ROUND 48: Slower/Smoother to prevent jumps
+                        interpolation-decay="600" // ROUND 48: Slower/Smoother for Mobile
                         // PERFORMANCE: Quality over Aggressive Scaling
                         // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"

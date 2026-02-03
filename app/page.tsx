@@ -14,9 +14,6 @@ const ModelLoader = () => (
     </div>
 );
 
-// FORCE DYNAMIC: Prevent Next.js from caching the build output statically
-export const dynamic = 'force-dynamic';
-
 const ModelSection = nextDynamic(() => import('./components/ModelSection'), {
     loading: ModelLoader,
     ssr: false
@@ -582,7 +579,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.13-smooth-800
+                    v0.1.13-perf-tune
                 </div>
             </div >
         </CartProvider >
