@@ -115,7 +115,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="30" // ROUND 31: Super-Slow Kinetic Drift
+                        interpolation-decay="3000" // ROUND 33: CORRECTION - High Value = Slower Decay (Longer Slide)
                         // PERFORMANCE: Quality over Aggressive Scaling
                         power-preference="high-performance"
                         touch-action="pan-y"
