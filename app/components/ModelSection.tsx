@@ -16,35 +16,35 @@ const DATA = [
     {
         title: "01. Dynamischer Ursprung",
         text: "Hier beginnt alles. Aus der starren Basis erwächst die Bewegung, Masse transformiert sich in reinen Auftrieb.",
-        orbit: "20deg 90deg 30%",
+        orbit: "20deg 90deg 25%", // ROUND 35: (was 30%)
         target: "0m -23.5m 0m",
         fov: "20deg"
     },
     {
         title: "02. Vertikaler Stab",
         text: "Die Achse der Balance. Kein massives Element, sondern ein filigraner Leitstrahl, der den Blick unaufhaltsam in die Höhe zieht.",
-        orbit: "-30deg 75deg 35%",  // KEEP ZOOM
+        orbit: "-30deg 75deg 28%",  // ROUND 35: (was 35%)
         target: "0m -10.0m 0m",
         fov: "20deg"
     },
     {
         title: "03. Negativer Raum",
         text: "Die Kunst der Auslassung. Luft wird zur Materie, Leere wird zur Form. Das Nichts hält die Struktur zusammen.",
-        orbit: "120deg 60deg 120%", // CALIBRATED
+        orbit: "120deg 60deg 100%", // ROUND 35: (was 120%)
         target: "0.1m 1.2m 0m",
         fov: "30deg"
     },
     {
         title: "04. Fragile Verbindung",
         text: "Ein Dialog zwischen Innen und Außen. Zwei Helices tanzen umeinander, berühren sich fast, und bleiben doch ewig getrennt.",
-        orbit: "200deg 60deg 90%",  // Camera moved up/back to show tip
-        target: "-0.1m 4.0m 0m",
+        orbit: "200deg 60deg 75%",  // ROUND 35: Closer to Tip (was 90%)
+        target: "-0.1m 4.2m 0m",     // Moved target slightly UP (4.0 -> 4.2) to center tip better
         fov: "30deg"
     },
     {
         title: "05. Auslaufen",
         text: "Die Auflösung ins Unendliche. Die Form verliert ihre Grenzen, wird immer feiner, bis sie schließlich eins mit dem Raum wird.",
-        orbit: "0deg 30deg 130%",   // CALIBRATED
+        orbit: "0deg 30deg 110%",   // ROUND 35: (was 130%)
         target: "0m 3.5m 0m",
         fov: "30deg"
     }
@@ -117,7 +117,7 @@ export default function ModelSection() {
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
                         interpolation-decay="500" // ROUND 34: Goldilocks Zone (Balanced Slow)
                         // PERFORMANCE: Quality over Aggressive Scaling
-                        power-preference="high-performance"
+                        // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"
                     />
                 </div>
