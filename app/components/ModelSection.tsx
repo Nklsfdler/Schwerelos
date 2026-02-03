@@ -57,7 +57,7 @@ const INITIAL_STATE = {
     // INITIAL ORBIT: Must match the hardcoded prop in model-viewer to prevent jump
     orbit: "45deg 75deg 160%",
     target: "0m 1.5m 0m",
-    fov: "auto"
+    fov: "30deg" // ROUND 45: Fixed Value (was "auto") to prevent FOV-switching snap
 };
 
 export default function ModelSection() {
@@ -110,7 +110,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="400" // ROUND 41: Tuning for Mobile (Slightly Faster than 600)
+                        interpolation-decay="500" // ROUND 45: Smoother for large Zooms
                         // PERFORMANCE: Quality over Aggressive Scaling
                         // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"
