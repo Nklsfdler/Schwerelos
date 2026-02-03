@@ -88,7 +88,7 @@ export default function ModelSection() {
                 {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <span
-                        className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-dm)] font-bold tracking-wide block mb-2 pl-2"
+                        className="text-lg md:text-xl text-blue-200/50 font-[family-name:var(--font-dm)] font-black tracking-wide block mb-2 pl-2"
                     >
                         Interactive 3D Model
                     </span>
