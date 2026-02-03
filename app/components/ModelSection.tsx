@@ -87,7 +87,7 @@ export default function ModelSection() {
 
                 {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-outfit)] font-bold uppercase tracking-[0.2em] block mb-2 pl-2">
+                    <span className="text-sm md:text-base text-blue-200/50 font-[family-name:var(--font-outfit)] font-black uppercase tracking-[0.2em] block mb-2 pl-2">
                         Interactive 3D Model
                     </span>
                 </div>
@@ -115,7 +115,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="500" // ROUND 34: Goldilocks Zone (Balanced Slow)
+                        interpolation-decay="200" // ROUND 36: Compromise (Faster than 500, Slower than 100)
                         // PERFORMANCE: Quality over Aggressive Scaling
                         // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"
@@ -168,11 +168,11 @@ export default function ModelSection() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             onClick={() => setActiveIndex(null)}
-                            className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-2 h-8 px-4 rounded-full bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all group"
+                            className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-2 h-7 px-3 rounded-full bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all group"
                             title="Reset View"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
-                            <span className="text-[10px] uppercase tracking-[0.15em] font-bold font-[family-name:var(--font-outfit)]">Reset</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                            <span className="text-[9px] uppercase tracking-[0.15em] font-bold font-[family-name:var(--font-outfit)]">Reset</span>
                         </motion.button>
                     )}
                 </AnimatePresence>
