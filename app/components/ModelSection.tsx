@@ -106,7 +106,7 @@ export default function ModelSection() {
                         // DYNAMIC ORBIT: Always provide a value. Fallback to INITIAL_STATE to prevent "snap" when activeIndex becomes null.
                         camera-orbit={currentData.orbit || "45deg 75deg 160%"}
                         camera-target={activeIndex === null ? "0m 1.5m 0m" : currentData.target}
-                        field-of-view={currentData.fov}
+                        field-of-view="25deg" // ROUND 51: Static FOV to prevent "Jumps" (Sprünge)
                         min-camera-orbit="auto auto 5%"
                         min-field-of-view="2deg"
                         interaction-prompt="none"
