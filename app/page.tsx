@@ -5,8 +5,7 @@ import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotio
 import { Wind, MousePointer2 } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 import { CartProvider } from './context/CartContext';
-import dynamic from 'next/dynamic';
-
+import nextDynamic from 'next/dynamic';
 
 // LOADER COMPONENT (Extracted for Stability)
 const ModelLoader = () => (
@@ -15,13 +14,16 @@ const ModelLoader = () => (
     </div>
 );
 
-const ModelSection = dynamic(() => import('./components/ModelSection'), {
+// FORCE DYNAMIC: Prevent Next.js from caching the build output statically
+export const dynamic = 'force-dynamic';
+
+const ModelSection = nextDynamic(() => import('./components/ModelSection'), {
     loading: ModelLoader,
     ssr: false
 });
-const ProductSection = dynamic(() => import('./components/ProductSection'), { ssr: false });
-const CartOverlay = dynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CartOverlay), { ssr: false });
-const CheckoutOverlay = dynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CheckoutOverlay), { ssr: false });
+const ProductSection = nextDynamic(() => import('./components/ProductSection'), { ssr: false });
+const CartOverlay = nextDynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CartOverlay), { ssr: false });
+const CheckoutOverlay = nextDynamic(() => import('./components/CheckoutOverlay').then(mod => mod.CheckoutOverlay), { ssr: false });
 
 const FRAME_COUNT = 200;
 const IMAGE_PATH_PREFIX = "/sequence/schwerelos/Design_ohne_Titel_";
@@ -320,6 +322,12 @@ export default function Home() {
         <CartProvider>
             <div ref={containerRef} className="bg-[#030303] text-slate-200 font-sans selection:bg-white/20 overflow-x-hidden relative md:cursor-none cursor-auto">
 
+                {/* CRITICAL DEBUG BANNER - REMOVE AFTER FIX */}
+                <div className="fixed top-0 left-0 w-full h-2 bg-red-600 z-[9999] pointer-events-none" />
+                <div className="fixed top-2 left-2 z-[9999] bg-red-600 text-white font-bold p-2 text-xs">
+                    DEBUG v0.1.12: FORCE UPDATE
+                </div>
+
                 {/* ETHEREAL MOUSE TRAIL (Desktop Only) */}
                 <MouseTrail />
 
@@ -580,7 +588,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.11-no-rotate
+                    v0.1.12-force-dynamic
                 </div>
             </div >
         </CartProvider >

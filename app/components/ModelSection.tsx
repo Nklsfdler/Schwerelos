@@ -91,6 +91,7 @@ export default function ModelSection() {
                 <div className="relative z-10 w-full flex-grow cursor-grab active:cursor-grabbing min-h-0">
                     {/* Increased interpolation-decay for smoother transitions */}
                     <model-viewer
+                        key="force-remount-v12" // ROUND 47: Force DOM destruction to kill auto-rotate
                         ref={modelViewerRef}
                         src="/schwerelos.glb?v=11"
                         poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
