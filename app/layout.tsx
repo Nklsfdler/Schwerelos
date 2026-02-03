@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     title: "Schwerelos | NFD Niklas Fiedler Design",
     description: "Eine semantische Studie der Leichtigkeit von NFD Niklas Fiedler Design.",
     icons: {
-        icon: "/logos/schwerelos-icon.png",
-        apple: "/logos/schwerelos-icon.png",
+        icon: "/logos/favicon.png?v=4",
+        apple: "/logos/favicon.png?v=4",
     },
 };
 

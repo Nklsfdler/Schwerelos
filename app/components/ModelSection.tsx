@@ -117,7 +117,7 @@ export default function ModelSection() {
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="600" // ROUND 38: Safe Smoothness (Deployment Check)
+                        interpolation-decay="400" // ROUND 41: Tuning for Mobile (Slightly Faster than 600)
                         // PERFORMANCE: Quality over Aggressive Scaling
                         // REMOVED power-preference="high-performance" to fix Mobile Jump
                         touch-action="pan-y"
