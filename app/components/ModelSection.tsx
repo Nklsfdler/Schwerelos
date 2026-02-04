@@ -89,24 +89,27 @@ export default function ModelSection() {
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
     // Instead, we animate the values ourselves using Framer Motion springs.
 
-    // ROUND 57: Splitting Configs for Smoother Zoom
-    // Rotation needs to be responsive but smooth.
-    const rotationConfig = { damping: 50, stiffness: 45, mass: 1.5 }; // Heavy feel
+    // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
+    // We bypass model-viewer's internal interpolation because it snaps on large distances.
+    // Instead, we animate the values ourselves using Framer Motion springs.
 
-    // Zoom needs MORE INERTIA to mask frame-drops/stutters.
-    const zoomConfig = { damping: 50, stiffness: 40, mass: 2.5 }; // VERY Heavy feel
+    // ROUND 58: "Snappy" Physics to fix Mobile Stutter
+    // Mass 1.0 = Lighter/Instant response (Less drag/lag)
+    // Stiffness 80 = Snappy
+    // Damping 40 = No bounce, just smooth stop
+    const springConfig = { damping: 40, stiffness: 80, mass: 1.0 };
 
     // Orbit Springs
     const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
-    const orbitTheta = useSpring(initialOrbit.theta, rotationConfig);
-    const orbitPhi = useSpring(initialOrbit.phi, rotationConfig);
-    const orbitRadius = useSpring(initialOrbit.radius, zoomConfig); // Use Zoom Config
+    const orbitTheta = useSpring(initialOrbit.theta, springConfig);
+    const orbitPhi = useSpring(initialOrbit.phi, springConfig);
+    const orbitRadius = useSpring(initialOrbit.radius, springConfig);
 
     // Target Springs
     const initialTarget = parseTarget(INITIAL_STATE.target);
-    const targetX = useSpring(initialTarget.x, zoomConfig); // Target moves with zoom usually
-    const targetY = useSpring(initialTarget.y, zoomConfig);
-    const targetZ = useSpring(initialTarget.z, zoomConfig);
+    const targetX = useSpring(initialTarget.x, springConfig);
+    const targetY = useSpring(initialTarget.y, springConfig);
+    const targetZ = useSpring(initialTarget.z, springConfig);
 
     // 1. SYNC: Update Springs when selection changes
     useEffect(() => {
@@ -160,22 +163,17 @@ export default function ModelSection() {
 
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-0 md:px-0">
 
-            {/* SEPARATE CARD CONTAINER - Taller/Rectangular (Increased Desktop Height to 115vh) */}
-            <div className="relative w-full max-w-[1400px] h-[95vh] md:h-[115vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden">
+            {/* SEPARATE CARD CONTAINER - Full Width on Desktop/iPad */}
+            {/* Removed max-w-[1400px] to fill screen width as requested "Ausschnitt zu klein" */}
+            <div className="relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border-y md:border border-white/10 md:rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden mx-auto md:w-[98%] max-w-[1600px]">
 
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: STATIC HEADER (Plain Text - No Bubble) */}
-                <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span
-                        className="text-xl md:text-3xl text-blue-200/50 font-[family-name:var(--font-dm)] font-black tracking-wide block mb-2 pl-2"
-                    >
-                        Interactive 3D Model
-                    </span>
-                </div>
+                {/* 1. TOP: REMOVED HEADER (Clean Look) */}
+                <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
 
                 {/* 2. MIDDLE: MODEL VIEWER (FLEX GROW) */}
                 <div className="relative z-10 w-full flex-grow cursor-grab active:cursor-grabbing min-h-0">

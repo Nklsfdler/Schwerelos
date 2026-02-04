@@ -410,79 +410,100 @@ export default function Home() {
                     <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-fr">
 
                         {/* TILE 1: PHILOSOPHY */}
-                        <SpotlightCard className="min-h-[300px] md:h-full">
+                        <SpotlightCard className="min-h-[300px] md:h-full group">
                             {/* Blue Theme Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
-                            <div className="p-8 md:p-10 flex flex-col justify-between h-full relative z-10">
-                                <Wind className="w-10 h-10 md:w-12 md:h-12 text-white/5 absolute top-10 right-10" />
-                                <div>
-                                    <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                    {/* Unified Header Size */}
-                                    <h4 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">&quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;</h4>
+                            {/* Content Container - Bottom Aligned */}
+                            <div className="p-8 md:p-8 lg:p-10 flex flex-col justify-end h-full relative z-10 pb-16 md:pb-16">
+                                <Wind className="w-10 h-10 md:w-8 md:h-8 lg:w-12 lg:h-12 text-white/5 absolute top-10 right-10" />
+
+                                <div className="mt-auto">
+                                    <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
+                                    {/* Responsive Sizes: Smaller on iPad (md), Premium on Desktop (lg) */}
+                                    <h4 className="text-3xl md:text-3xl lg:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">
+                                        &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
+                                    </h4>
                                 </div>
-                                {/* Full Text Restored, Expanding on Hover */}
-                                <div className="max-h-0 opacity-0 group-hover:max-h-[300px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
-                                    <p className="text-base md:text-lg mt-4">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+
+                                {/* Expanding Text - Pushes Upwards */}
+                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-out text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
+                                    <div className="overflow-hidden">
+                                        <p className="pt-4">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                                    </div>
                                 </div>
                             </div>
                             <TouchIcon />
                         </SpotlightCard>
 
                         {/* TILE 2: ARTIST */}
-                        <SpotlightCard className="min-h-[400px] md:h-full">
-                            {/* ROUND 12: FORCE CENTER */}
+                        <SpotlightCard className="min-h-[400px] md:h-full group">
+                            {/* Force Center Image */}
                             <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
                             {/* Blue Theme Overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay pointer-events-none" />
-                            <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
+
+                            {/* Content Container - Bottom Aligned */}
+                            <div className="absolute bottom-0 left-0 p-6 md:p-8 lg:p-10 w-full flex flex-col justify-end">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
-                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">Niklas Fiedler</h3>
-                                <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">Creator & Designer</p>
-                                {/* Full Text Restored */}
-                                <div className="max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-500 overflow-hidden">
-                                    <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
+                                <h3 className="text-4xl md:text-4xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">
+                                    Niklas Fiedler
+                                </h3>
+                                <p className="text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-2 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
+                                    Creator & Designer
+                                </p>
+
+                                {/* Expanding Text */}
+                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                    <div className="overflow-hidden">
+                                        <p className="text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4 mb-6">
+                                            Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <TouchIcon />
                         </SpotlightCard>
 
                         {/* TILE 3: CONTEXT */}
-                        <SpotlightCard className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full">
+                        <SpotlightCard className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full group">
                             {/* Subtle Color Hint Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
 
-                            <div className="p-8 flex flex-col h-full relative z-10 pb-28">
+                            {/* Content Container - Bottom Aligned */}
+                            <div className="p-8 md:p-8 lg:p-8 flex flex-col justify-end h-full relative z-10 pb-24 md:pb-24">
 
                                 {/* Header Group */}
-                                <div className="mb-2">
+                                <div className="mb-2 mt-auto">
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
-                                        <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
+                                        <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-4 md:pt-6 mb-4 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                    <h5 className="text-3xl md:text-3xl lg:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
 
-                                {/* Full Text Restored */}
-                                <div className="mt-4 pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
-                                        Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
-                                    </p>
+                                {/* Expanding Text */}
+                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out border-t border-white/5 mt-4">
+                                    <div className="overflow-hidden">
+                                        <p className="pt-4 text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
+                                            Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
                             {/* LOGOS - FIXED BOTTOM LEFT */}
                             <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none">
-                                {/* THI: Pure White Invert */}
-                                <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-12 w-auto object-contain invert opacity-90" />
+                                {/* THI: Pure White Invert - Scaled down on iPad (md) */}
+                                <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-8 lg:h-12 w-auto object-contain invert opacity-90" />
                                 <div className="h-6 w-px bg-white/20 hidden md:block" />
-                                {/* Audi: FINAL PNG (No Filters) */}
+                                {/* Audi: Scaled down on iPad (md) */}
                                 <img
                                     src="/logos/Audie Akademie.png"
                                     alt="Audi Academy"
                                     loading="lazy" decoding="async"
-                                    className="h-10 md:h-14 w-auto object-contain"
+                                    className="h-10 md:h-10 lg:h-14 w-auto object-contain"
                                 />
                             </div>
                             <TouchIcon />
@@ -493,8 +514,8 @@ export default function Home() {
 
 
                 {/* 4. 3D ANTIGRAVITY SECTION */}
-                {/* 3D Model needs space. Removed negative margin on desktop to fix overlap/gap issues. */}
-                <div className="py-0 relative z-20 w-full max-w-[1400px] mx-auto px-2 md:px-0 mt-4 md:mt-0">
+                {/* 3D Model needs space. Reduced distance. */}
+                <div className="py-0 relative z-20 w-full max-w-[1400px] mx-auto mt-4 md:mt-4">
                     <ModelSection />
                 </div>
 
@@ -544,7 +565,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.21-full-res
+                    v0.1.22-snappy-align
                 </div>
             </div >
         </CartProvider >
