@@ -93,132 +93,113 @@ export default function ModelSection() {
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
     // Instead, we animate the values ourselves using Framer Motion springs.
 
-    // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
-    // We bypass model-viewer's internal interpolation because it snaps on large distances.
-    // Instead, we animate the values ourselves using Framer Motion springs.
+    // --- CUSTOM LERP PHYSICS (The "Heavy Glide" Solution) ---
+    // Replaced Springs with a Frame-Based LERP Loop. 
+    // This is deterministic and doesn't suffer from React-Spring time-step jitters on mobile.
 
-    // ROUND 59: "Slow & Smooth" Physics (Revert to Heavy)
-    // Mass 2.0 = Slow initial acceleration (Heavy/Cinematic)
-    // Stiffness 60 = Reasonable speed
-    // Damping 60 = NO Overshoot, NO Jitter (Critical Damping)
-    const springConfig = { damping: 60, stiffness: 60, mass: 2.0 };
+    // Target Refs (Where we want to go)
+    const targetOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
+    const targetPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
-    // Orbit Springs
-    const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
-    const orbitTheta = useSpring(initialOrbit.theta, springConfig);
-    const orbitPhi = useSpring(initialOrbit.phi, springConfig);
-    const orbitRadius = useSpring(initialOrbit.radius, springConfig);
+    // Current Refs (Where we are)
+    const currentOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
+    const currentPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
-    // Target Springs
-    const initialTarget = parseTarget(INITIAL_STATE.target);
-    const targetX = useSpring(initialTarget.x, springConfig);
-    const targetY = useSpring(initialTarget.y, springConfig);
-    const targetZ = useSpring(initialTarget.z, springConfig);
+    // LERP Helper
+    const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
 
-    // 1. SYNC: Update Springs when selection changes
+    // 1. SYNC: Update Targets when selection changes
     useEffect(() => {
-        const targetData = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
+        const data = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
+        targetOrbit.current = parseOrbit(data.orbit);
+        targetPoint.current = parseTarget(data.target);
+    }, [activeIndex]);
 
-        // Parse New Values
-        const newOrbit = parseOrbit(targetData.orbit);
-        const newTarget = parseTarget(targetData.target);
-
-        // Set Springs
-        orbitTheta.set(newOrbit.theta);
-        orbitPhi.set(newOrbit.phi);
-        orbitRadius.set(newOrbit.radius);
-
-        targetX.set(newTarget.x);
-        targetY.set(newTarget.y);
-        targetZ.set(newTarget.z);
-    }, [activeIndex, orbitTheta, orbitPhi, orbitRadius, targetX, targetY, targetZ]);
-
-    // 2. RENDER LOOP: Apply spring values to model-viewer frame-by-frame
-    // We use a single observer on one spring to trigger the update for all.
+    // 2. PHYSICS LOOP: Run code on every animation frame
     useEffect(() => {
-        const updateCamera = () => {
-            if (!modelViewerRef.current) return;
+        let frameId: number;
+        const LERP_FACTOR = 0.04; // 0.04 = Heavy/Cinematic. Lower is slower.
 
-            // Construct Strings
-            const cameraOrbit = `${orbitTheta.get()}deg ${orbitPhi.get()}deg ${orbitRadius.get()}%`;
-            const cameraTarget = `${targetX.get()}m ${targetY.get()}m ${targetZ.get()}m`;
+        const loop = () => {
+            if (modelViewerRef.current) {
+                // Interpolate ORBIT
+                currentOrbit.current.theta = lerp(currentOrbit.current.theta, targetOrbit.current.theta, LERP_FACTOR);
+                currentOrbit.current.phi = lerp(currentOrbit.current.phi, targetOrbit.current.phi, LERP_FACTOR);
+                currentOrbit.current.radius = lerp(currentOrbit.current.radius, targetOrbit.current.radius, LERP_FACTOR);
 
-            // Direct DOM Manipulation (Fastest)
-            modelViewerRef.current.cameraOrbit = cameraOrbit;
-            modelViewerRef.current.cameraTarget = cameraTarget;
+                // Interpolate TARGET (Pan)
+                currentPoint.current.x = lerp(currentPoint.current.x, targetPoint.current.x, LERP_FACTOR);
+                currentPoint.current.y = lerp(currentPoint.current.y, targetPoint.current.y, LERP_FACTOR);
+                currentPoint.current.z = lerp(currentPoint.current.z, targetPoint.current.z, LERP_FACTOR);
+
+                // Apply to DOM
+                // Theta/Phi use 'deg', Radius uses '%'
+                modelViewerRef.current.cameraOrbit = `${currentOrbit.current.theta}deg ${currentOrbit.current.phi}deg ${currentOrbit.current.radius}%`;
+                modelViewerRef.current.cameraTarget = `${currentPoint.current.x}m ${currentPoint.current.y}m ${currentPoint.current.z}m`;
+            }
+            frameId = requestAnimationFrame(loop);
         };
 
-        // Subscribe to changes (using theta as the trigger, but all will be read)
-        const unsubscribe = orbitTheta.on("change", updateCamera);
-        // Also subscribe others to be safe if theta doesn't change
-        const unsubPhi = orbitPhi.on("change", updateCamera);
-        const unsubRad = orbitRadius.on("change", updateCamera);
-        const unsubTX = targetX.on("change", updateCamera);
-        const unsubTY = targetY.on("change", updateCamera);
-
-        return () => {
-            unsubscribe();
-            unsubPhi();
-            unsubRad();
-            unsubTX();
-            unsubTY();
-        };
-    }, [orbitTheta, orbitPhi, orbitRadius, targetX, targetY, targetZ]);
-
+        frameId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(frameId);
+    }, []);
 
     return (
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */}
-            {/* Added rounded-3xl and border back for ALL screens to frame it as requested "Kachel ... erkennbar" */}
             <div className="relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden mx-auto md:w-[98%] max-w-[1600px]">
 
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: MINIMAL HEADER (Restored "Interaktion") */}
-                <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
-                    <span
-                        className="text-xs md:text-sm text-white/40 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-bold block mb-2 pl-2"
-                    >
-                        Interaktion
-                    </span>
+                {/* 1. TOP: HEADER (Bold & Visible) */}
+                <div className="relative z-30 w-full p-6 md:p-8 flex flex-row justify-between items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                    <div className="flex flex-col">
+                        <span className="text-sm md:text-base text-white/90 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-black block mb-1 pl-2">
+                            INTERAKTIV
+                        </span>
+                        <span className="text-[10px] text-white/40 pl-2 font-[family-name:var(--font-dm)]">
+                            Wähle eine Ansicht
+                        </span>
+                    </div>
                 </div>
 
                 {/* 2. MIDDLE: MODEL VIEWER (FLEX GROW) */}
                 <div className="relative z-10 w-full flex-grow cursor-grab active:cursor-grabbing min-h-0">
-                    {/* Increased interpolation-decay for smoother transitions */}
                     <model-viewer
                         ref={modelViewerRef}
                         src="/schwerelos.glb?v=11"
-                        poster="/sequence/schwerelos/Design_ohne_Titel_200.jpg"
+                        // REMOVED POSTER: We use a custom loading slot to avoid black flashes
                         alt="Schwerelos Skulptur 3D"
                         bounds="tight"
-                        shadow-intensity="1" // ROUND 48: Reduced from 4 for Performance
-                        shadow-softness="0"  // ROUND 48: Hard shadows are cheaper
+                        shadow-intensity="1"
+                        shadow-softness="0"
                         exposure="1.0"
                         tone-mapping="neutral"
-                        camera-controls // Keep enabled
+                        camera-controls
 
                         auto-rotate={false}
-                        rotation-per-second="15deg"
+                        interaction-prompt="none"
 
-                        // IMPORTANT: remove interpolation-decay as WE are the interpolator now
-                        // interaction-prompt="none"
-
-                        // Initial Attributes (Static Fallback)
+                        // Static Fallback
                         camera-orbit={INITIAL_STATE.orbit}
                         camera-target={INITIAL_STATE.target}
-
-                        field-of-view="25deg" // ROUND 51: Static FOV to prevent "Jumps" (Sprünge)
+                        field-of-view="25deg" // Locked FOV
                         min-camera-orbit="auto auto 5%"
                         min-field-of-view="2deg"
-                        interaction-prompt="none"
-                        style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
 
-                        // REMOVED: interpolation-decay (Manual Control)
+                        style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
                         touch-action="pan-y"
-                    />
+                    >
+                        {/* CUSTOM LOADING SLOT */}
+                        <div slot="poster" className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-12 h-12 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                                <span className="text-white/40 text-xs tracking-widest uppercase animate-pulse">Lade 3D Modell...</span>
+                            </div>
+                        </div>
+                    </model-viewer>
                 </div>
 
                 {/* 3. BOTTOM: DYNAMIC CONTENT & BUTTONS */}

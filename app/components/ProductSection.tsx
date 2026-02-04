@@ -44,14 +44,14 @@ export default function ProductSection() {
                             />
                         </motion.div>
 
-                        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide justify-center md:justify-start">
+                        <div className="flex gap-4 overflow-x-auto p-2 scrollbar-hide justify-center md:justify-start">
                             {IMAGES.map((img, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setCurrentImage(i)}
                                     className={`
                                     relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border transition-all duration-300
-                                    ${currentImage === i ? "border-white opacity-100 ring-2 ring-white/20 scale-105" : "border-white/10 opacity-60 hover:opacity-100"}
+                                    ${currentImage === i ? "border-white opacity-100 ring-2 ring-white/20 scale-105 shadow-lg" : "border-white/10 opacity-60 hover:opacity-100"}
                                 `}
                                 >
                                     <img src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover" />
