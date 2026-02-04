@@ -93,11 +93,15 @@ export default function ModelSection() {
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
     // Instead, we animate the values ourselves using Framer Motion springs.
 
-    // ROUND 58: "Snappy" Physics to fix Mobile Stutter
-    // Mass 1.0 = Lighter/Instant response (Less drag/lag)
-    // Stiffness 80 = Snappy
-    // Damping 40 = No bounce, just smooth stop
-    const springConfig = { damping: 40, stiffness: 80, mass: 1.0 };
+    // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
+    // We bypass model-viewer's internal interpolation because it snaps on large distances.
+    // Instead, we animate the values ourselves using Framer Motion springs.
+
+    // ROUND 59: "Slow & Smooth" Physics (Revert to Heavy)
+    // Mass 2.0 = Slow initial acceleration (Heavy/Cinematic)
+    // Stiffness 60 = Reasonable speed
+    // Damping 60 = NO Overshoot, NO Jitter (Critical Damping)
+    const springConfig = { damping: 60, stiffness: 60, mass: 2.0 };
 
     // Orbit Springs
     const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
@@ -163,17 +167,23 @@ export default function ModelSection() {
 
 
     return (
-        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-0 md:px-0">
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
-            {/* SEPARATE CARD CONTAINER - Full Width on Desktop/iPad */}
-            {/* Removed max-w-[1400px] to fill screen width as requested "Ausschnitt zu klein" */}
-            <div className="relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border-y md:border border-white/10 md:rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden mx-auto md:w-[98%] max-w-[1600px]">
+            {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */}
+            {/* Added rounded-3xl and border back for ALL screens to frame it as requested "Kachel ... erkennbar" */}
+            <div className="relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden mx-auto md:w-[98%] max-w-[1600px]">
 
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: REMOVED HEADER (Clean Look) */}
-                <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+                {/* 1. TOP: MINIMAL HEADER (Restored "Interaktion") */}
+                <div className="relative z-30 w-full p-6 md:p-8 flex flex-col items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
+                    <span
+                        className="text-xs md:text-sm text-white/40 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-bold block mb-2 pl-2"
+                    >
+                        Interaktion
+                    </span>
+                </div>
 
                 {/* 2. MIDDLE: MODEL VIEWER (FLEX GROW) */}
                 <div className="relative z-10 w-full flex-grow cursor-grab active:cursor-grabbing min-h-0">

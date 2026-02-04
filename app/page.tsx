@@ -413,22 +413,22 @@ export default function Home() {
                         <SpotlightCard className="min-h-[300px] md:h-full group">
                             {/* Blue Theme Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
-                            {/* Content Container - Bottom Aligned */}
-                            <div className="p-8 md:p-8 lg:p-10 flex flex-col justify-end h-full relative z-10 pb-16 md:pb-16">
-                                <Wind className="w-10 h-10 md:w-8 md:h-8 lg:w-12 lg:h-12 text-white/5 absolute top-10 right-10" />
+                            {/* Content Container - Top Aligned */}
+                            <div className="p-8 md:p-10 flex flex-col h-full relative z-10">
+                                <Wind className="w-10 h-10 md:w-12 md:h-12 text-white/5 absolute top-10 right-10" />
 
-                                <div className="mt-auto">
-                                    <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                    {/* Responsive Sizes: Smaller on iPad (md), Premium on Desktop (lg) */}
-                                    <h4 className="text-3xl md:text-3xl lg:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">
+                                <div className="mb-auto">
+                                    <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
+                                    {/* Responsive Sizes: Top-Left */}
+                                    <h4 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">
                                         &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
                                     </h4>
                                 </div>
 
-                                {/* Expanding Text - Pushes Upwards */}
-                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-out text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
+                                {/* Expanding Text - Expands downwards */}
+                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-out text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium mt-4">
                                     <div className="overflow-hidden">
-                                        <p className="pt-4">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                                        <p>Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                     </div>
                                 </div>
                             </div>
@@ -443,20 +443,24 @@ export default function Home() {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay pointer-events-none" />
 
-                            {/* Content Container - Bottom Aligned */}
-                            <div className="absolute bottom-0 left-0 p-6 md:p-8 lg:p-10 w-full flex flex-col justify-end">
+                            {/* Content Container - Top Aligned with Spacer for Head */}
+                            <div className="absolute inset-0 p-6 md:p-10 flex flex-col">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
-                                <h3 className="text-4xl md:text-4xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">
+                                {/* Header Top Left */}
+                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500 relative z-20">
                                     Niklas Fiedler
                                 </h3>
-                                <p className="text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-2 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
+                                <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-2 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500 relative z-20">
                                     Creator & Designer
                                 </p>
 
-                                {/* Expanding Text */}
-                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                {/* Spacer to avoid face (assuming face is center-ish) */}
+                                <div className="flex-grow" />
+
+                                {/* Expanding Text at Bottom */}
+                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden relative z-20 bg-black/50 backdrop-blur-md rounded-xl md:bg-transparent md:backdrop-blur-none md:rounded-none -mx-2 px-2 md:mx-0 md:px-0">
                                     <div className="overflow-hidden">
-                                        <p className="text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4 mb-6">
+                                        <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4 py-2 md:py-0">
                                             Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.
                                         </p>
                                     </div>
@@ -470,15 +474,15 @@ export default function Home() {
                             {/* Subtle Color Hint Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
 
-                            {/* Content Container - Bottom Aligned */}
-                            <div className="p-8 md:p-8 lg:p-8 flex flex-col justify-end h-full relative z-10 pb-24 md:pb-24">
+                            {/* Content Container - Top Aligned */}
+                            <div className="p-8 md:p-10 flex flex-col h-full relative z-10 pb-24 md:pb-24">
 
-                                {/* Header Group */}
-                                <div className="mb-2 mt-auto">
+                                {/* Header Group Top Left */}
+                                <div className="mb-auto">
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
-                                        <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
+                                        <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl md:text-3xl lg:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
                                 </div>
@@ -486,7 +490,7 @@ export default function Home() {
                                 {/* Expanding Text */}
                                 <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out border-t border-white/5 mt-4">
                                     <div className="overflow-hidden">
-                                        <p className="pt-4 text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
+                                        <p className="pt-4 text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
                                             Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                         </p>
                                     </div>
@@ -495,15 +499,15 @@ export default function Home() {
 
                             {/* LOGOS - FIXED BOTTOM LEFT */}
                             <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none">
-                                {/* THI: Pure White Invert - Scaled down on iPad (md) */}
-                                <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-8 lg:h-12 w-auto object-contain invert opacity-90" />
+                                {/* THI: Pure White Invert */}
+                                <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-12 w-auto object-contain invert opacity-90" />
                                 <div className="h-6 w-px bg-white/20 hidden md:block" />
-                                {/* Audi: Scaled down on iPad (md) */}
+                                {/* Audi */}
                                 <img
                                     src="/logos/Audie Akademie.png"
                                     alt="Audi Academy"
                                     loading="lazy" decoding="async"
-                                    className="h-10 md:h-10 lg:h-14 w-auto object-contain"
+                                    className="h-10 md:h-14 w-auto object-contain"
                                 />
                             </div>
                             <TouchIcon />
@@ -565,7 +569,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.22-snappy-align
+                    v0.1.23-slow-card
                 </div>
             </div >
         </CartProvider >
