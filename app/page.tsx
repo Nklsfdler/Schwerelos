@@ -409,15 +409,15 @@ export default function Home() {
                 <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center justify-center">
                     <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-fr">
 
-                        {/* TILE 1: PHILOSOPHY - Smaller Font & Height */}
+                        {/* TILE 1: PHILOSOPHY - Compact Padding */}
                         <SpotlightCard className="min-h-[300px] md:h-full">
                             {/* Blue Theme Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
-                            <div className="p-8 md:p-10 flex flex-col justify-between h-full relative z-10">
-                                <Wind className="w-10 h-10 md:w-12 md:h-12 text-white/5 absolute top-10 right-10" />
+                            <div className="p-6 md:p-8 flex flex-col justify-between h-full relative z-10">
+                                <Wind className="w-8 h-8 md:w-10 md:h-10 text-white/5 absolute top-8 right-8" />
                                 <div>
                                     <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                    {/* REDUCED FONT SIZE: 4xl->3xl, 5xl->4xl */}
+                                    {/* Kept Smaller as requested */}
                                     <h4 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">&quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;</h4>
                                 </div>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
@@ -427,7 +427,7 @@ export default function Home() {
                             <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 2: ARTIST - Reduced Mobile Height */}
+                        {/* TILE 2: ARTIST - Maximum Impact */}
                         <SpotlightCard className="min-h-[400px] md:h-full">
                             {/* ROUND 12: FORCE CENTER */}
                             <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
@@ -436,8 +436,9 @@ export default function Home() {
                             <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay pointer-events-none" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
-                                <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">Niklas Fiedler</h3>
-                                <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">Creator & Designer</p>
+                                {/* RESTORED BIG FONT: 6xl */}
+                                <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">Niklas Fiedler</h3>
+                                <p className="text-lg md:text-xl font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">Creator & Designer</p>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-500 overflow-hidden">
                                     <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen.</p>
                                 </div>
@@ -445,7 +446,7 @@ export default function Home() {
                             <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 3: CONTEXT - Reduced Mobile Height */}
+                        {/* TILE 3: CONTEXT - Maximum Impact */}
                         <SpotlightCard className="min-h-[250px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full">
                             {/* Subtle Color Hint Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
@@ -457,7 +458,8 @@ export default function Home() {
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-4 md:pt-6 mb-4 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                    {/* RESTORED BIG FONT: 5xl+ */}
+                                    <h5 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-4 md:pt-6 mb-4 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Tech<br /> Design
                                     </h5>
                                 </div>
@@ -542,7 +544,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.19-physics-fix
+                    v0.1.20-layout-flow
                 </div>
             </div >
         </CartProvider >

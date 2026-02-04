@@ -89,7 +89,7 @@ export default function ModelSection() {
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
     // Instead, we animate the values ourselves using Framer Motion springs.
 
-    const springConfig = { damping: 40, stiffness: 60, mass: 1.5 }; // Butter smooth, heavy feel
+    const springConfig = { damping: 40, stiffness: 30, mass: 1.5 }; // SOFT & FLOATY (No Stutter)
 
     // Orbit Springs
     const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
