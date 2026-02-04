@@ -6,6 +6,7 @@ import { Wind, MousePointer2 } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 import { CartProvider } from './context/CartContext';
 import nextDynamic from 'next/dynamic';
+import { TouchIcon } from './components/TouchIcon';
 
 // LOADER COMPONENT (Extracted for Stability)
 const ModelLoader = () => (
@@ -404,46 +405,33 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* 3. BENTO GRID */}
-                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center">
-                    <div className="max-w-[1800px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-1.5 md:gap-3">
+                {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
+                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center justify-center">
+                    <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-fr">
 
-
-
-                        {/* TILE 2: PHILOSOPHY */}
-                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[400px]">
+                        {/* TILE 1: PHILOSOPHY */}
+                        <SpotlightCard className="min-h-[400px] md:h-full">
                             {/* Blue Theme Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
                             <div className="p-10 flex flex-col justify-between h-full relative z-10">
                                 <Wind className="w-12 h-12 text-white/5 absolute top-10 right-10" />
                                 <div>
                                     <span className="text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                    <h4 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">"Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>."</h4>
+                                    <h4 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">&quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;</h4>
                                 </div>
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
                                     <p className="text-lg">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                 </div>
                             </div>
-                            {/* TOUCH ICON: Bottom Right */}
-                            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-6 right-6">
-                                <div className="relative">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
-                                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
-                                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
-                                        <path d="M7 5a7 7 0 0 1 10 0" />
-                                    </svg>
-                                    <motion.div className="absolute inset-0 bg-white/20 rounded-full" animate={{ scale: [1, 2.5], opacity: [0.4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
-                                    <motion.div className="absolute inset-0 bg-white/10 rounded-full" animate={{ scale: [1, 3], opacity: [0.3, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
-                                </div>
-                            </div>
+                            <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 3: ARTIST */}
-                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-2" className="min-h-[500px] md:min-h-[600px]">
+                        {/* TILE 2: ARTIST */}
+                        <SpotlightCard className="min-h-[500px] md:h-full">
                             {/* ROUND 12: FORCE CENTER */}
                             <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             {/* Blue Theme Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
                             <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay pointer-events-none" />
                             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
@@ -453,52 +441,25 @@ export default function Home() {
                                     <p className="text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
                             </div>
-                            {/* TOUCH ICON: Bottom Right */}
-                            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-6 right-6">
-                                <div className="relative">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
-                                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
-                                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
-                                        <path d="M7 5a7 7 0 0 1 10 0" />
-                                    </svg>
-                                    <motion.div className="absolute inset-0 bg-white/20 rounded-full" animate={{ scale: [1, 2.5], opacity: [0.4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
-                                    <motion.div className="absolute inset-0 bg-white/10 rounded-full" animate={{ scale: [1, 3], opacity: [0.3, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
-                                </div>
-                            </div>
+                            <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 4: CONTEXT (Dark Mode, Tight Spacing, Color Hint) */}
-                        <SpotlightCard colSpan="md:col-span-4" rowSpan="md:row-span-1" className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden">
+                        {/* TILE 3: CONTEXT (Dark Mode, Tight Spacing, Color Hint) */}
+                        <SpotlightCard className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full">
                             {/* Subtle Color Hint Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
 
-                            <div className="p-8 flex flex-col h-full relative z-10">
+                            <div className="p-8 flex flex-col h-full relative z-10 pb-24"> {/* Added padding bottom for logos */}
 
                                 {/* Header Group - Tighter Spacing */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                     </div>
-                                    {/* Spacing Fix: Adjusted Higher (Round 27) */}
+                                    {/* Spacing Fix: Adjusted Higher */}
                                     <h5 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white mt-auto pt-4 md:pt-6 mb-4 tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                         B.Sc. Technisches<br /> Design
                                     </h5>
-                                </div>
-
-                                {/* LOGOS - Moved up to avoid overlap */}
-                                <div className="absolute top-6 right-6 flex items-center gap-4 flex-wrap justify-end max-w-[50%]">
-                                    {/* THI: Pure White Invert */}
-                                    <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-10 w-auto object-contain invert opacity-90" />
-
-                                    <div className="h-6 w-px bg-white/20 hidden md:block" />
-
-                                    {/* Audi: FINAL PNG (No Filters) */}
-                                    <img
-                                        src="/logos/Audie Akademie.png"
-                                        alt="Audi Academy"
-                                        loading="lazy" decoding="async"
-                                        className="h-10 md:h-12 w-auto object-contain transition-all duration-500 hover:scale-105"
-                                    />
                                 </div>
 
                                 {/* Text Content */}
@@ -508,18 +469,21 @@ export default function Home() {
                                     </p>
                                 </div>
                             </div>
-                            {/* TOUCH ICON: Bottom Right */}
-                            <div className="absolute z-20 flex items-center justify-center opacity-40 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none bottom-6 right-6">
-                                <div className="relative">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white relative z-10">
-                                        <path d="M12 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" />
-                                        <path d="M9.5 7.5a4.5 4.5 0 0 1 5 0" />
-                                        <path d="M7 5a7 7 0 0 1 10 0" />
-                                    </svg>
-                                    <motion.div className="absolute inset-0 bg-white/20 rounded-full" animate={{ scale: [1, 2.5], opacity: [0.4, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
-                                    <motion.div className="absolute inset-0 bg-white/10 rounded-full" animate={{ scale: [1, 3], opacity: [0.3, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
-                                </div>
+
+                            {/* LOGOS - FIXED BOTTOM LEFT (Avoid Overlap) */}
+                            <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none">
+                                {/* THI: Pure White Invert */}
+                                <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-10 w-auto object-contain invert opacity-90" />
+                                <div className="h-6 w-px bg-white/20 hidden md:block" />
+                                {/* Audi: FINAL PNG (No Filters) */}
+                                <img
+                                    src="/logos/Audie Akademie.png"
+                                    alt="Audi Academy"
+                                    loading="lazy" decoding="async"
+                                    className="h-10 md:h-12 w-auto object-contain"
+                                />
                             </div>
+                            <TouchIcon />
                         </SpotlightCard>
                     </div>
                 </section>
@@ -528,18 +492,17 @@ export default function Home() {
 
                 {/* 4. 3D ANTIGRAVITY SECTION */}
                 {/* Negative Top Margin for Tighter Connection */}
-                <div className="md:-mt-12 py-0 relative z-20">
+                <div className="md:-mt-12 py-0 relative z-20 w-full max-w-[1400px] mx-auto px-2 md:px-0">
                     <ModelSection />
                 </div>
 
-
-
                 {/* 5. PRODUCT ORDER SECTION */}
-                <div className="mb-2 w-full max-w-[1400px]">
+                <div className="mb-2 w-full max-w-[1400px] mx-auto z-20 relative">
                     <ProductSection />
                 </div>
+
                 {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */}
-                <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-4">
+                <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-4 relative z-20">
                     <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[200px] flex items-center shadow-2xl">
                         {/* Enhanced Blue Gradient */}
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-purple-900/10 opacity-80" />
@@ -579,7 +542,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.16-force-build
+                    v0.1.18-lint-clean
                 </div>
             </div >
         </CartProvider >

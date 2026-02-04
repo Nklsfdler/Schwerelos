@@ -73,7 +73,7 @@ export default function ModelSection() {
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER - Taller/Rectangular */}
-            <div className="relative w-full max-w-[1400px] h-[95vh] md:h-[105vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+            <div className="relative w-full max-w-[1400px] h-[95vh] md:h-[105vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden">
 
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none" />

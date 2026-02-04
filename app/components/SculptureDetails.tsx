@@ -53,7 +53,7 @@ export default function SculptureDetails() {
                     {/* Quote / Philosophy */}
                     <div className="col-span-1 lg:col-span-3 p-12 border border-white/10 bg-gradient-to-br from-white/5 to-transparent mt-8">
                         <p className="font-display text-2xl md:text-4xl font-light leading-relaxed text-white/80 max-w-4xl">
-                            "Die primäre Aufgabe der Skulptur ist nicht die Besetzung von Raum, sondern die <span className="text-white font-bold">Inszenierung der Leere</span>."
+                            &quot;Die primäre Aufgabe der Skulptur ist nicht die Besetzung von Raum, sondern die <span className="text-white font-bold">Inszenierung der Leere</span>.&quot;
                         </p>
                         <p className="mt-6 text-sm font-sans font-bold text-white/40">— Dr. Aris K., Lead Architect</p>
                     </div>
