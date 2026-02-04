@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence, useSpring } from "framer-motion";
 
 declare global {
     namespace JSX {
@@ -60,14 +60,99 @@ const INITIAL_STATE = {
     fov: "30deg" // ROUND 45: Fixed Value (was "auto") to prevent FOV-switching snap
 };
 
+// --- HELPER FUNCTIONS ---
+function parseOrbit(orbitString: string) {
+    const [theta, phi, radius] = orbitString.split(" ");
+    return {
+        theta: parseFloat(theta),
+        phi: parseFloat(phi),
+        radius: parseFloat(radius)
+    };
+}
+
+function parseTarget(targetString: string) {
+    const [x, y, z] = targetString.split(" ");
+    return {
+        x: parseFloat(x),
+        y: parseFloat(y),
+        z: parseFloat(z)
+    };
+}
+
 export default function ModelSection() {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const modelViewerRef = React.useRef<any>(null);
 
     const currentData = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
 
-    // FORCE UPDATE: REMOVED (Conflicted with React Props)
-    // React.useEffect(() => { ... }) replaced by direct prop binding below
+    // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
+    // We bypass model-viewer's internal interpolation because it snaps on large distances.
+    // Instead, we animate the values ourselves using Framer Motion springs.
+
+    const springConfig = { damping: 40, stiffness: 60, mass: 1.5 }; // Butter smooth, heavy feel
+
+    // Orbit Springs
+    const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
+    const orbitTheta = useSpring(initialOrbit.theta, springConfig);
+    const orbitPhi = useSpring(initialOrbit.phi, springConfig);
+    const orbitRadius = useSpring(initialOrbit.radius, springConfig);
+
+    // Target Springs
+    const initialTarget = parseTarget(INITIAL_STATE.target);
+    const targetX = useSpring(initialTarget.x, springConfig);
+    const targetY = useSpring(initialTarget.y, springConfig);
+    const targetZ = useSpring(initialTarget.z, springConfig);
+
+    // 1. SYNC: Update Springs when selection changes
+    useEffect(() => {
+        const targetData = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
+
+        // Parse New Values
+        const newOrbit = parseOrbit(targetData.orbit);
+        const newTarget = parseTarget(targetData.target);
+
+        // Set Springs
+        orbitTheta.set(newOrbit.theta);
+        orbitPhi.set(newOrbit.phi);
+        orbitRadius.set(newOrbit.radius);
+
+        targetX.set(newTarget.x);
+        targetY.set(newTarget.y);
+        targetZ.set(newTarget.z);
+    }, [activeIndex, orbitTheta, orbitPhi, orbitRadius, targetX, targetY, targetZ]);
+
+    // 2. RENDER LOOP: Apply spring values to model-viewer frame-by-frame
+    // We use a single observer on one spring to trigger the update for all.
+    useEffect(() => {
+        const updateCamera = () => {
+            if (!modelViewerRef.current) return;
+
+            // Construct Strings
+            const cameraOrbit = `${orbitTheta.get()}deg ${orbitPhi.get()}deg ${orbitRadius.get()}%`;
+            const cameraTarget = `${targetX.get()}m ${targetY.get()}m ${targetZ.get()}m`;
+
+            // Direct DOM Manipulation (Fastest)
+            modelViewerRef.current.cameraOrbit = cameraOrbit;
+            modelViewerRef.current.cameraTarget = cameraTarget;
+        };
+
+        // Subscribe to changes (using theta as the trigger, but all will be read)
+        const unsubscribe = orbitTheta.on("change", updateCamera);
+        // Also subscribe others to be safe if theta doesn't change
+        const unsubPhi = orbitPhi.on("change", updateCamera);
+        const unsubRad = orbitRadius.on("change", updateCamera);
+        const unsubTX = targetX.on("change", updateCamera);
+        const unsubTY = targetY.on("change", updateCamera);
+
+        return () => {
+            unsubscribe();
+            unsubPhi();
+            unsubRad();
+            unsubTX();
+            unsubTY();
+        };
+    }, [orbitTheta, orbitPhi, orbitRadius, targetX, targetY, targetZ]);
+
 
     return (
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
@@ -100,20 +185,25 @@ export default function ModelSection() {
                         shadow-softness="0"  // ROUND 48: Hard shadows are cheaper
                         exposure="1.0"
                         tone-mapping="neutral"
-                        camera-controls
+                        camera-controls // Keep enabled
+
                         auto-rotate={false}
                         rotation-per-second="15deg"
-                        // DYNAMIC ORBIT: Always provide a value. Fallback to INITIAL_STATE to prevent "snap" when activeIndex becomes null.
-                        camera-orbit={currentData.orbit || "45deg 75deg 160%"}
-                        camera-target={activeIndex === null ? "0m 1.5m 0m" : currentData.target}
+
+                        // IMPORTANT: remove interpolation-decay as WE are the interpolator now
+                        // interaction-prompt="none"
+
+                        // Initial Attributes (Static Fallback)
+                        camera-orbit={INITIAL_STATE.orbit}
+                        camera-target={INITIAL_STATE.target}
+
                         field-of-view="25deg" // ROUND 51: Static FOV to prevent "Jumps" (Sprünge)
                         min-camera-orbit="auto auto 5%"
                         min-field-of-view="2deg"
                         interaction-prompt="none"
                         style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                        interpolation-decay="600" // ROUND 48: Slower/Smoother for Mobile
-                        // PERFORMANCE: Quality over Aggressive Scaling
-                        // REMOVED power-preference="high-performance" to fix Mobile Jump
+
+                        // REMOVED: interpolation-decay (Manual Control)
                         touch-action="pan-y"
                     />
                 </div>
