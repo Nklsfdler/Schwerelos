@@ -407,10 +407,10 @@ export default function Home() {
 
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
                 <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center justify-center">
-                    <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-fr">
+                    <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[600px] lg:h-[700px]">
 
                         {/* TILE 1: PHILOSOPHY */}
-                        <SpotlightCard className="min-h-[300px] md:h-full group">
+                        <SpotlightCard className="h-[350px] md:h-full group">
                             {/* Blue Theme Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
                             {/* Content Container - Top Aligned */}
@@ -420,13 +420,13 @@ export default function Home() {
                                 <div className="flex flex-col gap-4">
                                     <div>
                                         <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest text-white/30 mb-2 md:mb-4 block">Psychologie</span>
-                                        {/* iPad: Smaller Font (2xl), Desktop: Large (5xl) */}
-                                        <h4 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">
+                                        {/* iPad: Reduced Weight (Bold vs Black) & Size */}
+                                        <h4 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] font-bold text-white leading-snug">
                                             &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
                                         </h4>
                                     </div>
 
-                                    {/* Expanding Text - Immediately below header */}
+                                    {/* Expanding Text */}
                                     <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-out text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
                                         <div className="overflow-hidden">
                                             <p className="pt-2">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
@@ -437,37 +437,56 @@ export default function Home() {
                             <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 2: ARTIST */}
-                        <SpotlightCard className="min-h-[400px] md:h-full group">
-                            {/* Image pushed down (object-position center 25%) to clear head for text */}
-                            <img src="/sequence/Niklas/image.png" alt="Niklas Fiedler" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-[50%_25%] filter grayscale opacity-80 group-hover:opacity-100 transition-all duration-700" />
-                            {/* Blue Theme Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-90" />
-                            <div className="absolute inset-0 bg-blue-900/5 mix-blend-overlay pointer-events-none" />
+                        {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */}
+                        <SpotlightCard className="h-[450px] md:h-full group overflow-hidden bg-[#0a0a0a]">
 
-                            {/* Content Container - Top Aligned */}
-                            <div className="absolute inset-0 p-6 md:p-8 lg:p-10 flex flex-col">
+                            {/* 1. TOP SECTION: Solid Black Background for Text (Approx 35%) */}
+                            <div className="absolute top-0 left-0 w-full h-[35%] bg-[#0a0a0a] z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
                                 <div className="h-px w-12 bg-white/20 mb-4" />
 
-                                {/* Header Group Top Left */}
-                                <div className="relative z-20">
-                                    <h3 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">
-                                        Niklas Fiedler
-                                    </h3>
-                                    <p className="text-base md:text-sm lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-2 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
+                                {/* Header Group: Creator Top, Name Bottom */}
+                                <div>
+                                    <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-1 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         Creator & Designer
                                     </p>
+                                    <h3 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tight group-hover:text-white text-white/90 transition-colors duration-500">
+                                        Niklas Fiedler
+                                    </h3>
+                                </div>
+                            </div>
 
-                                    {/* Expanding Text - Immediately below header (User request) */}
-                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden bg-black/50 backdrop-blur-md rounded-xl md:bg-transparent md:backdrop-blur-none md:rounded-none -mx-2 px-2 md:mx-0 md:px-0 mt-2">
-                                        <div className="overflow-hidden">
-                                            <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4 py-2 md:py-0">
-                                                Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf.
-                                            </p>
-                                        </div>
+                            {/* 2. BOTTOM SECTION: Image (Starts below text) */}
+                            {/* HOVER EFFECT: Image moves DOWN (translate-y) to reveal more black space if needed, or just standard paralax */}
+                            {/* User asked: "Kopf ... weiter runter geht ... schneid mehr unten ab" */}
+                            <div className="absolute top-[35%] left-0 w-full h-[65%] overflow-hidden z-10 bg-[#0a0a0a]">
+                                <img
+                                    src="/sequence/Niklas/image.png"
+                                    alt="Niklas Fiedler"
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 group-hover:translate-y-4 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                />
+                                {/* Overlay gradient to merge with top black */}
+                                <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20" />
+                            </div>
+
+                            {/* 3. EXPANDING TEXT (Floats over image bottom or in black area? User said "Expandiert ... Kopf weiter runter") */}
+                            {/* We put it in the Top Section, expanding downwards? No, space is tight. */}
+                            {/* Let's put it absolute at the bottom, fading in over the image? Or growing from the top section? */}
+                            {/* "Kopf noch weiter runter geht ... Platz hat". Implies Top Section Grows? */}
+                            {/* Safer: Top Section is fixed. Text appears there if space, or over image. */}
+                            {/* Actually, let's put it in the Top Section and let it push height? No, absolute positioning breaks that. */}
+                            {/* Let's overlay it on the image top, fading in. */}
+                            <div className="absolute top-[35%] left-0 w-full p-6 md:p-8 lg:p-10 z-30 pointer-events-none">
+                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                    <div className="overflow-hidden">
+                                        <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-4 drop-shadow-md bg-black/40 backdrop-blur-md p-4 rounded-xl md:bg-transparent md:backdrop-blur-none md:p-0 md:rounded-none">
+                                            Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
+
                             <TouchIcon />
                         </SpotlightCard>
 
@@ -478,19 +497,18 @@ export default function Home() {
 
                             {/* Content Container - Top Aligned */}
                             <div className="p-8 md:p-8 lg:p-10 flex flex-col h-full relative z-10 pb-24 md:pb-24">
-
-                                {/* Header Group Top Left */}
                                 <div className="flex flex-col gap-4">
                                     <div className="mb-auto">
-                                        <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
+                                        <div className="flex justify-start items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                             <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                         </div>
-                                        <h5 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                        {/* iPad: Font Bold (not Black) */}
+                                        <h5 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                             B.Sc. Technisches<br /> Design
                                         </h5>
                                     </div>
 
-                                    {/* Expanding Text - Immediately below header */}
+                                    {/* Expanding Text */}
                                     <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out border-t border-white/5 mt-4">
                                         <div className="overflow-hidden">
                                             <p className="pt-2 text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
@@ -571,7 +589,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.24-lerp-perf
+                    v0.1.25-physics3-layout
                 </div>
             </div >
         </CartProvider >

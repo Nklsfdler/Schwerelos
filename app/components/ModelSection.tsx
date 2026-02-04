@@ -87,53 +87,55 @@ export default function ModelSection() {
 
     // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
-    // Instead, we animate the values ourselves using Framer Motion springs.
+    // --- CUSTOM PHYSICS LOOP 3.0 (Time-Corrected Damping) ---
+    // The previous loop sputtered on frame drops because the LERP factor was constant.
+    // This new loop normalizes movement based on Delta Time (dt), ensuring smooth speed regardless of FPS.
+    // Formula: current = lerp(current, target, 1 - exp(-speed * dt))
 
-    // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
-    // We bypass model-viewer's internal interpolation because it snaps on large distances.
-    // Instead, we animate the values ourselves using Framer Motion springs.
-
-    // --- CUSTOM LERP PHYSICS (The "Heavy Glide" Solution) ---
-    // Replaced Springs with a Frame-Based LERP Loop. 
-    // This is deterministic and doesn't suffer from React-Spring time-step jitters on mobile.
-
-    // Target Refs (Where we want to go)
+    // Target Refs
     const targetOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
     const targetPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
-    // Current Refs (Where we are)
+    // Current Refs
     const currentOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
     const currentPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
     // LERP Helper
     const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
 
-    // 1. SYNC: Update Targets when selection changes
+    // 1. SYNC: Update Targets
     useEffect(() => {
         const data = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
         targetOrbit.current = parseOrbit(data.orbit);
         targetPoint.current = parseTarget(data.target);
     }, [activeIndex]);
 
-    // 2. PHYSICS LOOP: Run code on every animation frame
+    // 2. PHYSICS LOOP
     useEffect(() => {
         let frameId: number;
-        const LERP_FACTOR = 0.04; // 0.04 = Heavy/Cinematic. Lower is slower.
+        let lastTime = performance.now();
+        const DECAY_SPEED = 3.0; // 3.0 = Heavy/Cinematic. Higher = Snappier.
 
-        const loop = () => {
+        const loop = (time: number) => {
+            const dt = Math.min((time - lastTime) / 1000, 0.1); // Clamp dt to prevent huge jumps on tab switch
+            lastTime = time;
+
             if (modelViewerRef.current) {
+                // Time-Corrected Damping Factor
+                // If dt increases (lag), factor increases to compensate.
+                const factor = 1 - Math.exp(-DECAY_SPEED * dt);
+
                 // Interpolate ORBIT
-                currentOrbit.current.theta = lerp(currentOrbit.current.theta, targetOrbit.current.theta, LERP_FACTOR);
-                currentOrbit.current.phi = lerp(currentOrbit.current.phi, targetOrbit.current.phi, LERP_FACTOR);
-                currentOrbit.current.radius = lerp(currentOrbit.current.radius, targetOrbit.current.radius, LERP_FACTOR);
+                currentOrbit.current.theta = lerp(currentOrbit.current.theta, targetOrbit.current.theta, factor);
+                currentOrbit.current.phi = lerp(currentOrbit.current.phi, targetOrbit.current.phi, factor);
+                currentOrbit.current.radius = lerp(currentOrbit.current.radius, targetOrbit.current.radius, factor);
 
-                // Interpolate TARGET (Pan)
-                currentPoint.current.x = lerp(currentPoint.current.x, targetPoint.current.x, LERP_FACTOR);
-                currentPoint.current.y = lerp(currentPoint.current.y, targetPoint.current.y, LERP_FACTOR);
-                currentPoint.current.z = lerp(currentPoint.current.z, targetPoint.current.z, LERP_FACTOR);
+                // Interpolate TARGET
+                currentPoint.current.x = lerp(currentPoint.current.x, targetPoint.current.x, factor);
+                currentPoint.current.y = lerp(currentPoint.current.y, targetPoint.current.y, factor);
+                currentPoint.current.z = lerp(currentPoint.current.z, targetPoint.current.z, factor);
 
-                // Apply to DOM
-                // Theta/Phi use 'deg', Radius uses '%'
+                // Apply
                 modelViewerRef.current.cameraOrbit = `${currentOrbit.current.theta}deg ${currentOrbit.current.phi}deg ${currentOrbit.current.radius}%`;
                 modelViewerRef.current.cameraTarget = `${currentPoint.current.x}m ${currentPoint.current.y}m ${currentPoint.current.z}m`;
             }
@@ -153,14 +155,16 @@ export default function ModelSection() {
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none" />
 
-                {/* 1. TOP: HEADER (Bold & Visible) */}
+                {/* 1. TOP: HEADER (Reordered: Context top, Title bottom) */}
                 <div className="relative z-30 w-full p-6 md:p-8 flex flex-row justify-between items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0">
                     <div className="flex flex-col">
-                        <span className="text-sm md:text-base text-white/90 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-black block mb-1 pl-2">
-                            INTERAKTIV
-                        </span>
-                        <span className="text-[10px] text-white/40 pl-2 font-[family-name:var(--font-dm)]">
+                        {/* 1. Context (Small, Gray, Top) */}
+                        <span className="text-[10px] md:text-xs text-white/40 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-bold block mb-1 pl-1">
                             Wähle eine Ansicht
+                        </span>
+                        {/* 2. Main Title (Big, White, Bottom - Matches other tiles) */}
+                        <span className="text-xl md:text-2xl text-white/90 font-[family-name:var(--font-outfit)] uppercase tracking-widest font-bold block">
+                            INTERAKTIV
                         </span>
                     </div>
                 </div>
@@ -181,6 +185,8 @@ export default function ModelSection() {
 
                         auto-rotate={false}
                         interaction-prompt="none"
+                        loading="eager" // Force immediate load
+                        reveal="auto"   // Show as soon as ready
 
                         // Static Fallback
                         camera-orbit={INITIAL_STATE.orbit}
