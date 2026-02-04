@@ -89,7 +89,10 @@ export default function ModelSection() {
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
     // Instead, we animate the values ourselves using Framer Motion springs.
 
-    const springConfig = { damping: 40, stiffness: 30, mass: 1.5 }; // SOFT & FLOATY (No Stutter)
+    // ROUND 56: Softer Physics to prevent "Micro-Stutter" / Ruckeln
+    // Lower Stiffness (60->45) = Slower/Softer acceleration
+    // Higher Damping (40->50) = Less oscillation/overshoot (Heavy Feel)
+    const springConfig = { damping: 50, stiffness: 45, mass: 1.5 }; // Butter smooth, heavy feel
 
     // Orbit Springs
     const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
@@ -219,7 +222,7 @@ export default function ModelSection() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.3 }}
-                            className="w-full mb-8 max-w-2xl"
+                            className="w-full mb-8 max-w-2xl text-container pr-12 md:pr-24" // Added Padding Right to avoid Reset Button overlap
                         >
                             {/* Larger Dynamic Title */}
                             <h4 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">
