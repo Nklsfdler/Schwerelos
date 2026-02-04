@@ -409,7 +409,7 @@ export default function Home() {
                 <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center justify-center">
                     <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-fr">
 
-                        {/* TILE 1: PHILOSOPHY - Optimized Size */}
+                        {/* TILE 1: PHILOSOPHY */}
                         <SpotlightCard className="min-h-[300px] md:h-full">
                             {/* Blue Theme Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
@@ -417,11 +417,12 @@ export default function Home() {
                                 <Wind className="w-10 h-10 md:w-12 md:h-12 text-white/5 absolute top-10 right-10" />
                                 <div>
                                     <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/30 mb-4 block">Psychologie</span>
-                                    {/* Restore Larger Desktop Font, Keep Mobile readable */}
+                                    {/* Unified Header Size */}
                                     <h4 className="text-3xl md:text-5xl font-[family-name:var(--font-outfit)] text-white font-light leading-snug">&quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;</h4>
                                 </div>
-                                <div className="max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
-                                    <p className="text-base md:text-lg">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht.</p>
+                                {/* Full Text Restored, Expanding on Hover */}
+                                <div className="max-h-0 opacity-0 group-hover:max-h-[300px] group-hover:opacity-100 transition-all duration-700 overflow-hidden text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
+                                    <p className="text-base md:text-lg mt-4">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                 </div>
                             </div>
                             <TouchIcon />
@@ -438,21 +439,22 @@ export default function Home() {
                                 <div className="h-px w-12 bg-white/20 mb-4" />
                                 <h3 className="text-4xl md:text-6xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight group-hover:text-white text-white/70 transition-colors duration-500">Niklas Fiedler</h3>
                                 <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-6 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">Creator & Designer</p>
+                                {/* Full Text Restored */}
                                 <div className="max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-500 overflow-hidden">
-                                    <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen.</p>
+                                    <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed border-l border-white/10 pl-4">Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um das Unmögliche sichtbar zu machen: das Gefühl von absoluter Schwerelosigkeit.</p>
                                 </div>
                             </div>
                             <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 3: CONTEXT - Restore Full Text & Logo Size */}
+                        {/* TILE 3: CONTEXT */}
                         <SpotlightCard className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full">
                             {/* Subtle Color Hint Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
 
                             <div className="p-8 flex flex-col h-full relative z-10 pb-28">
 
-                                {/* Header Group - Tighter Spacing */}
+                                {/* Header Group */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
@@ -462,15 +464,15 @@ export default function Home() {
                                     </h5>
                                 </div>
 
-                                {/* Text Content */}
+                                {/* Full Text Restored */}
                                 <div className="mt-4 pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                     <p className="text-base md:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
-                                        Projektarbeit von Niklas Fiedler.
+                                        Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                     </p>
                                 </div>
                             </div>
 
-                            {/* LOGOS - FIXED BOTTOM LEFT (Increased Size) */}
+                            {/* LOGOS - FIXED BOTTOM LEFT */}
                             <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none">
                                 {/* THI: Pure White Invert */}
                                 <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-12 w-auto object-contain invert opacity-90" />
@@ -542,7 +544,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.20-polish
+                    v0.1.21-full-res
                 </div>
             </div >
         </CartProvider >

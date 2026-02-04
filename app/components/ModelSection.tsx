@@ -89,22 +89,24 @@ export default function ModelSection() {
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
     // Instead, we animate the values ourselves using Framer Motion springs.
 
-    // ROUND 56: Softer Physics to prevent "Micro-Stutter" / Ruckeln
-    // Lower Stiffness (60->45) = Slower/Softer acceleration
-    // Higher Damping (40->50) = Less oscillation/overshoot (Heavy Feel)
-    const springConfig = { damping: 50, stiffness: 45, mass: 1.5 }; // Butter smooth, heavy feel
+    // ROUND 57: Splitting Configs for Smoother Zoom
+    // Rotation needs to be responsive but smooth.
+    const rotationConfig = { damping: 50, stiffness: 45, mass: 1.5 }; // Heavy feel
+
+    // Zoom needs MORE INERTIA to mask frame-drops/stutters.
+    const zoomConfig = { damping: 50, stiffness: 40, mass: 2.5 }; // VERY Heavy feel
 
     // Orbit Springs
     const initialOrbit = parseOrbit(INITIAL_STATE.orbit);
-    const orbitTheta = useSpring(initialOrbit.theta, springConfig);
-    const orbitPhi = useSpring(initialOrbit.phi, springConfig);
-    const orbitRadius = useSpring(initialOrbit.radius, springConfig);
+    const orbitTheta = useSpring(initialOrbit.theta, rotationConfig);
+    const orbitPhi = useSpring(initialOrbit.phi, rotationConfig);
+    const orbitRadius = useSpring(initialOrbit.radius, zoomConfig); // Use Zoom Config
 
     // Target Springs
     const initialTarget = parseTarget(INITIAL_STATE.target);
-    const targetX = useSpring(initialTarget.x, springConfig);
-    const targetY = useSpring(initialTarget.y, springConfig);
-    const targetZ = useSpring(initialTarget.z, springConfig);
+    const targetX = useSpring(initialTarget.x, zoomConfig); // Target moves with zoom usually
+    const targetY = useSpring(initialTarget.y, zoomConfig);
+    const targetZ = useSpring(initialTarget.z, zoomConfig);
 
     // 1. SYNC: Update Springs when selection changes
     useEffect(() => {
@@ -160,8 +162,8 @@ export default function ModelSection() {
     return (
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
-            {/* SEPARATE CARD CONTAINER - Taller/Rectangular */}
-            <div className="relative w-full max-w-[1400px] h-[95vh] md:h-[105vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden">
+            {/* SEPARATE CARD CONTAINER - Taller/Rectangular (Increased Desktop Height to 115vh) */}
+            <div className="relative w-full max-w-[1400px] h-[95vh] md:h-[115vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl overflow-hidden">
 
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none" />
