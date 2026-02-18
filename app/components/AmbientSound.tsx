@@ -117,7 +117,7 @@ export default function AmbientSound({ scrollProgress }: AmbientSoundProps) {
     }, [scrollProgress]);
 
     return (
-        <div className="fixed bottom-8 right-8 z-[100] flex items-center gap-4">
+        <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-4">
             {/* HINT ARROW (Visible if Muted & Top of Page) */}
             {isMuted && showHint && (
                 <div

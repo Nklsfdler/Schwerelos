@@ -422,9 +422,9 @@ export default function Home() {
 
                                 <div className="flex flex-col gap-4">
                                     <div>
-                                        <span className="text-[10px] md:text-xs font-medium tracking-[0.2em] text-white/50 mb-2 md:mb-4 block">Psychologie</span>
+                                        <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest text-white/30 mb-2 md:mb-4 block">Psychologie</span>
                                         {/* iPad: Reduced Weight (Bold vs Black) & Size */}
-                                        <h4 className="text-3xl md:text-2xl lg:text-[3.2vw] font-[family-name:var(--font-outfit)] font-bold text-white leading-relaxed">
+                                        <h4 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] font-bold text-white leading-snug">
                                             &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
                                         </h4>
                                     </div>
@@ -441,56 +441,55 @@ export default function Home() {
                             <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
-                            <div className="absolute bottom-8 right-8 z-20">
-                                <TouchIcon />
-                            </div>
+                            <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 2: ARTIST (NIKLAS) - REFACTORED FLEX LAYOUT */}
+                        {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */}
                         <SpotlightCard className="h-[450px] md:h-full group overflow-hidden bg-[#0a0a0a]">
-                            <div className="flex flex-col h-full w-full relative z-10">
-                                {/* 1. TOP SECTION: Text - Adjusted proportions */}
-                                <div className="relative h-[45%] md:h-[40%] bg-transparent z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start shrink-0">
-                                    {/* Header Group: Creator Top, Name Bottom */}
-                                    <div>
-                                        <p className="text-base md:text-xs font-medium tracking-[0.2em] text-white/50 mb-1 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
-                                            Creator & Designer
-                                        </p>
-                                        <h3 className="text-4xl md:text-3xl lg:text-[4vw] font-[family-name:var(--font-outfit)] font-black text-white tracking-tight leading-none group-hover:text-white transition-colors duration-500 mb-2">
-                                            Niklas Fiedler
-                                        </h3>
 
-                                        {/* MOVED & EXPANDED TEXT */}
-                                        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
-                                            <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
-                                                <p className="text-sm md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-2">
-                                                    Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf.
-                                                </p>
-                                            </div>
+                            {/* 1. TOP SECTION: Transparent Background for Text */}
+                            <div className="absolute top-0 left-0 w-full h-[40%] bg-transparent z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
+                                {/* Header Group: Creator Top, Name Bottom */}
+                                <div>
+                                    <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-1 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
+                                        Creator & Designer
+                                    </p>
+                                    <h3 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tight group-hover:text-white text-white/90 transition-colors duration-500 mb-2">
+                                        Niklas Fiedler
+                                    </h3>
+
+                                    {/* MOVED & EXPANDED TEXT: Closer to headline */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
+                                            <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-2">
+                                                Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um Visionen zu realisieren, die sich von der Schwerkraft des Gewöhnlichen lösen.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* 2. BOTTOM SECTION: Image - Fills remaining space */}
-                                <div className="relative h-[55%] md:h-[60%] w-full overflow-hidden bg-[#0a0a0a]">
-                                    <img
-                                        src="/sequence/Niklas/image.png"
-                                        alt="Niklas Fiedler"
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="absolute inset-0 w-full h-full object-cover object-[50%_20%] group-hover:scale-105 group-hover:translate-y-[10%] transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
-                                    />
-                                    {/* Overlay gradient - REDUCED FADE */}
-                                    <div className="absolute top-0 left-0 w-full h-12 bg-gradient-to-b from-black/50 to-transparent z-20" />
-                                </div>
                             </div>
+
+                            {/* 2. BOTTOM SECTION: Image (Starts below text) */}
+                            {/* HOVER EFFECT: Image moves DOWN (translate-y) to reveal more black space if needed, or just standard paralax */}
+                            {/* User asked: "Kopf ... weiter runter geht ... schneid mehr unten ab" */}
+                            <div className="absolute top-[40%] left-0 w-full h-[60%] overflow-hidden z-10 bg-[#0a0a0a]">
+                                <img
+                                    src="/sequence/Niklas/image.png"
+                                    alt="Niklas Fiedler"
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 group-hover:translate-y-[20%] transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                />
+                                {/* Overlay gradient to merge with top black - REDUCED FADE */}
+                                <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-black/60 to-transparent z-20" />
+                            </div>
+
+                            {/* 3. OLD TEXT REMOVED (Merged into Top Section) */}
 
                             <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
-                            <div className="absolute bottom-8 right-8 z-20">
-                                <TouchIcon />
-                            </div>
+                            <TouchIcon />
                         </SpotlightCard>
 
                         {/* TILE 3: CONTEXT */}
@@ -503,10 +502,10 @@ export default function Home() {
                                 <div className="flex flex-col gap-4">
                                     <div className="mb-auto">
                                         <div className="flex justify-start items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
-                                            <span className="text-[10px] md:text-xs uppercase font-medium tracking-[0.2em] text-white/50">Studium & Kontext</span>
+                                            <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                         </div>
                                         {/* iPad: Font Bold (not Black) */}
-                                        <h5 className="text-4xl md:text-3xl lg:text-[3.5vw] font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white transition-colors duration-500">
+                                        <h5 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                             Technisches<br /> Design
                                         </h5>
                                     </div>
@@ -539,9 +538,7 @@ export default function Home() {
                             <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
-                            <div className="absolute bottom-8 right-8 z-20">
-                                <TouchIcon />
-                            </div>
+                            <TouchIcon />
                         </SpotlightCard>
                     </div>
                 </section>
