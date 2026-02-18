@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
+import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { Wind, MousePointer2 } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
@@ -452,12 +453,14 @@ export default function Home() {
 
                             {/* 1. FULL IMAGE BACKGROUND */}
                             <div className="absolute inset-0 w-full h-full z-0">
-                                <img
-                                    src="/sequence/Niklas/image.png?v=2"
+                                <Image
+                                    src="/sequence/Niklas/image.png"
                                     alt="Niklas Fiedler"
-                                    loading="eager"
-                                    decoding="async"
-                                    className="w-full h-full object-cover object-[50%_40%] group-hover:translate-y-[40%] group-hover:scale-105 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                    fill
+                                    priority
+                                    quality={80}
+                                    sizes="(max-width: 768px) 100vw, 33vw"
+                                    className="object-cover object-center group-hover:translate-y-[40%] transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
                                 />
                                 {/* subtle gradient overlay for text readability - Softened to 60% */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 z-10" />
@@ -593,7 +596,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v1.9.0-SpeedFocus
+                    v1.9.0-InstantFocus
                 </div>
             </div >
         </CartProvider >
