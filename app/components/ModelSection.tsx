@@ -251,14 +251,16 @@ export default function ModelSection() {
     }, []);
 
     return (
-        {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */ }
-        < div className = "relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]" >
+        <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
-            {/* Background Texture (With Blue Tint) */ }
-            < div className = "absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none z-0" />
+            {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */}
+            <div className="relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
 
-                {/* 1. TOP: HEADER (Reordered: Context top, Title bottom) */ }
-                < div className = "relative z-30 w-full p-6 md:p-8 flex flex-row justify-between items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0 pointer-events-none" >
+                {/* Background Texture (With Blue Tint) */}
+                < div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none z-0" />
+
+                {/* 1. TOP: HEADER (Reordered: Context top, Title bottom) */}
+                < div className="relative z-30 w-full p-6 md:p-8 flex flex-row justify-between items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0 pointer-events-none" >
                     <div className="flex flex-col">
                         {/* 1. Context (Small, Gray, Top) */}
                         <span className="text-[10px] md:text-xs text-white/40 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-bold block mb-1 pl-1">
@@ -271,102 +273,102 @@ export default function ModelSection() {
                     </div>
                 </div >
 
-        {/* 2. BACKGROUND: MODEL VIEWER (Absolute, Full Screen) */ }
-        < div className = "absolute inset-0 z-10 w-full h-full cursor-grab active:cursor-grabbing" >
-            <model-viewer
-                ref={modelViewerRef}
-                src="/schwerelos.glb?v=11"
-                // REMOVED POSTER: We use a custom loading slot to avoid black flashes
-                alt="Schwerelos Skulptur 3D"
-                bounds="tight"
-                shadow-intensity="1"
-                shadow-softness="0"
-                exposure="1.0"
-                tone-mapping="neutral"
-                camera-controls
+                {/* 2. BACKGROUND: MODEL VIEWER (Absolute, Full Screen) */}
+                < div className="absolute inset-0 z-10 w-full h-full cursor-grab active:cursor-grabbing" >
+                    <model-viewer
+                        ref={modelViewerRef}
+                        src="/schwerelos.glb?v=11"
+                        // REMOVED POSTER: We use a custom loading slot to avoid black flashes
+                        alt="Schwerelos Skulptur 3D"
+                        bounds="tight"
+                        shadow-intensity="1"
+                        shadow-softness="0"
+                        exposure="1.0"
+                        tone-mapping="neutral"
+                        camera-controls
 
-                auto-rotate={false}
-                interaction-prompt="none"
-                loading="eager" // Force immediate load
-                reveal="auto"   // Show as soon as ready
+                        auto-rotate={false}
+                        interaction-prompt="none"
+                        loading="eager" // Force immediate load
+                        reveal="auto"   // Show as soon as ready
 
-                // Static Fallback
-                camera-orbit={INITIAL_STATE.orbit}
-                camera-target={INITIAL_STATE.target}
-                field-of-view="25deg" // Locked FOV
-                min-camera-orbit="auto auto 5%"
-                min-field-of-view="2deg"
+                        // Static Fallback
+                        camera-orbit={INITIAL_STATE.orbit}
+                        camera-target={INITIAL_STATE.target}
+                        field-of-view="25deg" // Locked FOV
+                        min-camera-orbit="auto auto 5%"
+                        min-field-of-view="2deg"
 
-                style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
-                touch-action="pan-y"
-            >
-                {/* CUSTOM LOADING SLOT */}
-                <div slot="poster" className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="w-12 h-12 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-                        <span className="text-white/40 text-xs tracking-widest uppercase animate-pulse">Lade 3D Modell...</span>
-                    </div>
-                </div>
-            </model-viewer>
+                        style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
+                        touch-action="pan-y"
+                    >
+                        {/* CUSTOM LOADING SLOT */}
+                        <div slot="poster" className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-12 h-12 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                                <span className="text-white/40 text-xs tracking-widest uppercase animate-pulse">Lade 3D Modell...</span>
+                            </div>
+                        </div>
+                    </model-viewer>
                 </div >
 
-        {/* 3. BOTTOM: DYNAMIC CONTENT & BUTTONS */ }
-        < div className = "relative z-30 w-full p-6 md:p-12 pt-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent shrink-0 pointer-events-none" >
+                {/* 3. BOTTOM: DYNAMIC CONTENT & BUTTONS */}
+                < div className="relative z-30 w-full p-6 md:p-12 pt-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent shrink-0 pointer-events-none" >
 
-            {/* Dynamic Text */ }
-            < AnimatePresence mode = "wait" >
-                <motion.div
-                    key={activeIndex ?? "initial"}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full mb-8 max-w-2xl text-container pr-12 md:pr-24 pointer-events-auto" // Added Padding Right to avoid Reset Button overlap
-                >
-                    {/* Larger Dynamic Title */}
-                    <h4 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">
-                        {currentData.title}
-                    </h4>
-                    <div className="text-base md:text-lg text-white/60 font-[family-name:var(--font-dm)] leading-relaxed">
-                        {currentData.text}
-                    </div>
-                </motion.div>
+                    {/* Dynamic Text */}
+                    < AnimatePresence mode="wait" >
+                        <motion.div
+                            key={activeIndex ?? "initial"}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                            className="w-full mb-8 max-w-2xl text-container pr-12 md:pr-24 pointer-events-auto" // Added Padding Right to avoid Reset Button overlap
+                        >
+                            {/* Larger Dynamic Title */}
+                            <h4 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 tracking-tight">
+                                {currentData.title}
+                            </h4>
+                            <div className="text-base md:text-lg text-white/60 font-[family-name:var(--font-dm)] leading-relaxed">
+                                {currentData.text}
+                            </div>
+                        </motion.div>
                     </AnimatePresence >
 
-        {/* Buttons (Left Aligned) */ }
-        < div className = "flex flex-wrap gap-3 md:gap-4 justify-start items-center relative z-50 pointer-events-auto" >
-        {
-            DATA.map((item, index) => (
-                <TabButton
-                    key={index}
-                    active={index === activeIndex}
-                    onClick={() => setActiveIndex(index)}
-                    number={`0${index + 1}`}
-                    label={item.title.split('. ')[1] || item.title} // Short label
-                    index={index}
-                />
-            ))
-        }
+                    {/* Buttons (Left Aligned) */}
+                    < div className="flex flex-wrap gap-3 md:gap-4 justify-start items-center relative z-50 pointer-events-auto" >
+                        {
+                            DATA.map((item, index) => (
+                                <TabButton
+                                    key={index}
+                                    active={index === activeIndex}
+                                    onClick={() => setActiveIndex(index)}
+                                    number={`0${index + 1}`}
+                                    label={item.title.split('. ')[1] || item.title} // Short label
+                                    index={index}
+                                />
+                            ))
+                        }
                     </div >
                 </div >
 
-        {/* RESET BUTTON (Minimalist - Top Right) */ }
-        <AnimatePresence>
-    {
-        activeIndex !== null && (
-            <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                onClick={() => setActiveIndex(null)}
-                className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-2 h-7 px-3 rounded-full bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all group pointer-events-auto"
-                title="Reset View"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
-                <span className="text-[9px] uppercase tracking-[0.15em] font-bold font-[family-name:var(--font-outfit)]">Reset</span>
-            </motion.button>
-        )
-    }
+                {/* RESET BUTTON (Minimalist - Top Right) */}
+                <AnimatePresence>
+                    {
+                        activeIndex !== null && (
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                onClick={() => setActiveIndex(null)}
+                                className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-2 h-7 px-3 rounded-full bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all group pointer-events-auto"
+                                title="Reset View"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                                <span className="text-[9px] uppercase tracking-[0.15em] font-bold font-[family-name:var(--font-outfit)]">Reset</span>
+                            </motion.button>
+                        )
+                    }
                 </AnimatePresence >
 
             </div >
