@@ -17,36 +17,36 @@ const DATA = [
     {
         title: "01. Dynamischer Ursprung",
         text: "Hier beginnt alles. Aus der starren Basis erwächst die Bewegung, Masse transformiert sich in reinen Auftrieb.",
-        orbit: "20deg 90deg 25%", // ROUND 35: (was 30%)
-        target: "0m -26.5m 0m", // Shifted Up (Look Lower)
+        orbit: "20deg 90deg 55%", // Zoomed Out (was 25%)
+        target: "0m -26.5m 0m",
         fov: "20deg"
     },
     {
         title: "02. Vertikaler Stab",
         text: "Die Achse der Balance. Kein massives Element, sondern ein filigraner Leitstrahl, der den Blick unaufhaltsam in die Höhe zieht.",
-        orbit: "-30deg 75deg 28%",  // ROUND 35: (was 35%)
-        target: "0m -13.0m 0m",    // Shifted Up (Look Lower)
+        orbit: "-30deg 75deg 58%",  // Zoomed Out (was 28%)
+        target: "0m -13.0m 0m",
         fov: "20deg"
     },
     {
         title: "03. Negativer Raum",
         text: "Die Kunst der Auslassung. Luft wird zur Materie, Leere wird zur Form. Das Nichts hält die Struktur zusammen.",
-        orbit: "120deg 60deg 100%", // ROUND 35: (was 120%)
-        target: "0.1m -1.8m 0m",   // Shifted Up (Look Lower)
+        orbit: "120deg 60deg 130%", // Zoomed Out (was 100%)
+        target: "0.1m -1.8m 0m",
         fov: "30deg"
     },
     {
         title: "04. Fragile Verbindung",
         text: "Ein Dialog zwischen Innen und Außen. Zwei Helices tanzen umeinander, berühren sich fast, und bleiben doch ewig getrennt.",
-        orbit: "200deg 60deg 75%",  // ROUND 35: Closer to Tip (was 90%)
-        target: "-0.1m 1.2m 0m",    // Shifted Up (Look Lower)
+        orbit: "200deg 60deg 105%",  // Zoomed Out (was 75%)
+        target: "-0.1m 1.2m 0m",
         fov: "30deg"
     },
     {
         title: "05. Auslaufen",
         text: "Die Auflösung ins Unendliche. Die Form verliert ihre Grenzen, wird immer feiner, bis sie schließlich eins mit dem Raum wird.",
-        orbit: "0deg 30deg 110%",   // ROUND 35: (was 130%)
-        target: "0m 0.5m 0m",     // Shifted Up (Look Lower)
+        orbit: "0deg 30deg 140%",   // Zoomed Out (was 110%)
+        target: "0m 0.5m 0m",
         fov: "30deg"
     }
 ];
@@ -57,7 +57,7 @@ const INITIAL_STATE = {
     text: "Eine Studie der Leichtigkeit. Wähle einen Bereich, um die Details zu erkunden.",
     // INITIAL ORBIT: Must match the hardcoded prop in model-viewer to prevent jump
     orbit: "45deg 75deg 160%",
-    target: "0m -1.5m 0m", // Shifted Up (Look Lower)
+    target: "0m -1.5m 0m",
     fov: "30deg" // ROUND 45: Fixed Value (was "auto") to prevent FOV-switching snap
 };
 
@@ -115,7 +115,8 @@ export default function ModelSection() {
     const currentPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
     // MATH HELPERS
-    const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    // QUADRATIC EASING (Smoother start/end, less abrupt)
+    const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
     const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
 
     // Shortest Angular Distance: Ensures 350 -> 10 goes +20, not -340
@@ -214,7 +215,7 @@ export default function ModelSection() {
             const { startTime, duration, startOrbit, endOrbit, startPoint, endPoint } = animationState.current;
             const elapsed = time - startTime;
             const progress = Math.min(elapsed / duration, 1); // 0 to 1
-            const ease = easeInOutCubic(progress); // Smooth Curve
+            const ease = easeInOutQuad(progress); // Smoother Quad Curve
 
             if (modelViewerRef.current) {
                 // ORBIT INTERPOLATION (With Shortest Angle Path)
@@ -256,13 +257,13 @@ export default function ModelSection() {
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */}
-            <div className="relative w-full h-[95vh] md:h-[125vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
+            <div className="relative w-full h-[95vh] md:h-[140vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
 
                 {/* Background Texture (With Blue Tint) */}
-                < div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none z-0" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none z-0" />
 
                 {/* 1. TOP: HEADER (Reordered: Context top, Title bottom) */}
-                < div className="relative z-30 w-full p-6 md:p-8 flex flex-row justify-between items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0 pointer-events-none" >
+                <div className="relative z-30 w-full p-6 md:p-8 flex flex-row justify-between items-start bg-gradient-to-b from-[#0a0a0a] to-transparent shrink-0 pointer-events-none">
                     <div className="flex flex-col">
                         {/* 1. Context (Small, Gray, Top) */}
                         <span className="text-[10px] md:text-xs text-white/40 font-[family-name:var(--font-outfit)] uppercase tracking-[0.2em] font-bold block mb-1 pl-1">
@@ -273,10 +274,10 @@ export default function ModelSection() {
                             INTERAKTIV
                         </span>
                     </div>
-                </div >
+                </div>
 
-                {/* 2. BACKGROUND: MODEL VIEWER (Absolute, Full Screen) */}
-                < div className="absolute inset-0 z-10 w-full h-full cursor-grab active:cursor-grabbing" >
+                {/* 2. BACKGROUND: MODEL VIEWER (Restricted Height) */}
+                <div className="absolute inset-x-0 top-0 bottom-[20%] z-10 cursor-grab active:cursor-grabbing">
                     <model-viewer
                         ref={modelViewerRef}
                         src="/schwerelos.glb?v=11"
