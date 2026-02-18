@@ -439,7 +439,7 @@ export default function Home() {
                             </div>
                             {/* Interaction Hint Text (Pulsing) */}
                             <div className="absolute bottom-6 left-8 md:bottom-8 md:left-8 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                                <span className="text-[10px] uppercase tracking-widest text-white/40 animate-pulse">Drücken zum Lesen</span>
+                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
                         </SpotlightCard>
@@ -447,23 +447,32 @@ export default function Home() {
                         {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */}
                         <SpotlightCard className="h-[450px] md:h-full group overflow-hidden bg-[#0a0a0a]">
 
-                            {/* 1. TOP SECTION: Solid Black Background for Text (Approx 35%) */}
-                            <div className="absolute top-0 left-0 w-full h-[35%] bg-[#0a0a0a] z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
+                            {/* 1. TOP SECTION: Solid Black Background for Text (Approx 40%) */}
+                            <div className="absolute top-0 left-0 w-full h-[40%] bg-[#0a0a0a] z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
                                 {/* Header Group: Creator Top, Name Bottom */}
                                 <div>
                                     <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-1 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
                                         Creator & Designer
                                     </p>
-                                    <h3 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tight group-hover:text-white text-white/90 transition-colors duration-500">
+                                    <h3 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tight group-hover:text-white text-white/90 transition-colors duration-500 mb-2">
                                         Niklas Fiedler
                                     </h3>
+
+                                    {/* MOVED & EXPANDED TEXT: Closer to headline */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
+                                            <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-2">
+                                                Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um Visionen zu realisieren, die sich von der Schwerkraft des Gewöhnlichen lösen.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             {/* 2. BOTTOM SECTION: Image (Starts below text) */}
                             {/* HOVER EFFECT: Image moves DOWN (translate-y) to reveal more black space if needed, or just standard paralax */}
                             {/* User asked: "Kopf ... weiter runter geht ... schneid mehr unten ab" */}
-                            <div className="absolute top-[35%] left-0 w-full h-[65%] overflow-hidden z-10 bg-[#0a0a0a]">
+                            <div className="absolute top-[40%] left-0 w-full h-[60%] overflow-hidden z-10 bg-[#0a0a0a]">
                                 <img
                                     src="/sequence/Niklas/image.png"
                                     alt="Niklas Fiedler"
@@ -475,25 +484,10 @@ export default function Home() {
                                 <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20" />
                             </div>
 
-                            {/* 3. EXPANDING TEXT (Floats over image bottom or in black area? User said "Expandiert ... Kopf weiter runter") */}
-                            {/* We put it in the Top Section, expanding downwards? No, space is tight. */}
-                            {/* Let's put it absolute at the bottom, fading in over the image? Or growing from the top section? */}
-                            {/* "Kopf noch weiter runter geht ... Platz hat". Implies Top Section Grows? */}
-                            {/* Safer: Top Section is fixed. Text appears there if space, or over image. */}
-                            {/* Actually, let's put it in the Top Section and let it push height? No, absolute positioning breaks that. */}
-                            {/* Let's overlay it on the image top, fading in. */}
-                            <div className="absolute top-[35%] left-0 w-full p-6 md:p-8 lg:p-10 z-30 pointer-events-none">
-                                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
-                                    <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
-                                        <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-4 drop-shadow-md bg-black/40 backdrop-blur-md p-4 rounded-xl md:bg-transparent md:backdrop-blur-none md:p-0 md:rounded-none">
-                                            Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                            {/* 3. OLD TEXT REMOVED (Merged into Top Section) */}
 
                             <div className="absolute bottom-6 left-8 md:bottom-8 md:left-8 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                                <span className="text-[10px] uppercase tracking-widest text-white/40 animate-pulse">Drücken zum Lesen</span>
+                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
                         </SpotlightCard>
@@ -539,6 +533,10 @@ export default function Home() {
                                     loading="lazy" decoding="async"
                                     className="h-10 md:h-8 lg:h-14 w-auto object-contain"
                                 />
+                            </div>
+
+                            <div className="absolute bottom-6 left-32 md:left-36 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
                         </SpotlightCard>
