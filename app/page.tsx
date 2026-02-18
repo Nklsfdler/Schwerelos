@@ -454,7 +454,7 @@ export default function Home() {
                                     alt="Niklas Fiedler"
                                     loading="lazy"
                                     decoding="async"
-                                    className="w-full h-full object-cover object-[50%_35%] group-hover:scale-105 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                    className="w-full h-full object-cover object-[50%_45%] group-hover:object-[50%_15%] group-hover:scale-105 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
                                 />
                                 {/* subtle gradient overlay for text readability */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/70 z-10" />
@@ -590,7 +590,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v1.5.0-Uniformity
+                    v1.6.0-DynamicFocus
                 </div>
             </div >
         </CartProvider >
