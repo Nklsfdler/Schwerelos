@@ -422,7 +422,10 @@ export default function Home() {
 
                                 <div className="flex flex-col gap-4">
                                     <div>
-                                        <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest text-white/30 mb-2 md:mb-4 block">Psychologie</span>
+                                        {/* UNIFORM OVERTEXT: PHILOSOPHY */}
+                                        <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 block">
+                                            Psychologie
+                                        </span>
                                         {/* iPad: Reduced Weight (Bold vs Black) & Size */}
                                         <h4 className="text-3xl md:text-2xl lg:text-4xl font-[family-name:var(--font-outfit)] font-bold text-white leading-snug">
                                             &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
@@ -444,28 +447,29 @@ export default function Home() {
                             <TouchIcon />
                         </SpotlightCard>
 
-                        {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */}
+                        {/* TILE 2: ARTIST (NIKLAS) - RESTORED ADAPTIVE LAYOUT */}
                         <SpotlightCard className="h-[450px] md:h-full group overflow-hidden bg-[#0a0a0a]">
 
-                            {/* 1. FULL IMAGE BACKGROUND */}
+                            {/* 1. FULL IMAGE BACKGROUND - TOP ALIGNED (Heads Up) */}
                             <div className="absolute inset-0 w-full h-full z-0">
                                 <img
                                     src="/sequence/Niklas/image.png"
                                     alt="Niklas Fiedler"
                                     loading="lazy"
                                     decoding="async"
-                                    className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                    className="w-full h-full object-cover object-[50%_0%] group-hover:scale-105 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
                                 />
-                                {/* subtle gradient overlay for text readability */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/70 z-10" />
+                                {/* Gradient: Transparent Top (for face) -> Dark Bottom (for text) */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/90 z-10" />
                             </div>
 
-                            {/* 2. TEXT CONTENT OVERLAY (Top Aligned) */}
-                            <div className="relative z-20 p-6 md:p-6 lg:p-8 flex flex-col justify-start h-full pointer-events-none">
-                                <div>
-                                    <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-1 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
+                            {/* 2. TEXT CONTENT OVERLAY - BOTTOM ALIGNED (Justify-End) */}
+                            <div className="relative z-20 p-6 md:p-6 lg:p-8 flex flex-col justify-end h-full pointer-events-none">
+                                <div className="mt-auto">
+                                    {/* UNIFORM OVERTEXT: CREATOR */}
+                                    <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 block group-hover:text-white/60 transition-colors">
                                         Creator & Designer
-                                    </p>
+                                    </span>
                                     <h3 className="text-4xl md:text-3xl lg:text-5xl font-[family-name:var(--font-outfit)] font-black text-white tracking-tight group-hover:text-white text-white/90 transition-colors duration-500 mb-2">
                                         Niklas Fiedler
                                     </h3>
@@ -497,7 +501,10 @@ export default function Home() {
                                 <div className="flex flex-col gap-4">
                                     <div className="mb-auto">
                                         <div className="flex justify-start items-start mb-2 group-hover:opacity-100 opacity-60 transition-opacity duration-500">
-                                            <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
+                                            {/* UNIFORM OVERTEXT: CONTEXT */}
+                                            <span className="text-[10px] md:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 block">
+                                                Studium & Kontext
+                                            </span>
                                         </div>
                                         {/* iPad: Font Bold (not Black) */}
                                         <h5 className="text-4xl md:text-3xl lg:text-5xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
@@ -590,7 +597,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v1.4.0-DeepSpace
+                    v1.5.0-Uniform
                 </div>
             </div >
         </CartProvider >
