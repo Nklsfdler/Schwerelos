@@ -87,58 +87,109 @@ export default function ModelSection() {
 
     // --- CUSTOM SPRING PHYSICS (The "No-Jump" Solution) ---
     // We bypass model-viewer's internal interpolation because it snaps on large distances.
-    // --- CUSTOM PHYSICS LOOP 3.0 (Time-Corrected Damping) ---
-    // The previous loop sputtered on frame drops because the LERP factor was constant.
-    // This new loop normalizes movement based on Delta Time (dt), ensuring smooth speed regardless of FPS.
-    // Formula: current = lerp(current, target, 1 - exp(-speed * dt))
+    // --- CINEMATIC TRANSITION LOOP 4.0 (Ease-In-Out Duration) ---
+    // Problem: Physics-based movement starts with max velocity -> "Jump".
+    // Solution: Pre-calculated Duration Easing (Slow Start -> Fast Move -> Slow End).
+    // This feels "produced" and "cinematic", totally eliminating the initial snap.
 
-    // Target Refs
-    const targetOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
-    const targetPoint = React.useRef(parseTarget(INITIAL_STATE.target));
+    // CONSTANTS
+    const DURATION = 1800; // 1.8s = Very Calm & Cinematic
 
-    // Current Refs
+    // REFS (Mutable State for Animation Loop)
+    const animationState = React.useRef({
+        startTime: 0,
+        isAnimating: false,
+        // Start Values (Captured when transition begins)
+        startOrbit: parseOrbit(INITIAL_STATE.orbit),
+        startPoint: parseTarget(INITIAL_STATE.target),
+        // Target Values (Where we are going)
+        endOrbit: parseOrbit(INITIAL_STATE.orbit),
+        endPoint: parseTarget(INITIAL_STATE.target),
+    });
+
+    // Current Values (Used for "where are we right now" if interrupted)
     const currentOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
     const currentPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
-    // LERP Helper
-    const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
+    // MATH HELPERS
+    const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
 
-    // 1. SYNC: Update Targets
+    // Shortest Angular Distance: Ensures 350 -> 10 goes +20, not -340
+    const shortestAngleDist = (start: number, end: number) => {
+        const diff = (end - start + 180) % 360 - 180;
+        return diff < -180 ? diff + 360 : diff;
+    };
+
+    // 1. TRIGGER: When activeIndex changes, START a new transition
     useEffect(() => {
         const data = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
-        targetOrbit.current = parseOrbit(data.orbit);
-        targetPoint.current = parseTarget(data.target);
+
+        // 1. Capture where we currently are (INTERRUPTION SAFE)
+        // If user clicks mid-move, we start from the current interpolated position.
+        const startO = { ...currentOrbit.current };
+        const startP = { ...currentPoint.current };
+
+        // 2. Define where we are going
+        const endO = parseOrbit(data.orbit);
+        const endP = parseTarget(data.target);
+
+        // 3. Set Animation State
+        animationState.current = {
+            startTime: performance.now(),
+            isAnimating: true,
+            startOrbit: startO,
+            startPoint: startP,
+            endOrbit: endO,
+            endPoint: endP
+        };
+
     }, [activeIndex]);
 
-    // 2. PHYSICS LOOP
+    // 2. ANIMATION LOOP
     useEffect(() => {
         let frameId: number;
-        let lastTime = performance.now();
-        const DECAY_SPEED = 3.0; // 3.0 = Heavy/Cinematic. Higher = Snappier.
 
         const loop = (time: number) => {
-            const dt = Math.min((time - lastTime) / 1000, 0.1); // Clamp dt to prevent huge jumps on tab switch
-            lastTime = time;
+            if (!animationState.current.isAnimating) {
+                frameId = requestAnimationFrame(loop);
+                return;
+            }
+
+            const { startTime, startOrbit, endOrbit, startPoint, endPoint } = animationState.current;
+            const elapsed = time - startTime;
+            const progress = Math.min(elapsed / DURATION, 1); // 0 to 1
+            const ease = easeInOutCubic(progress); // Smooth Curve
 
             if (modelViewerRef.current) {
-                // Time-Corrected Damping Factor
-                // If dt increases (lag), factor increases to compensate.
-                const factor = 1 - Math.exp(-DECAY_SPEED * dt);
+                // ORBIT INTERPOLATION (With Shortest Angle Path)
+                // Use shortest path logic for angles (Theta/Phi)
+                // We calculate `start + difference * ease` instead of `lerp` to handle wrap-around correctly manually or just use raw values?
+                // Actually, `lerp` is fine IF we adjust the END target to be the "closest" relative to start.
 
-                // Interpolate ORBIT
-                currentOrbit.current.theta = lerp(currentOrbit.current.theta, targetOrbit.current.theta, factor);
-                currentOrbit.current.phi = lerp(currentOrbit.current.phi, targetOrbit.current.phi, factor);
-                currentOrbit.current.radius = lerp(currentOrbit.current.radius, targetOrbit.current.radius, factor);
+                // Better approach: Calculate delta first
+                const thetaDiff = shortestAngleDist(startOrbit.theta, endOrbit.theta);
+                const phiDiff = shortestAngleDist(startOrbit.phi, endOrbit.phi); // Phi usually doesn't wrap, but safe to keep.
 
-                // Interpolate TARGET
-                currentPoint.current.x = lerp(currentPoint.current.x, targetPoint.current.x, factor);
-                currentPoint.current.y = lerp(currentPoint.current.y, targetPoint.current.y, factor);
-                currentPoint.current.z = lerp(currentPoint.current.z, targetPoint.current.z, factor);
+                currentOrbit.current.theta = startOrbit.theta + thetaDiff * ease;
+                currentOrbit.current.phi = startOrbit.phi + phiDiff * ease;
+                currentOrbit.current.radius = lerp(startOrbit.radius, endOrbit.radius, ease);
+
+                // TARGET INTERPOLATION (Linear Space is simpler)
+                currentPoint.current.x = lerp(startPoint.x, endPoint.x, ease);
+                currentPoint.current.y = lerp(startPoint.y, endPoint.y, ease);
+                currentPoint.current.z = lerp(startPoint.z, endPoint.z, ease);
 
                 // Apply
                 modelViewerRef.current.cameraOrbit = `${currentOrbit.current.theta}deg ${currentOrbit.current.phi}deg ${currentOrbit.current.radius}%`;
                 modelViewerRef.current.cameraTarget = `${currentPoint.current.x}m ${currentPoint.current.y}m ${currentPoint.current.z}m`;
             }
+
+            // Stop condition
+            if (progress >= 1) {
+                animationState.current.isAnimating = false;
+            }
+
             frameId = requestAnimationFrame(loop);
         };
 
