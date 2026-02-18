@@ -17,35 +17,35 @@ const DATA = [
         title: "01. Dynamischer Ursprung",
         text: "Hier beginnt alles. Aus der starren Basis erwächst die Bewegung, Masse transformiert sich in reinen Auftrieb.",
         orbit: "20deg 90deg 25%", // ROUND 35: (was 30%)
-        target: "0m -23.5m 0m",
+        target: "0m -25.5m 0m", // Lifted (was -23.5)
         fov: "20deg"
     },
     {
         title: "02. Vertikaler Stab",
         text: "Die Achse der Balance. Kein massives Element, sondern ein filigraner Leitstrahl, der den Blick unaufhaltsam in die Höhe zieht.",
         orbit: "-30deg 75deg 28%",  // ROUND 35: (was 35%)
-        target: "0m -10.0m 0m",
+        target: "0m -12.0m 0m", // Lifted (was -10.0)
         fov: "20deg"
     },
     {
         title: "03. Negativer Raum",
         text: "Die Kunst der Auslassung. Luft wird zur Materie, Leere wird zur Form. Das Nichts hält die Struktur zusammen.",
         orbit: "120deg 60deg 100%", // ROUND 35: (was 120%)
-        target: "0.1m 1.2m 0m",
+        target: "0.1m -0.8m 0m", // Lifted (was 1.2)
         fov: "30deg"
     },
     {
         title: "04. Fragile Verbindung",
         text: "Ein Dialog zwischen Innen und Außen. Zwei Helices tanzen umeinander, berühren sich fast, und bleiben doch ewig getrennt.",
         orbit: "200deg 60deg 75%",  // ROUND 35: Closer to Tip (was 90%)
-        target: "-0.1m 4.2m 0m",     // Moved target slightly UP (4.0 -> 4.2) to center tip better
+        target: "-0.1m 2.2m 0m",     // Lifted (was 4.2)
         fov: "30deg"
     },
     {
         title: "05. Auslaufen",
         text: "Die Auflösung ins Unendliche. Die Form verliert ihre Grenzen, wird immer feiner, bis sie schließlich eins mit dem Raum wird.",
         orbit: "0deg 30deg 110%",   // ROUND 35: (was 130%)
-        target: "0m 3.5m 0m",
+        target: "0m 1.5m 0m", // Lifted (was 3.5)
         fov: "30deg"
     }
 ];
@@ -56,7 +56,7 @@ const INITIAL_STATE = {
     text: "Eine Studie der Leichtigkeit. Wähle einen Bereich, um die Details zu erkunden.",
     // INITIAL ORBIT: Must match the hardcoded prop in model-viewer to prevent jump
     orbit: "45deg 75deg 160%",
-    target: "0m 1.5m 0m",
+    target: "0m -0.5m 0m", // Lifted (was 1.5)
     fov: "30deg" // ROUND 45: Fixed Value (was "auto") to prevent FOV-switching snap
 };
 
@@ -93,7 +93,7 @@ export default function ModelSection() {
     // This feels "produced" and "cinematic", totally eliminating the initial snap.
 
     // CONSTANTS
-    const DURATION = 1800; // 1.8s = Very Calm & Cinematic
+    const DURATION = 2400; // 2.4s = Extremely Elegant (User Request)
 
     // REFS (Mutable State for Animation Loop)
     const animationState = React.useRef({
@@ -113,7 +113,8 @@ export default function ModelSection() {
     const currentPoint = React.useRef(parseTarget(INITIAL_STATE.target));
 
     // MATH HELPERS
-    const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    // Quintic Ease for maximum elegance
+    const easeInOutQuint = (t: number) => t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
     const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
 
     // Shortest Angular Distance: Ensures 350 -> 10 goes +20, not -340
@@ -212,7 +213,7 @@ export default function ModelSection() {
             const { startTime, duration, startOrbit, endOrbit, startPoint, endPoint } = animationState.current;
             const elapsed = time - startTime;
             const progress = Math.min(elapsed / duration, 1); // 0 to 1
-            const ease = easeInOutCubic(progress); // Smooth Curve
+            const ease = easeInOutQuint(progress); // Smooth Curve
 
             if (modelViewerRef.current) {
                 // ORBIT INTERPOLATION (With Shortest Angle Path)
