@@ -12,40 +12,41 @@ declare global {
 }
 
 // ORDER: Bottom to Top (Reversed)
+// ORDER: Bottom to Top (Reversed)
 const DATA = [
     {
         title: "01. Dynamischer Ursprung",
         text: "Hier beginnt alles. Aus der starren Basis erwächst die Bewegung, Masse transformiert sich in reinen Auftrieb.",
         orbit: "20deg 90deg 25%", // ROUND 35: (was 30%)
-        target: "0m -22.5m 0m", // Shifted Up +1m (was -23.5m)
+        target: "0m -26.5m 0m", // Shifted Up (Look Lower)
         fov: "20deg"
     },
     {
         title: "02. Vertikaler Stab",
         text: "Die Achse der Balance. Kein massives Element, sondern ein filigraner Leitstrahl, der den Blick unaufhaltsam in die Höhe zieht.",
         orbit: "-30deg 75deg 28%",  // ROUND 35: (was 35%)
-        target: "0m -9.0m 0m",    // Shifted Up +1m (was -10.0m)
+        target: "0m -13.0m 0m",    // Shifted Up (Look Lower)
         fov: "20deg"
     },
     {
         title: "03. Negativer Raum",
         text: "Die Kunst der Auslassung. Luft wird zur Materie, Leere wird zur Form. Das Nichts hält die Struktur zusammen.",
         orbit: "120deg 60deg 100%", // ROUND 35: (was 120%)
-        target: "0.1m 2.2m 0m",   // Shifted Up +1m (was 1.2m)
+        target: "0.1m -1.8m 0m",   // Shifted Up (Look Lower)
         fov: "30deg"
     },
     {
         title: "04. Fragile Verbindung",
         text: "Ein Dialog zwischen Innen und Außen. Zwei Helices tanzen umeinander, berühren sich fast, und bleiben doch ewig getrennt.",
         orbit: "200deg 60deg 75%",  // ROUND 35: Closer to Tip (was 90%)
-        target: "-0.1m 5.2m 0m",    // Shifted Up +1m (was 4.2m)
+        target: "-0.1m 1.2m 0m",    // Shifted Up (Look Lower)
         fov: "30deg"
     },
     {
         title: "05. Auslaufen",
         text: "Die Auflösung ins Unendliche. Die Form verliert ihre Grenzen, wird immer feiner, bis sie schließlich eins mit dem Raum wird.",
         orbit: "0deg 30deg 110%",   // ROUND 35: (was 130%)
-        target: "0m 4.5m 0m",     // Shifted Up +1m (was 3.5m)
+        target: "0m 0.5m 0m",     // Shifted Up (Look Lower)
         fov: "30deg"
     }
 ];
@@ -56,7 +57,7 @@ const INITIAL_STATE = {
     text: "Eine Studie der Leichtigkeit. Wähle einen Bereich, um die Details zu erkunden.",
     // INITIAL ORBIT: Must match the hardcoded prop in model-viewer to prevent jump
     orbit: "45deg 75deg 160%",
-    target: "0m 2.5m 0m", // Shifted Up +1m (was 1.5m)
+    target: "0m -1.5m 0m", // Shifted Up (Look Lower)
     fov: "30deg" // ROUND 45: Fixed Value (was "auto") to prevent FOV-switching snap
 };
 
@@ -93,7 +94,7 @@ export default function ModelSection() {
     // This feels "produced" and "cinematic", totally eliminating the initial snap.
 
     // CONSTANTS
-    const DURATION = 2400; // 2.4s = Extremely Smooth & Elegant
+    const DURATION = 3200; // 3.2s = Floating in Space
 
 
     // REFS (Mutable State for Animation Loop)
@@ -255,7 +256,7 @@ export default function ModelSection() {
         <section className="relative w-full min-h-screen md:h-screen bg-[#050505] flex flex-col items-center justify-center snap-section py-2 px-2 md:px-0">
 
             {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */}
-            <div className="relative w-full h-[95vh] md:h-[110vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
+            <div className="relative w-full h-[95vh] md:h-[125vh] min-h-[800px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
 
                 {/* Background Texture (With Blue Tint) */}
                 < div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none z-0" />

@@ -590,7 +590,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v1.2.0-SpaceElegance
+                    v1.3.0-AiryFlow
                 </div>
             </div >
         </CartProvider >
