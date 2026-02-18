@@ -405,6 +405,9 @@ export default function Home() {
                     </div>
                 </section>
 
+                {/* SCROLL CATCH BUFFER (Soft Landing) */}
+                <div className="h-[30vh] w-full bg-[#030303]" />
+
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
                 <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center justify-center">
                     <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[600px] lg:h-[700px]">
@@ -428,7 +431,7 @@ export default function Home() {
 
                                     {/* Expanding Text */}
                                     <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-out text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
-                                        <div className="overflow-hidden">
+                                        <div className="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
                                             <p className="pt-2">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                         </div>
                                     </div>
@@ -464,7 +467,7 @@ export default function Home() {
                                     alt="Niklas Fiedler"
                                     loading="lazy"
                                     decoding="async"
-                                    className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 group-hover:translate-y-4 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                    className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 group-hover:translate-y-[20%] transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
                                 />
                                 {/* Overlay gradient to merge with top black */}
                                 <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20" />
@@ -479,7 +482,7 @@ export default function Home() {
                             {/* Let's overlay it on the image top, fading in. */}
                             <div className="absolute top-[35%] left-0 w-full p-6 md:p-8 lg:p-10 z-30 pointer-events-none">
                                 <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
-                                    <div className="overflow-hidden">
+                                    <div className="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
                                         <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-4 drop-shadow-md bg-black/40 backdrop-blur-md p-4 rounded-xl md:bg-transparent md:backdrop-blur-none md:p-0 md:rounded-none">
                                             Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf.
                                         </p>
@@ -504,13 +507,13 @@ export default function Home() {
                                         </div>
                                         {/* iPad: Font Bold (not Black) */}
                                         <h5 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
-                                            B.Sc. Technisches<br /> Design
+                                            Technisches<br /> Design
                                         </h5>
                                     </div>
 
                                     {/* Expanding Text */}
                                     <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out border-t border-white/5 mt-4">
-                                        <div className="overflow-hidden">
+                                        <div className="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
                                             <p className="pt-2 text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
                                                 Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                             </p>

@@ -105,6 +105,7 @@ export default function ModelSection() {
         // Target Values (Where we are going)
         endOrbit: parseOrbit(INITIAL_STATE.orbit),
         endPoint: parseTarget(INITIAL_STATE.target),
+        duration: DURATION,
     });
 
     // Current Values (Used for "where are we right now" if interrupted)
@@ -134,9 +135,19 @@ export default function ModelSection() {
         const endO = parseOrbit(data.orbit);
         const endP = parseTarget(data.target);
 
-        // 3. Set Animation State
+        // 3. Dynamic Duration based on Distance (Constant Velocity feel)
+        const thetaDiff = Math.abs(shortestAngleDist(startO.theta, endO.theta));
+        const phiDiff = Math.abs(shortestAngleDist(startO.phi, endO.phi));
+        const maxAngle = Math.max(thetaDiff, phiDiff);
+
+        // Base 1.8s + extra time for large rotations. 
+        // 180deg rotation gets ~2.5s total. Small moves stay ~1.8s.
+        const calculatedDuration = Math.max(DURATION, 1000 + (maxAngle * 10));
+
+        // 4. Set Animation State
         animationState.current = {
             startTime: performance.now(),
+            duration: calculatedDuration, // Store it
             isAnimating: true,
             startOrbit: startO,
             startPoint: startP,
@@ -156,9 +167,9 @@ export default function ModelSection() {
                 return;
             }
 
-            const { startTime, startOrbit, endOrbit, startPoint, endPoint } = animationState.current;
+            const { startTime, duration, startOrbit, endOrbit, startPoint, endPoint } = animationState.current;
             const elapsed = time - startTime;
-            const progress = Math.min(elapsed / DURATION, 1); // 0 to 1
+            const progress = Math.min(elapsed / duration, 1); // 0 to 1
             const ease = easeInOutCubic(progress); // Smooth Curve
 
             if (modelViewerRef.current) {
