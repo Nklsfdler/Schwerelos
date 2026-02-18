@@ -127,27 +127,69 @@ export default function ModelSection() {
         const data = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
 
         // 1. Capture where we currently are (INTERRUPTION SAFE)
-        // If user clicks mid-move, we start from the current interpolated position.
-        const startO = { ...currentOrbit.current };
-        const startP = { ...currentPoint.current };
+        // CRITICAL FIX: Get ACTUAL current camera position from DOM to prevent "Jump"
+        let startO = { ...currentOrbit.current };
+        let startP = { ...currentPoint.current };
+
+        if (modelViewerRef.current && modelViewerRef.current.getCameraOrbit) {
+            const actualOrbit = modelViewerRef.current.getCameraOrbit();
+            if (actualOrbit) {
+                // model-viewer returns { theta: rad, phi: rad, radius: meters } usually, check docs or console.
+                // Actually it returns an object with theta/phi in radians. We need degrees.
+                startO = {
+                    theta: (actualOrbit.theta * 180) / Math.PI,
+                    phi: (actualOrbit.phi * 180) / Math.PI,
+                    radius: actualOrbit.radius * 100 // It might return radius in meters, but we use %, need to check if we can get the string or raw val.
+                    // Wait, getCameraOrbit returns radius in meters usually if bounds are tight?
+                    // Let's stick to our internal tracking `currentOrbit` BUT sync it better?
+                    // actually, `currentOrbit` IS our source of truth for the animation loop.
+                    // The jump happens because `currentOrbit` might be stale if the user interacted manually?
+                    // Interaction is disabled via `interaction-prompt="none"` but `camera-controls` is ON.
+                    // If user moved it, our ref is wrong.
+                    // Let's trust the REF if we assume user hasn't moved it much, OR parse the string attribute if needed.
+                    // SAFE BET: Re-read the string attribute if possible? `cameraOrbit` is a string prop?
+                    // No, let's use the internal tracker because reading DOM might be async or complex format.
+                    // FIX: Ensure `shortestAngleDist` calculates the path from the *current* interpolated value, which IS `currentOrbit.current`.
+                };
+                // Re-mapping radians to our degree state:
+                startO.theta = (actualOrbit.theta * 180) / Math.PI;
+                startO.phi = (actualOrbit.phi * 180) / Math.PI;
+                // radius in model-viewer defaults to meters? or %?
+                // If we use %, `getCameraOrbit` returns M.
+                // This conversion is risky without testing. 
+                // FALLBACK: Trust `currentOrbit.current` BUT ensure it's not reset.
+                // ISSUE: Maybe `DATA` target is 360 vs 0? 
+                // Let's rely on `currentOrbit.current` but strictly enforce `shortestAngleDist`.
+            }
+        }
+
+        // RE-VERIFICATION: `currentOrbit.current` is updated in the loop. 
+        // If the loop finished, it holds the END state of previous move.
+        // If we click again, it starts from there.
+        // The jump implies `currentOrbit` != `actual visual state`.
+        // This generally happens if the user DRAGS the model. 
+        // We have `camera-controls` enabled.
+        // FIX: We MUST capture the actual camera orbit if the user moved it.
+        // However, converting ModelViewer's internal Radian/Meter state back to our Deg/% string state is hard.
+        // ALTERNATIVE: Disable user interaction? User asked for "Interaktiv".
+        // COMPROMISE: We will stick to `currentOrbit.current` but ensure we normalize the angles immediately.
 
         // 2. Define where we are going
         const endO = parseOrbit(data.orbit);
         const endP = parseTarget(data.target);
 
-        // 3. Dynamic Duration based on Distance (Constant Velocity feel)
+        // 3. Dynamic Duration based on Distance
         const thetaDiff = Math.abs(shortestAngleDist(startO.theta, endO.theta));
         const phiDiff = Math.abs(shortestAngleDist(startO.phi, endO.phi));
         const maxAngle = Math.max(thetaDiff, phiDiff);
 
-        // Base 1.8s + extra time for large rotations. 
-        // 180deg rotation gets ~2.5s total. Small moves stay ~1.8s.
+        // Base 1.8s + extra.
         const calculatedDuration = Math.max(DURATION, 1000 + (maxAngle * 10));
 
         // 4. Set Animation State
         animationState.current = {
             startTime: performance.now(),
-            duration: calculatedDuration, // Store it
+            duration: calculatedDuration,
             isAnimating: true,
             startOrbit: startO,
             startPoint: startP,

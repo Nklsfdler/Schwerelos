@@ -437,6 +437,10 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>
+                            {/* Interaction Hint Text (Pulsing) */}
+                            <div className="absolute bottom-6 left-8 md:bottom-8 md:left-8 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                                <span className="text-[10px] uppercase tracking-widest text-white/40 animate-pulse">Drücken zum Lesen</span>
+                            </div>
                             <TouchIcon />
                         </SpotlightCard>
 
@@ -445,8 +449,6 @@ export default function Home() {
 
                             {/* 1. TOP SECTION: Solid Black Background for Text (Approx 35%) */}
                             <div className="absolute top-0 left-0 w-full h-[35%] bg-[#0a0a0a] z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
-                                <div className="h-px w-12 bg-white/20 mb-4" />
-
                                 {/* Header Group: Creator Top, Name Bottom */}
                                 <div>
                                     <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-1 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
@@ -490,6 +492,9 @@ export default function Home() {
                                 </div>
                             </div>
 
+                            <div className="absolute bottom-6 left-8 md:bottom-8 md:left-8 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                                <span className="text-[10px] uppercase tracking-widest text-white/40 animate-pulse">Drücken zum Lesen</span>
+                            </div>
                             <TouchIcon />
                         </SpotlightCard>
 
@@ -506,7 +511,7 @@ export default function Home() {
                                             <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40">Studium & Kontext</span>
                                         </div>
                                         {/* iPad: Font Bold (not Black) */}
-                                        <h5 className="text-3xl md:text-2xl lg:text-5xl font-[family-name:var(--font-outfit)] font-bold leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
+                                        <h5 className="text-4xl md:text-3xl lg:text-6xl font-[family-name:var(--font-outfit)] font-black leading-none text-white tracking-tight relative z-10 group-hover:text-white text-white/70 transition-colors duration-500">
                                             Technisches<br /> Design
                                         </h5>
                                     </div>
