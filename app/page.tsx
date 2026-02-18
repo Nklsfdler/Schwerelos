@@ -437,8 +437,8 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>
-                            {/* Interaction Hint Text (Pulsing) */}
-                            <div className="absolute bottom-6 left-8 md:bottom-8 md:left-8 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                            {/* Interaction Hint Text (Pulsing) - Moved next to Icon */}
+                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
@@ -447,8 +447,8 @@ export default function Home() {
                         {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */}
                         <SpotlightCard className="h-[450px] md:h-full group overflow-hidden bg-[#0a0a0a]">
 
-                            {/* 1. TOP SECTION: Solid Black Background for Text (Approx 40%) */}
-                            <div className="absolute top-0 left-0 w-full h-[40%] bg-[#0a0a0a] z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
+                            {/* 1. TOP SECTION: Transparent Background for Text */}
+                            <div className="absolute top-0 left-0 w-full h-[40%] bg-transparent z-30 p-6 md:p-8 lg:p-10 flex flex-col justify-start">
                                 {/* Header Group: Creator Top, Name Bottom */}
                                 <div>
                                     <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 mb-1 font-medium group-hover:opacity-100 opacity-60 transition-opacity duration-500">
@@ -480,13 +480,13 @@ export default function Home() {
                                     decoding="async"
                                     className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 group-hover:translate-y-[20%] transition-all duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
                                 />
-                                {/* Overlay gradient to merge with top black */}
-                                <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20" />
+                                {/* Overlay gradient to merge with top black - REDUCED FADE */}
+                                <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-black/60 to-transparent z-20" />
                             </div>
 
                             {/* 3. OLD TEXT REMOVED (Merged into Top Section) */}
 
-                            <div className="absolute bottom-6 left-8 md:bottom-8 md:left-8 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
@@ -535,7 +535,7 @@ export default function Home() {
                                 />
                             </div>
 
-                            <div className="absolute bottom-6 left-32 md:left-36 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
@@ -595,7 +595,7 @@ export default function Home() {
 
                 {/* DEBUG: Version Badge (To confirm deployment) */}
                 <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v0.1.26-cinematic
+                    v1.0.0
                 </div>
             </div >
         </CartProvider >
