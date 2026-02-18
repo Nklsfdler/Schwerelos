@@ -147,7 +147,7 @@ function SpotlightCard({ children, className = "", colSpan = "col-span-1", rowSp
     return (
         <div
             id={id}
-            className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className}`}
+            className={`relative border border-white/5 bg-neutral-900/50 backdrop-blur-sm overflow-hidden rounded-[2rem] group ${colSpan} ${rowSpan} ${className} hover:scale-[1.01] hover:shadow-2xl transition-all duration-500 ease-out`}
             onMouseMove={handleMouseMove}
         >
             {/* REMOVED: Old centralized Touch Icon (Now per-tile) */}
@@ -418,7 +418,7 @@ export default function Home() {
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
                             {/* Content Container - Top Aligned */}
                             <div className="p-8 md:p-8 lg:p-10 flex flex-col h-full relative z-10">
-                                <Wind className="w-10 h-10 md:w-8 md:h-8 lg:w-12 lg:h-12 text-white/5 absolute top-10 right-10" />
+                                {/* Wind Icon Removed for cleaner Plus Icon affordance */}
 
                                 <div className="flex flex-col gap-4">
                                     <div>
@@ -429,9 +429,9 @@ export default function Home() {
                                         </h4>
                                     </div>
 
-                                    {/* Expanding Text */}
-                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-out text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
-                                        <div className="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
+                                    {/* Expanding Text with Cross-Fade (Blur + Opacity) */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
                                             <p className="pt-2">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
                                         </div>
                                     </div>
@@ -482,7 +482,7 @@ export default function Home() {
                             {/* Let's overlay it on the image top, fading in. */}
                             <div className="absolute top-[35%] left-0 w-full p-6 md:p-8 lg:p-10 z-30 pointer-events-none">
                                 <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
-                                    <div className="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
+                                    <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
                                         <p className="text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-4 drop-shadow-md bg-black/40 backdrop-blur-md p-4 rounded-xl md:bg-transparent md:backdrop-blur-none md:p-0 md:rounded-none">
                                             Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf.
                                         </p>
@@ -513,7 +513,7 @@ export default function Home() {
 
                                     {/* Expanding Text */}
                                     <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out border-t border-white/5 mt-4">
-                                        <div className="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
                                             <p className="pt-2 text-base md:text-xs lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
                                                 Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
                                             </p>
