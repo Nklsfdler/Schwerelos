@@ -12,16 +12,20 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Server configuration error: Missing Stripe key" }, { status: 500 });
         }
 
-        // Initialize inside handler so env vars are fully available
         const stripe = new Stripe(key, {
             apiVersion: "2026-01-28.clover",
         });
 
+        // Use automatic payment methods — lets Stripe decide based on account capabilities.
+        // This avoids errors from specifying payment types not enabled on this account.
         const paymentIntent = await stripe.paymentIntents.create({
             amount: 50, // Stripe minimum: €0.50
             currency: "eur",
-            // Card includes Apple Pay. Klarna and SEPA are separate.
-            payment_method_types: ["card", "klarna", "sepa_debit"],
+            automatic_payment_methods: {
+                enabled: true,
+                // Allow redirect-based methods (needed for Klarna)
+                allow_redirects: "always",
+            },
         });
 
         return NextResponse.json({
