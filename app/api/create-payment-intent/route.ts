@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 
-// Force Node.js runtime — Stripe SDK requires real Node.js HTTP (not Edge)
+// Force Node.js runtime — required for fetch to work correctly
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
@@ -12,27 +11,38 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Server configuration error: Missing Stripe key" }, { status: 500 });
         }
 
-        const stripe = new Stripe(key, {
-            apiVersion: "2026-01-28.clover",
+        // Use native fetch instead of Stripe SDK (SDK has Node 24 compatibility issues)
+        const body = new URLSearchParams({
+            amount: "50", // €0.50 — Stripe minimum
+            currency: "eur",
+            "automatic_payment_methods[enabled]": "true",
+            "automatic_payment_methods[allow_redirects]": "always",
         });
 
-        // Use automatic payment methods — lets Stripe decide based on account capabilities.
-        // This avoids errors from specifying payment types not enabled on this account.
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: 50, // Stripe minimum: €0.50
-            currency: "eur",
-            automatic_payment_methods: {
-                enabled: true,
-                // Allow redirect-based methods (needed for Klarna)
-                allow_redirects: "always",
+        const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${key}`,
+                "Content-Type": "application/x-www-form-urlencoded",
             },
+            body: body.toString(),
         });
+
+        const data = await stripeResponse.json() as any;
+
+        if (!stripeResponse.ok) {
+            console.error("Stripe API error:", data?.error);
+            return NextResponse.json(
+                { error: `Stripe Error: ${data?.error?.message ?? "Unknown error"}` },
+                { status: 500 }
+            );
+        }
 
         return NextResponse.json({
-            clientSecret: paymentIntent.client_secret,
+            clientSecret: data.client_secret,
         });
     } catch (error: any) {
-        console.error("Stripe PaymentIntent error:", error?.message, error?.type, error?.code);
+        console.error("API route error:", error?.message);
         return NextResponse.json(
             { error: `Internal Server Error: ${error.message}` },
             { status: 500 }
