@@ -85,13 +85,13 @@ export default function ProductSection() {
 
                             <div className="flex flex-row items-baseline gap-4 mb-10 border-b border-white/10 pb-8 flex-wrap">
                                 <p className="text-4xl font-[family-name:var(--font-dm)] font-light text-white whitespace-nowrap">
-                                    159,00 €
+                                    29,00 €
                                 </p>
-                                <span className="text-sm text-white/40 uppercase tracking-widest whitespace-nowrap">Inkl. Mwst. & Versand</span>
+                                <span className="text-sm text-white/40 uppercase tracking-widest whitespace-nowrap">Exkl. Versand</span>
                             </div>
 
                             <div className="space-y-4 mb-10">
-                                <InfoRow label="Material" value="Obsidian & Vulkanstein" />
+                                <InfoRow label="Material" value="Weiß ABS 3D Printed" />
                                 <InfoRow label="Maße" value="45cm x 15cm x 15cm" />
                                 <InfoRow label="Limitierung" value="50 Exemplare weltweit" />
                                 <InfoRow label="Lieferung" value="Express (1-2 Tage)" />
@@ -106,7 +106,7 @@ export default function ProductSection() {
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </button>
                                 <div className="flex justify-center gap-6 mt-4 opacity-50 text-[10px] uppercase tracking-widest">
-                                    <span className="flex items-center gap-1.5"><Check className="w-3 h-3" /> Kostenloser Versand</span>
+                                    <span className="flex items-center gap-1.5"><Check className="w-3 h-3" /> 4,99 € Versand</span>
                                     <span className="flex items-center gap-1.5"><Check className="w-3 h-3" /> 30 Tage Rückgabe</span>
                                 </div>
                             </div>

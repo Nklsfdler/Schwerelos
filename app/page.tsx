@@ -410,115 +410,148 @@ export default function Home() {
                 <div className="h-[30vh] w-full bg-[#030303]" />
 
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
-                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-8 px-2 md:px-6 min-h-screen flex items-center justify-center">
-                    <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[600px] lg:h-[600px]">
+                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-4 px-2 md:px-6 min-h-screen md:min-h-0 md:h-auto md:py-12 flex items-center justify-center">
+                    <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[600px] lg:h-[450px]">
 
                         {/* TILE 1: PHILOSOPHY */}
-                    </div>
-            </div>
-        </div>
-                            {/* Interaction Hint Text (Pulsing) - Moved next to Icon */ }
+                        <SpotlightCard className="h-[350px] md:h-full group">
+                            {/* Blue Theme Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
+                            {/* Content Container - Top Aligned */}
+                            <div className="p-6 md:p-6 lg:p-6 flex flex-col h-full relative z-10">
+                                {/* Wind Icon Removed for cleaner Plus Icon affordance */}
+
+                                <div className="flex flex-col gap-4">
+                                    <div>
+                                        <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 md:mb-2 block">Psychologie</span>
+                                        {/* iPad: Reduced Weight (Bold vs Black) & Size */}
+                                        <h4 className="text-3xl md:text-3xl lg:text-3xl font-[family-name:var(--font-outfit)] font-bold text-white/70 leading-snug group-hover:text-white transition-colors duration-500">
+                                            &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
+                                        </h4>
+                                    </div>
+
+                                    {/* Expanding Text with Cross-Fade (Blur + Opacity) */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] text-base md:text-base lg:text-lg font-[family-name:var(--font-dm)] text-white/60 leading-relaxed font-medium">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
+                                            <p className="pt-2">Schwerelosigkeit beginnt im Geist. Es ist der Moment, in dem die Schwere des Alltags einer inneren Leichtigkeit weicht. Meine Arbeit ist die Übersetzung dieses mentalen Loslassens in eine sichtbare Form – ein Aufstieg, der keine Kraft benötigt.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Interaction Hint Text (Pulsing) - Moved next to Icon */}
                             <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
                                 <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
                             </div>
                             <TouchIcon />
-                        </SpotlightCard >
+                        </SpotlightCard>
 
-        {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */ }
-        < SpotlightCard className = "h-[450px] md:h-full group overflow-hidden bg-black" >
+                        {/* TILE 2: ARTIST (NIKLAS) - SPECIAL LAYOUT */}
+                        <SpotlightCard className="h-[450px] md:h-full group overflow-hidden bg-black">
 
-            {/* Blue Theme Gradient (Match Design Tile) */ }
-            < div className = "absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none z-10" />
+                            {/* Blue Theme Gradient (Match Design Tile) */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none z-10" />
 
-                {/* 1. FULL IMAGE BACKGROUND */ }
-                < div className = "absolute inset-0 w-full h-full z-0" >
-                    <NextImage
-                        src="/sequence/Niklas/image.png"
-                        alt="Niklas Fiedler"
-                        fill
-                        priority
-                        quality={80}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover object-[55%_center] translate-y-[20%] group-hover:translate-y-[45%] transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
-                    />
-    {/* subtle gradient overlay for text readability - Softened to 60% */ }
-    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 z-10" />
-                            </div >
+                            {/* 1. FULL IMAGE BACKGROUND */}
+                            <div className="absolute inset-0 w-full h-full z-0">
+                                <NextImage
+                                    src="/sequence/Niklas/image.png"
+                                    alt="Niklas Fiedler"
+                                    fill
+                                    priority
+                                    quality={80}
+                                    sizes="(max-width: 768px) 100vw, 33vw"
+                                    className="object-cover object-[55%_15%] translate-y-[20%] group-hover:translate-y-[45%] transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                />
+                                {/* subtle gradient overlay for text readability - Softened to 60% */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 z-10" />
+                            </div>
 
-        {/* 2. TEXT CONTENT OVERLAY (Top Aligned) */ }
-        < div className = "relative z-20 p-6 md:p-6 lg:p-6 flex flex-col justify-start h-full pointer-events-none" >
-            <div>
-                <p className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 md:mb-2 block group-hover:opacity-100 transition-opacity duration-500">
-                    Creator & Designer
-                </p>
-                <h3 className="text-4xl md:text-3xl lg:text-3xl font-[family-name:var(--font-outfit)] font-black text-white/70 tracking-tight group-hover:text-white transition-colors duration-500 mb-2">
-                    Niklas Fiedler
-                </h3>
+                            {/* 2. TEXT CONTENT OVERLAY (Top Aligned) */}
+                            <div className="relative z-20 p-6 md:p-6 lg:p-6 flex flex-col justify-start h-full pointer-events-none">
+                                <div>
+                                    <p className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 md:mb-2 block group-hover:opacity-100 transition-opacity duration-500">
+                                        Creator & Designer
+                                    </p>
+                                    <h3 className="text-4xl md:text-3xl lg:text-3xl font-[family-name:var(--font-outfit)] font-black text-white/70 tracking-tight group-hover:text-white transition-colors duration-500 mb-2">
+                                        Niklas Fiedler
+                                    </h3>
 
-                {/* EXPANDING TEXT */}
-                <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
-                    <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
-                        <p className="text-base md:text-xs lg:text-sm font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-1 drop-shadow-lg">
-                            Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um Visionen zu realisieren, die sich von der Schwerkraft des Gewöhnlichen lösen.
-                        </p>
+                                    {/* EXPANDING TEXT */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
+                                            <p className="text-base md:text-base lg:text-lg font-[family-name:var(--font-dm)] text-white/80 leading-relaxed pt-1 drop-shadow-lg">
+                                                Für mich bedeutet Gestalten, Barrieren im Kopf abzubauen. Ich lasse meinen Impulsen freien Lauf, um Visionen zu realisieren, die sich von der Schwerkraft des Gewöhnlichen lösen.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
+                            </div>
+                            <TouchIcon />
+                        </SpotlightCard>
+
+                        {/* TILE 3: CONTEXT */}
+                        <SpotlightCard className="min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full group">
+                            {/* Subtle Color Hint Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
+
+                            <div className="absolute inset-0 opacity-20 bg-[url('/noise.png')] pointer-events-none mix-blend-overlay" />
+
+                            <div className="relative z-10 h-full flex flex-col justify-between p-6 lg:p-6">
+                                <div>
+                                    <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 md:mb-2 block">Studium & Kontext</span>
+                                    <h3 className="text-4xl md:text-3xl lg:text-3xl font-[family-name:var(--font-outfit)] font-black text-white/70 tracking-tight group-hover:text-white transition-colors duration-500 mb-2">
+                                        Technisches<br />Design
+                                    </h3>
+
+                                    {/* EXPANDING TEXT - HOVER ONLY */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out overflow-hidden">
+                                        <div className="overflow-hidden opacity-0 blur-[10px] group-hover:opacity-100 group-hover:blur-0 transition-all duration-1000 delay-100">
+                                            <p className="text-white/60 text-base md:text-base lg:text-lg font-[family-name:var(--font-dm)] leading-relaxed max-w-md pt-1">
+                                                Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* LOGOS - FIXED BOTTOM LEFT */}
+                            <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none">
+                                {/* THI: Pure White Invert - Tiny on iPad (h-6) */}
+                                <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-6 lg:h-10 w-auto object-contain invert opacity-90" />
+                                <div className="h-6 w-px bg-white/20 hidden md:block" />
+                                {/* Audi: Tiny on iPad (h-8) */}
+                                <img
+                                    src="/logos/Audie Akademie.png"
+                                    alt="Audi Academy"
+                                    loading="lazy" decoding="async"
+                                    className="h-10 md:h-8 lg:h-12 w-auto object-contain"
+                                />
+                            </div>
+
+                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
+                            </div>
+                            <TouchIcon />
+                        </SpotlightCard>
                     </div>
+                </section>
+
+                {/* 4. 3D ANTIGRAVITY SECTION */}
+                {/* 3D Model needs space. Reduced distance on Desktop (md:-mt-8) */}
+                <div className="py-0 relative z-20 w-full max-w-[1400px] mx-auto mt-0 md:-mt-8">
+                    <ModelSection />
                 </div>
-            </div>
-                            </div >
 
-                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
-                            </div>
-                            <TouchIcon />
-                        </SpotlightCard >
+                {/* 5. PRODUCT ORDER SECTION */}
+                <div className="mb-2 w-full max-w-[1400px] mx-auto z-20 relative">
+                    <ProductSection />
+                </div>
 
-        {/* TILE 3: CONTEXT */ }
-        < SpotlightCard className = "min-h-[300px] border border-white/10 relative bg-[#080808] overflow-hidden md:h-full group" >
-            {/* Subtle Color Hint Gradient */ }
-            < div className = "absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent pointer-events-none" />
-
-                <p className="pt-2 text-base md:text-xs lg:text-base font-[family-name:var(--font-dm)] text-white/80 leading-relaxed font-medium">
-                    Projektarbeit von Niklas Fiedler an der technischen Hochschule Ingolstadt und Audi Akademie.
-                </p>
-                    </div >
-            </div >
-        </div >
-                            </div >
-
-        {/* LOGOS - FIXED BOTTOM LEFT */ }
-        < div className = "absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none" >
-            {/* THI: Pure White Invert - Tiny on iPad (h-6) */ }
-            < img src = "/logos/thi.png" alt = "THI Logo" loading = "lazy" decoding = "async" className = "h-8 md:h-6 lg:h-10 w-auto object-contain invert opacity-90" />
-                <div className="h-6 w-px bg-white/20 hidden md:block" />
-    {/* Audi: Tiny on iPad (h-8) */ }
-    <img
-        src="/logos/Audie Akademie.png"
-        alt="Audi Academy"
-        loading="lazy" decoding="async"
-        className="h-10 md:h-8 lg:h-12 w-auto object-contain"
-    />
-                            </div >
-
-                            <div className="absolute bottom-8 right-20 md:right-24 z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] animate-pulse pointer-events-none select-none">PRESS TO READ</span>
-                            </div>
-                            <TouchIcon />
-                        </SpotlightCard >
-                    </div >
-                </section >
-
-        {/* 4. 3D ANTIGRAVITY SECTION */ }
-    {/* 3D Model needs space. Reduced distance on Desktop (md:-mt-8) */ }
-    <div className="py-0 relative z-20 w-full max-w-[1400px] mx-auto mt-4 md:-mt-8">
-        <ModelSection />
-    </div>
-
-    {/* 5. PRODUCT ORDER SECTION */ }
-    <div className="mb-2 w-full max-w-[1400px] mx-auto z-20 relative">
-        <ProductSection />
-    </div>
-
-    {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */ }
+                {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */}
                 <section id="kontakt" className="py-2 px-2 md:px-12 bg-[#020205] flex justify-center -mt-4 relative z-20">
                     <div className="max-w-[1200px] w-full relative border border-white/10 rounded-[3rem] overflow-hidden bg-[#0a0a0a] min-h-[200px] flex items-center shadow-2xl">
                         {/* Enhanced Blue Gradient */}
@@ -554,14 +587,14 @@ export default function Home() {
                     </div>
                 </footer>
 
-    {/* GENERATIVE AUDIO SYSTEM */ }
-    <AmbientSound scrollProgress={smoothProgress} />
+                {/* GENERATIVE AUDIO SYSTEM */}
+                <AmbientSound scrollProgress={smoothProgress} />
 
-    {/* DEBUG: Version Badge (To confirm deployment) */ }
-    <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-        v1.12.0-GridPolish
-    </div>
-            </div >
-        </CartProvider >
+                {/* DEBUG: Version Badge (To confirm deployment) */}
+                <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
+                    v1.20.0-RobustReset
+                </div>
+            </div>
+        </CartProvider>
     );
 }

@@ -82,6 +82,7 @@ function parseTarget(targetString: string) {
 
 export default function ModelSection() {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [resetTrigger, setResetTrigger] = useState(0); // Forces effect to run even if index is same
     const modelViewerRef = React.useRef<any>(null);
 
     const currentData = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
@@ -101,106 +102,101 @@ export default function ModelSection() {
     const animationState = React.useRef({
         startTime: 0,
         isAnimating: false,
-        // Start Values (Captured when transition begins)
+        // Start Values
         startOrbit: parseOrbit(INITIAL_STATE.orbit),
         startPoint: parseTarget(INITIAL_STATE.target),
-        // Target Values (Where we are going)
+        startFov: parseFloat(INITIAL_STATE.fov),
+        // Target Values
         endOrbit: parseOrbit(INITIAL_STATE.orbit),
         endPoint: parseTarget(INITIAL_STATE.target),
+        endFov: parseFloat(INITIAL_STATE.fov),
         duration: DURATION,
     });
 
-    // Current Values (Used for "where are we right now" if interrupted)
+    // Current Values
     const currentOrbit = React.useRef(parseOrbit(INITIAL_STATE.orbit));
     const currentPoint = React.useRef(parseTarget(INITIAL_STATE.target));
+    const currentFov = React.useRef(parseFloat(INITIAL_STATE.fov));
+
+    // TRACKER: Normalized Meter-to-Percent Ratio sync
+    // We calibrate this every time an animation hits its target precisely.
+    const radiusCalibration = React.useRef({ meters: 0, percent: 160 });
 
     // MATH HELPERS
-    // QUADRATIC EASING (Smoother start/end, less abrupt)
     const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
     const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
 
-    // Shortest Angular Distance: Ensures 350 -> 10 goes +20, not -340
     const shortestAngleDist = (start: number, end: number) => {
         const diff = (end - start + 180) % 360 - 180;
         return diff < -180 ? diff + 360 : diff;
     };
 
-    // 1. TRIGGER: When activeIndex changes, START a new transition
+    // 1. TRIGGER: New Transition
     useEffect(() => {
         const data = activeIndex !== null ? DATA[activeIndex] : INITIAL_STATE;
 
-        // 1. Capture where we currently are (INTERRUPTION SAFE)
-        // CRITICAL FIX: Get ACTUAL current camera position from DOM to prevent "Jump"
         let startO = { ...currentOrbit.current };
         let startP = { ...currentPoint.current };
+        let startF = currentFov.current;
 
-        if (modelViewerRef.current && modelViewerRef.current.getCameraOrbit) {
-            const actualOrbit = modelViewerRef.current.getCameraOrbit();
-            if (actualOrbit) {
-                // model-viewer returns { theta: rad, phi: rad, radius: meters } usually, check docs or console.
-                // Actually it returns an object with theta/phi in radians. We need degrees.
-                startO = {
-                    theta: (actualOrbit.theta * 180) / Math.PI,
-                    phi: (actualOrbit.phi * 180) / Math.PI,
-                    radius: actualOrbit.radius * 100 // It might return radius in meters, but we use %, need to check if we can get the string or raw val.
-                    // Wait, getCameraOrbit returns radius in meters usually if bounds are tight?
-                    // Let's stick to our internal tracking `currentOrbit` BUT sync it better?
-                    // actually, `currentOrbit` IS our source of truth for the animation loop.
-                    // The jump happens because `currentOrbit` might be stale if the user interacted manually?
-                    // Interaction is disabled via `interaction-prompt="none"` but `camera-controls` is ON.
-                    // If user moved it, our ref is wrong.
-                    // Let's trust the REF if we assume user hasn't moved it much, OR parse the string attribute if needed.
-                    // SAFE BET: Re-read the string attribute if possible? `cameraOrbit` is a string prop?
-                    // No, let's use the internal tracker because reading DOM might be async or complex format.
-                    // FIX: Ensure `shortestAngleDist` calculates the path from the *current* interpolated value, which IS `currentOrbit.current`.
-                };
-                // Re-mapping radians to our degree state:
-                startO.theta = (actualOrbit.theta * 180) / Math.PI;
-                startO.phi = (actualOrbit.phi * 180) / Math.PI;
-                // radius in model-viewer defaults to meters? or %?
-                // If we use %, `getCameraOrbit` returns M.
-                // This conversion is risky without testing. 
-                // FALLBACK: Trust `currentOrbit.current` BUT ensure it's not reset.
-                // ISSUE: Maybe `DATA` target is 360 vs 0? 
-                // Let's rely on `currentOrbit.current` but strictly enforce `shortestAngleDist`.
+        if (modelViewerRef.current) {
+            // 1. Capture ORBIT (With Meter-to-Percent Sync)
+            if (modelViewerRef.current.getCameraOrbit) {
+                const actualOrbit = modelViewerRef.current.getCameraOrbit(); // Returns meters
+                if (actualOrbit) {
+                    // CONVERSION LOGIC:
+                    // If we have a calibration point, use it to convert current meters back to %.
+                    // Else, default to our tracker.
+                    let currentRadPerc = currentOrbit.current.radius;
+                    if (radiusCalibration.current.meters > 0) {
+                        const ratio = radiusCalibration.current.percent / radiusCalibration.current.meters;
+                        currentRadPerc = actualOrbit.radius * ratio;
+                    }
+
+                    startO = {
+                        theta: (actualOrbit.theta * 180) / Math.PI,
+                        phi: (actualOrbit.phi * 180) / Math.PI,
+                        radius: currentRadPerc
+                    };
+                    currentOrbit.current = { ...startO };
+                }
+            }
+
+            // 2. Capture FOV
+            if (modelViewerRef.current.getFieldOfView) {
+                const actualFov = modelViewerRef.current.getFieldOfView(); // Returns degrees
+                if (typeof actualFov === 'number') {
+                    startF = actualFov;
+                    currentFov.current = startF;
+                }
             }
         }
 
-        // RE-VERIFICATION: `currentOrbit.current` is updated in the loop. 
-        // If the loop finished, it holds the END state of previous move.
-        // If we click again, it starts from there.
-        // The jump implies `currentOrbit` != `actual visual state`.
-        // This generally happens if the user DRAGS the model. 
-        // We have `camera-controls` enabled.
-        // FIX: We MUST capture the actual camera orbit if the user moved it.
-        // However, converting ModelViewer's internal Radian/Meter state back to our Deg/% string state is hard.
-        // ALTERNATIVE: Disable user interaction? User asked for "Interaktiv".
-        // COMPROMISE: We will stick to `currentOrbit.current` but ensure we normalize the angles immediately.
-
-        // 2. Define where we are going
+        // Define Ends
         const endO = parseOrbit(data.orbit);
         const endP = parseTarget(data.target);
+        const endF = parseFloat(data.fov);
 
-        // 3. Dynamic Duration based on Distance
+        // Calc Duration
         const thetaDiff = Math.abs(shortestAngleDist(startO.theta, endO.theta));
         const phiDiff = Math.abs(shortestAngleDist(startO.phi, endO.phi));
         const maxAngle = Math.max(thetaDiff, phiDiff);
-
-        // Base 1.8s + extra.
         const calculatedDuration = Math.max(DURATION, 1000 + (maxAngle * 10));
 
-        // 4. Set Animation State
+        // Set State
         animationState.current = {
             startTime: performance.now(),
             duration: calculatedDuration,
             isAnimating: true,
             startOrbit: startO,
             startPoint: startP,
+            startFov: startF,
             endOrbit: endO,
-            endPoint: endP
+            endPoint: endP,
+            endFov: endF
         };
 
-    }, [activeIndex]);
+    }, [activeIndex, resetTrigger]);
 
     // 2. ANIMATION LOOP
     useEffect(() => {
@@ -212,36 +208,45 @@ export default function ModelSection() {
                 return;
             }
 
-            const { startTime, duration, startOrbit, endOrbit, startPoint, endPoint } = animationState.current;
+            const { startTime, duration, startOrbit, endOrbit, startPoint, endPoint, startFov, endFov } = animationState.current;
             const elapsed = time - startTime;
-            const progress = Math.min(elapsed / duration, 1); // 0 to 1
-            const ease = easeInOutQuad(progress); // Smoother Quad Curve
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = easeInOutQuad(progress);
 
             if (modelViewerRef.current) {
-                // ORBIT INTERPOLATION (With Shortest Angle Path)
-                // Use shortest path logic for angles (Theta/Phi)
-                // We calculate `start + difference * ease` instead of `lerp` to handle wrap-around correctly manually or just use raw values?
-                // Actually, `lerp` is fine IF we adjust the END target to be the "closest" relative to start.
-
-                // Better approach: Calculate delta first
+                // ORBIT
                 const thetaDiff = shortestAngleDist(startOrbit.theta, endOrbit.theta);
-                const phiDiff = shortestAngleDist(startOrbit.phi, endOrbit.phi); // Phi usually doesn't wrap, but safe to keep.
+                const phiDiff = shortestAngleDist(startOrbit.phi, endOrbit.phi);
 
                 currentOrbit.current.theta = startOrbit.theta + thetaDiff * ease;
                 currentOrbit.current.phi = startOrbit.phi + phiDiff * ease;
                 currentOrbit.current.radius = lerp(startOrbit.radius, endOrbit.radius, ease);
 
-                // TARGET INTERPOLATION (Linear Space is simpler)
+                // TARGET
                 currentPoint.current.x = lerp(startPoint.x, endPoint.x, ease);
                 currentPoint.current.y = lerp(startPoint.y, endPoint.y, ease);
                 currentPoint.current.z = lerp(startPoint.z, endPoint.z, ease);
 
-                // Apply
+                // FOV
+                currentFov.current = lerp(startFov, endFov, ease);
+
+                // APPLY
                 modelViewerRef.current.cameraOrbit = `${currentOrbit.current.theta}deg ${currentOrbit.current.phi}deg ${currentOrbit.current.radius}%`;
                 modelViewerRef.current.cameraTarget = `${currentPoint.current.x}m ${currentPoint.current.y}m ${currentPoint.current.z}m`;
+                modelViewerRef.current.fieldOfView = `${currentFov.current}deg`;
+
+                // Calibration: If we finished, save the current meter distance for that %
+                if (progress >= 1) {
+                    const actualOrbit = modelViewerRef.current.getCameraOrbit();
+                    if (actualOrbit) {
+                        radiusCalibration.current = {
+                            meters: actualOrbit.radius,
+                            percent: endOrbit.radius
+                        };
+                    }
+                }
             }
 
-            // Stop condition
             if (progress >= 1) {
                 animationState.current.isAnimating = false;
             }
@@ -363,7 +368,10 @@ export default function ModelSection() {
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
-                                onClick={() => setActiveIndex(null)}
+                                onClick={() => {
+                                    setActiveIndex(null);
+                                    setResetTrigger(prev => prev + 1);
+                                }}
                                 className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-2 h-7 px-3 rounded-full bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all group pointer-events-auto"
                                 title="Reset View"
                             >
