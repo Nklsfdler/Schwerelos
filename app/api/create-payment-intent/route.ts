@@ -1,7 +1,19 @@
 import { NextResponse } from "next/server";
 
-// Force Node.js runtime — required for fetch to work correctly
 export const runtime = "nodejs";
+
+// Generate order-related IDs
+function generateOrderId(): string {
+    const year = new Date().getFullYear();
+    const random = Math.floor(Math.random() * 900000) + 100000;
+    return `SCH-${year}-${random}`;
+}
+
+function generateTrackingNumber(): string {
+    // DHL-style: JD + 18 digits
+    const digits = Array.from({ length: 18 }, () => Math.floor(Math.random() * 10)).join("");
+    return `JD${digits}`;
+}
 
 export async function POST(request: Request) {
     try {
@@ -11,9 +23,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Server configuration error: Missing Stripe key" }, { status: 500 });
         }
 
-        // Use native fetch instead of Stripe SDK (SDK has Node 24 compatibility issues)
+        // Use native fetch — Stripe SDK has Node 24 compatibility issues on Vercel
         const body = new URLSearchParams({
-            amount: "50", // €0.50 — Stripe minimum
+            amount: "50", // €0.50 — Stripe minimum (real price 33.99€ shown in UI)
             currency: "eur",
             "automatic_payment_methods[enabled]": "true",
             "automatic_payment_methods[allow_redirects]": "always",
@@ -40,6 +52,8 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             clientSecret: data.client_secret,
+            orderId: generateOrderId(),
+            trackingNr: generateTrackingNumber(),
         });
     } catch (error: any) {
         console.error("API route error:", error?.message);

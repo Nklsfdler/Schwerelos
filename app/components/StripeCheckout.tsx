@@ -16,6 +16,8 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 // --- OUTER WRAPPER: Loads PaymentIntent, then renders Stripe Elements ---
 export default function StripeCheckout({ amount = 1 }: { amount?: number }) {
     const [clientSecret, setClientSecret] = useState<string>("");
+    const [orderId, setOrderId] = useState<string>("");
+    const [trackingNr, setTrackingNr] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -31,6 +33,8 @@ export default function StripeCheckout({ amount = 1 }: { amount?: number }) {
                     setError(data.error);
                 } else {
                     setClientSecret(data.clientSecret);
+                    if (data.orderId) setOrderId(data.orderId);
+                    if (data.trackingNr) setTrackingNr(data.trackingNr);
                 }
             })
             .catch(() => setError("Verbindung zum Server fehlgeschlagen."));
@@ -104,18 +108,26 @@ export default function StripeCheckout({ amount = 1 }: { amount?: number }) {
     return (
         <div className="w-full">
             <Elements options={options} stripe={stripePromise}>
-                <CheckoutForm />
+                <CheckoutForm orderId={orderId} trackingNr={trackingNr} />
             </Elements>
         </div>
     );
 }
 
 // --- INNER FORM: Uses Stripe hooks ---
-function CheckoutForm() {
+function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; trackingNr?: string }) {
     const stripe = useStripe();
     const elements = useElements();
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const getReturnUrl = () => {
+        const base = `${window.location.origin}/bestellung-bestaetigung`;
+        const params = new URLSearchParams();
+        if (orderId) params.set("order_id", orderId);
+        if (trackingNr) params.set("tracking", trackingNr);
+        return `${base}?${params.toString()}`;
+    };
 
     // Check for redirect-back success/failure
     useEffect(() => {
@@ -139,7 +151,7 @@ function CheckoutForm() {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/?success=true`,
+                return_url: getReturnUrl(),
             },
         });
 
@@ -147,7 +159,7 @@ function CheckoutForm() {
             setMessage(error.message ?? "Ein unbekannter Fehler ist aufgetreten.");
         }
         setIsLoading(false);
-    }, [stripe, elements]);
+    }, [stripe, elements, orderId, trackingNr]);
 
     // Handle Apple Pay / Google Pay confirmation (called by Stripe internally)
     const handleExpressConfirm = useCallback(async () => {
@@ -155,13 +167,13 @@ function CheckoutForm() {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/?success=true`,
+                return_url: getReturnUrl(),
             },
         });
         if (error) {
             setMessage(error.message ?? "Express-Zahlung fehlgeschlagen.");
         }
-    }, [stripe, elements]);
+    }, [stripe, elements, orderId, trackingNr]);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -201,7 +213,7 @@ function CheckoutForm() {
                         <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                         Verarbeiten...
                     </span>
-                ) : "Jetzt zahlen — 0,50 €"}
+                ) : "Jetzt zahlen — 33,99 €"}
             </button>
 
             {message && (

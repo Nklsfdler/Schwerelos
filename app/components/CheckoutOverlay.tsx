@@ -48,7 +48,7 @@ export function CartOverlay() {
                                 </div>
                                 <div className="flex justify-between items-end">
                                     <p className="text-sm font-light">1 x</p>
-                                    <p className="font-bold">29,00 €</p>
+                                    <p className="font-bold">33,99 €</p>
                                 </div>
                             </div>
                         </div>
@@ -117,21 +117,24 @@ export function CheckoutOverlay() {
                                 <div>
                                     <h3 className="font-[family-name:var(--font-outfit)] font-bold text-white text-lg">Schwerelos</h3>
                                     <p className="text-xs text-white/40 font-[family-name:var(--font-dm)] mt-1">Edition 01 / Obsidian</p>
-                                    <p className="text-sm font-bold text-white/90 mt-2">0,50 € (Technischer Test)</p>
+                                    <p className="text-sm font-bold text-white/90 mt-2">33,99 €</p>
                                 </div>
                             </div>
                             <div className="mt-auto space-y-4 text-sm font-[family-name:var(--font-dm)]">
                                 <div className="flex justify-between border-t border-white/5 pt-4">
                                     <span className="text-white/40">Zwischensumme</span>
-                                    <span className="font-medium text-white/80">0,50 €</span>
+                                    <span className="font-medium text-white/80">29,00 €</span>
                                 </div>
-                                <div className="flex justify-between border-t border-white/10 pt-4 text-lg">
-                                    <span className="font-bold text-white">Versand</span>
-                                    <span className="font-bold text-white/80">0,00 €</span>
+                                <div className="flex justify-between border-t border-white/10 pt-4">
+                                    <span className="text-white/40">Versand</span>
+                                    <span className="font-medium text-white/80">4,99 €</span>
                                 </div>
                                 <div className="flex justify-between border-t border-white/10 pt-4 text-lg">
                                     <span className="font-bold text-white">Gesamt</span>
-                                    <span className="font-bold text-blue-400">0,50 €</span>
+                                    <span className="font-bold text-blue-400">33,99 €</span>
+                                </div>
+                                <div className="mt-1 text-[10px] text-blue-400/50 text-right">
+                                    Testmodus: Es werden 0,50 € berechnet
                                 </div>
                             </div>
                         </div>
@@ -161,7 +164,7 @@ export function CheckoutOverlay() {
                                 </div>
                                 <p className="text-sm text-blue-300/80 leading-relaxed mb-6 font-[family-name:var(--font-dm)]">
                                     Dies ist eine technische Demonstration. Es wird <strong>keine Ware versendet</strong> und kein Kaufvertrag geschlossen.
-                                    Der Betrag von 0,01 € dient der Verifikation und wird als Spende an das Testsystem verbucht.
+                                    Es werden technisch <strong>0,50 €</strong> verarbeitet — kein echter Kauf.
                                 </p>
                                 <label className="flex items-start gap-4 cursor-pointer group p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
                                     <input
