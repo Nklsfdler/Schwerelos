@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+// Force Node.js runtime — Stripe SDK requires real Node.js HTTP (not Edge)
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
     try {
         const key = process.env.STRIPE_SECRET_KEY;
