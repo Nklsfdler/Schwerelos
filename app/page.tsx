@@ -577,7 +577,7 @@ export default function Home() {
 
                 <footer className="py-24 border-t border-white/5 bg-[#050505] text-center relative z-20 flex flex-col items-center">
                     {/* NFD Logo in Footer (White Asset, No Filters) */}
-                    <img src="/logos/NFD SW.png" alt="NFD Logo" className="h-24 w-auto object-contain mb-8" />
+                    <img src="/logos/NFD SW.PNG" alt="NFD Logo" className="h-24 w-auto object-contain mb-8" />
 
                     <span className="font-[family-name:var(--font-outfit)] font-bold text-2xl text-white/10 tracking-tighter">SCHWERELOS</span>
                     <p className="text-[10px] text-white/20 mt-4 font-[family-name:var(--font-dm)] uppercase tracking-widest">© 2026 NFD Niklas Fiedler Design</p>
