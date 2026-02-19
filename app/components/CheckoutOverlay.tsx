@@ -188,10 +188,13 @@ export function CheckoutOverlay() {
                             {/* We need React State. CheckoutOverlay controls this. */}
 
                             {/* Footer / Trust Badges */}
-                            <div className="mt-8 pt-8 border-t border-white/5 flex gap-6 justify-center grayscale opacity-40">
-                                <img src="/logos/applepay.png" className="h-5 object-contain" />
-                                <img src="/logos/klarna.png" className="h-5 object-contain" />
-                                <img src="/logos/paypal.png" className="h-5 object-contain" />
+                            <div className="mt-8 pt-8 border-t border-white/5 flex gap-6 justify-center items-center grayscale opacity-40">
+                                <img src="/logos/applepay.png" className="h-5 object-contain" alt="Apple Pay" />
+                                <img src="/logos/klarna.svg" className="h-4 object-contain invert brightness-200" alt="Klarna" />
+                                <svg viewBox="0 0 38 24" className="h-5 w-auto fill-white" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="38" height="24" rx="3" fill="none" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
+                                    <text x="19" y="16" textAnchor="middle" fontSize="8" fontWeight="bold" fill="white" fontFamily="Arial">VISA</text>
+                                </svg>
                             </div>
                         </div>
                     </motion.div>
