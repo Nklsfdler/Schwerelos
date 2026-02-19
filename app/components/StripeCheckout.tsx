@@ -45,7 +45,6 @@ export default function StripeCheckout({ amount = 1 }: { amount?: number }) {
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
                 <p className="font-bold mb-1">Fehler beim Laden</p>
                 <p className="text-xs opacity-70">{error}</p>
-                <p className="text-xs opacity-50 mt-2">Stripe-API-Key in .env.local prüfen.</p>
             </div>
         );
     }
@@ -102,7 +101,6 @@ export default function StripeCheckout({ amount = 1 }: { amount?: number }) {
         appearance,
         locale: "de" as const,
         loader: "auto" as const,
-        paymentMethodOrder: ["apple_pay", "google_pay", "klarna", "paypal", "card", "sepa_debit"],
     };
 
     return (
@@ -120,6 +118,7 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
     const elements = useElements();
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [expressAvailable, setExpressAvailable] = useState(false);
 
     const getReturnUrl = () => {
         const base = `${window.location.origin}/bestellung-bestaetigung`;
@@ -161,7 +160,7 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
         setIsLoading(false);
     }, [stripe, elements, orderId, trackingNr]);
 
-    // Handle Apple Pay / Google Pay confirmation (called by Stripe internally)
+    // Handle Apple Pay / Google Pay confirmation
     const handleExpressConfirm = useCallback(async () => {
         if (!stripe || !elements) return;
         const { error } = await stripe.confirmPayment({
@@ -177,20 +176,35 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
 
     return (
         <form onSubmit={handleSubmit} className="space-y-5">
-            {/* EXPRESS CHECKOUT: Apple Pay / Google Pay */}
+            {/* EXPRESS CHECKOUT: Apple Pay / Google Pay only — Link deaktiviert */}
             <div>
-                <p className="text-[10px] text-white/30 uppercase tracking-widest mb-2">Apple Pay / Google Pay</p>
+                <p className="text-[10px] text-white/30 uppercase tracking-widest mb-2">
+                    Apple Pay / Google Pay
+                </p>
                 <ExpressCheckoutElement
                     onConfirm={handleExpressConfirm}
+                    onReady={({ availablePaymentMethods }) => {
+                        if (availablePaymentMethods) setExpressAvailable(true);
+                    }}
                     options={{
+                        // Remove Link — only show wallet buttons (Apple Pay, Google Pay)
+                        paymentMethods: {
+                            link: "never",
+                            applePay: "always",
+                            googlePay: "always",
+                            amazonPay: "never",
+                            paypal: "never",
+                        },
                         buttonType: { applePay: "buy", googlePay: "buy" },
-                        buttonTheme: { applePay: "white-outline", googlePay: "black" },
-                        buttonHeight: 48,
+                        buttonTheme: { applePay: "white", googlePay: "black" },
+                        buttonHeight: 52,
                     }}
                 />
-                <p className="text-[9px] text-white/15 mt-1 text-center">
-                    Apple Pay nur auf Safari mit hinterlegter Karte verfügbar
-                </p>
+                {!expressAvailable && (
+                    <p className="text-[9px] text-white/20 mt-2 text-center">
+                        Apple Pay: Safari + Karte in Wallet & Apple Pay erforderlich
+                    </p>
+                )}
             </div>
 
             {/* DIVIDER */}
@@ -200,8 +214,13 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
                 <div className="flex-grow border-t border-white/8" />
             </div>
 
-            {/* STANDARD PAYMENT ELEMENT (Card, SEPA, Klarna, PayPal via tabs) */}
-            <PaymentElement options={{ layout: "tabs" }} />
+            {/* STANDARD PAYMENT ELEMENT — Link ausgeblendet */}
+            <PaymentElement
+                options={{
+                    layout: "tabs",
+                    wallets: { applePay: "never", googlePay: "never" },
+                }}
+            />
 
             <button
                 type="submit"
