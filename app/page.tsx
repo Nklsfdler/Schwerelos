@@ -584,6 +584,7 @@ export default function Home() {
                     <div className="flex justify-center gap-6 mt-6">
                         <a href="/impressum" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Impressum</a>
                         <a href="/datenschutz" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Datenschutz</a>
+                        <a href="/retoure" className="text-[10px] text-white/20 hover:text-white font-[family-name:var(--font-dm)] uppercase tracking-widest transition-colors">Retoure & Bestellstatus</a>
                     </div>
                 </footer>
 

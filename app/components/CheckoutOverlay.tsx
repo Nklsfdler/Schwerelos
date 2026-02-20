@@ -61,7 +61,7 @@ export function CartOverlay() {
                             </div>
                             <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/[0.02] border border-white/5">
                                 <RotateCcw className="w-4 h-4 text-blue-400/60" />
-                                <span className="text-[9px] text-white/30 text-center leading-tight">14 Tage Rückgabe</span>
+                                <span className="text-[9px] text-white/30 text-center leading-tight">14 Tage Widerrufsrecht</span>
                             </div>
                             <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/[0.02] border border-white/5">
                                 <ShieldCheck className="w-4 h-4 text-blue-400/60" />
@@ -138,7 +138,7 @@ export function CheckoutOverlay() {
                                 <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
                                     <RotateCcw className="w-4 h-4 text-blue-400/60 shrink-0" />
                                     <div>
-                                        <p className="text-[10px] text-white/50 font-bold uppercase tracking-wider">14 Tage Rückgaberecht</p>
+                                        <p className="text-[10px] text-white/50 font-bold uppercase tracking-wider">14 Tage Widerrufsrecht</p>
                                         <p className="text-[9px] text-white/25 mt-0.5">Einfach per E-Mail an hallo@nfd.studio</p>
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@ export function CheckoutOverlay() {
                                     <Truck className="w-4 h-4 text-blue-400/60 shrink-0" />
                                     <div>
                                         <p className="text-[10px] text-white/50 font-bold uppercase tracking-wider">DHL Express Versand</p>
-                                        <p className="text-[9px] text-white/25 mt-0.5">5–8 Werktage · Tracking per E-Mail</p>
+                                        <p className="text-[9px] text-white/25 mt-0.5">1–3 Werktage · Tracking per E-Mail</p>
                                     </div>
                                 </div>
                             </div>

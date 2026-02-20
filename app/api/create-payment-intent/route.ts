@@ -21,6 +21,17 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Server-Konfigurationsfehler" }, { status: 500 });
         }
 
+        let email: string | undefined;
+        try {
+            const json = await request.json();
+            email = json?.email;
+        } catch {
+            // No body or not JSON — that's ok
+        }
+
+        const orderId = generateOrderId();
+        const trackingNr = generateTrackingNumber();
+
         // Create PaymentIntent — 0.50€ (50 cents) — LIVE mode
         const body = new URLSearchParams({
             amount: "50",
@@ -28,9 +39,14 @@ export async function POST(request: Request) {
             "automatic_payment_methods[enabled]": "true",
             "automatic_payment_methods[allow_redirects]": "always",
             description: "Schwerelos Edition 01 — Testbestellung",
-            "metadata[order_id]": generateOrderId(),
-            "metadata[tracking_nr]": generateTrackingNumber(),
+            "metadata[order_id]": orderId,
+            "metadata[tracking_nr]": trackingNr,
         });
+
+        // Set receipt_email if email is provided → Stripe sends automatic receipt
+        if (email && email.includes("@")) {
+            body.set("receipt_email", email);
+        }
 
         const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {
             method: "POST",
@@ -53,8 +69,9 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             clientSecret: data.client_secret,
-            orderId: data.metadata?.order_id ?? generateOrderId(),
-            trackingNr: data.metadata?.tracking_nr ?? generateTrackingNumber(),
+            paymentIntentId: data.id,
+            orderId,
+            trackingNr,
         });
     } catch (error: any) {
         console.error("API route error:", error?.message);

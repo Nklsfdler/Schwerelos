@@ -154,8 +154,8 @@ function TimelineStep({ icon, title, subtitle, delay, isActive, isLast }: {
         >
             <div className="flex flex-col items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center border shrink-0 ${isActive
-                        ? "bg-blue-500/20 border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
-                        : "bg-white/[0.03] border-white/10"
+                    ? "bg-blue-500/20 border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                    : "bg-white/[0.03] border-white/10"
                     }`}>
                     {icon}
                 </div>
@@ -378,9 +378,9 @@ function ConfirmationContent() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                         </svg>
                         <div>
-                            <p className="text-xs text-white/50 font-bold mb-1">Rückgabe & Retoure</p>
+                            <p className="text-xs text-white/50 font-bold mb-1">Widerrufsrecht & Retoure</p>
                             <p className="text-[11px] text-white/30 leading-relaxed">
-                                Du hast 14 Tage Rückgaberecht. Sende einfach eine E-Mail an{" "}
+                                Du hast 14 Tage Widerrufsrecht. Sende einfach eine E-Mail an{" "}
                                 <a href="mailto:hallo@nfd.studio" className="text-blue-400 hover:underline">hallo@nfd.studio</a>{" "}
                                 mit deiner Bestellnummer. Wir kümmern uns um den Rest.
                             </p>

@@ -94,7 +94,7 @@ export default function ProductSection() {
                                 <InfoRow label="Material" value="Weiß ABS 3D Printed" />
                                 <InfoRow label="Maße" value="45cm x 15cm x 15cm" />
                                 <InfoRow label="Limitierung" value="50 Exemplare weltweit" />
-                                <InfoRow label="Lieferung" value="Express (1-2 Tage)" />
+                                <InfoRow label="Lieferung" value="Expressversand (1–3 Werktage)" />
                             </div>
 
                             <div className="flex flex-col gap-4">
@@ -107,7 +107,7 @@ export default function ProductSection() {
                                 </button>
                                 <div className="flex justify-center gap-6 mt-4 opacity-50 text-[10px] uppercase tracking-widest">
                                     <span className="flex items-center gap-1.5"><Check className="w-3 h-3" /> 4,99 € Versand</span>
-                                    <span className="flex items-center gap-1.5"><Check className="w-3 h-3" /> 30 Tage Rückgabe</span>
+                                    <span className="flex items-center gap-1.5"><Check className="w-3 h-3" /> 14 Tage Widerrufsrecht</span>
                                 </div>
                             </div>
                         </motion.div>

@@ -8,8 +8,9 @@ export default function AGB() {
                 <p><strong>3. Angebot und Vertragsschluss</strong><br />Die Darstellung der Produkte im Online-Shop stellt kein rechtlich bindendes Angebot, sondern einen unverbindlichen Online-Katalog dar. Durch Anklicken des Bestellbuttons geben Sie eine verbindliche Bestellung der im Warenkorb enthaltenen Waren ab.</p>
                 <p><strong>4. Preise und Versandkosten</strong><br />Die auf den Produktseiten genannten Preise enthalten die gesetzliche Mehrwertsteuer und sonstige Preisbestandteile. Wir liefern weltweit versandkostenfrei.</p>
                 <p><strong>5. Lieferung</strong><br />Die Lieferung erfolgt nur innerhalb der angegebenen Länder mit DHL Express. Die Lieferzeit beträgt 1-3 Werktage.</p>
-                <p><strong>6. Zahlung</strong><br />Die Zahlung erfolgt wahlweise per Apple Pay, PayPal oder Kreditkarte.</p>
-                <p><strong>7. Eigentumsvorbehalt</strong><br />Bis zur vollständigen Zahlung bleibt die Ware unser Eigentum.</p>
+                <p><strong>6. Zahlung</strong><br />Die Zahlung erfolgt wahlweise per PayPal, Apple Pay, Google Pay oder Kreditkarte via Stripe.</p>
+                <p><strong>7. Widerrufsrecht</strong><br />Sie haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt 14 Tage ab dem Tag, an dem Sie oder ein von Ihnen benannter Dritter die Waren in Besitz genommen haben. Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (hallo@nfd.studio) mittels einer eindeutigen Erklärung über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
+                <p><strong>8. Eigentumsvorbehalt</strong><br />Bis zur vollständigen Zahlung bleibt die Ware unser Eigentum.</p>
             </div>
         </div>
     );

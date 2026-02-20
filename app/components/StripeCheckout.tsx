@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
     Elements,
     PaymentElement,
@@ -12,9 +12,23 @@ import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
+/* ─── PAYPAL SVG LOGO ─── */
+function PayPalLogo({ className = "h-5" }: { className?: string }) {
+    return (
+        <svg className={className} viewBox="0 0 101 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.237 2.797h-7.01a.984.984 0 0 0-.972.832L1.688 19.78a.59.59 0 0 0 .58.685h3.396a.69.69 0 0 0 .68-.582l.728-4.607a.984.984 0 0 1 .972-.832h2.242c4.667 0 7.362-2.26 8.064-6.739.316-1.96.013-3.5-.9-4.579C16.432 1.909 14.618 1.165 12.237 2.797z" fill="#253B80" />
+            <path d="M12.237 2.797h-7.01a.984.984 0 0 0-.972.832L1.688 19.78a.59.59 0 0 0 .58.685h3.396a.69.69 0 0 0 .68-.582l.728-4.607a.984.984 0 0 1 .972-.832h2.242c4.667 0 7.362-2.26 8.064-6.739.316-1.96.013-3.5-.9-4.579C16.432 1.909 14.618 1.165 12.237 2.797z" fill="#253B80" />
+            <path d="M39.634 2.797h-7.01a.984.984 0 0 0-.972.832L29.086 19.78a.59.59 0 0 0 .58.685h3.587a.984.984 0 0 0 .972-.832l.708-4.482a.984.984 0 0 1 .972-.832h2.242c4.667 0 7.362-2.26 8.064-6.739.316-1.96.013-3.5-.9-4.579C44.293 1.909 42.015 1.165 39.634 2.797z" fill="#179BD7" />
+            <path d="M61.6 8.274h-3.602a.59.59 0 0 0-.583.498l-.159 1.012-.252-.366c-.782-1.135-2.526-1.515-4.266-1.515-3.99 0-7.399 3.023-8.063 7.264-.346 2.114.145 4.137 1.345 5.548 1.102 1.296 2.675 1.835 4.547 1.835 3.215 0 4.998-2.067 4.998-2.067l-.16 1.003a.59.59 0 0 0 .583.685h3.24a.984.984 0 0 0 .972-.832l1.942-12.337a.59.59 0 0 0-.542-.728z" fill="#179BD7" />
+            <path d="M67.12 2.797L64.363 19.78a.59.59 0 0 0 .583.685h3.097a.984.984 0 0 0 .972-.832L71.583 3.48a.59.59 0 0 0-.583-.685h-3.298a.59.59 0 0 0-.582.002z" fill="#179BD7" />
+        </svg>
+    );
+}
+
 /* ─── OUTER WRAPPER ─── */
 export default function StripeCheckout({ amount = 50 }: { amount?: number }) {
     const [clientSecret, setClientSecret] = useState<string>("");
+    const [paymentIntentId, setPaymentIntentId] = useState<string>("");
     const [orderId, setOrderId] = useState<string>("");
     const [trackingNr, setTrackingNr] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
@@ -31,6 +45,7 @@ export default function StripeCheckout({ amount = 50 }: { amount?: number }) {
                 if (data.error) setError(data.error);
                 else {
                     setClientSecret(data.clientSecret);
+                    if (data.paymentIntentId) setPaymentIntentId(data.paymentIntentId);
                     if (data.orderId) setOrderId(data.orderId);
                     if (data.trackingNr) setTrackingNr(data.trackingNr);
                 }
@@ -100,26 +115,44 @@ export default function StripeCheckout({ amount = 50 }: { amount?: number }) {
                 options={{ clientSecret, appearance, locale: "de" as const, loader: "auto" as const }}
                 stripe={stripePromise}
             >
-                <CheckoutForm orderId={orderId} trackingNr={trackingNr} />
+                <CheckoutForm orderId={orderId} trackingNr={trackingNr} paymentIntentId={paymentIntentId} />
             </Elements>
         </div>
     );
 }
 
 /* ─── INNER CHECKOUT FORM ─── */
-function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; trackingNr?: string }) {
+function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: { orderId?: string; trackingNr?: string; paymentIntentId?: string }) {
     const stripe = useStripe();
     const elements = useElements();
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [activeMethod, setActiveMethod] = useState<"card" | null>(null);
+    const expressRef = useRef<HTMLDivElement>(null);
 
-    const getReturnUrl = () => {
+    const validateEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+    // Update receipt_email on Stripe when email changes
+    const updateReceiptEmail = useCallback(async (emailValue: string) => {
+        if (!paymentIntentId || !validateEmail(emailValue)) return;
+        try {
+            await fetch("/api/update-payment-intent", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentIntentId, email: emailValue }),
+            });
+        } catch { /* silent */ }
+    }, [paymentIntentId]);
+
+    const getReturnUrl = useCallback(() => {
         const base = `${window.location.origin}/bestellung-bestaetigung`;
         const params = new URLSearchParams();
         if (orderId) params.set("order_id", orderId);
         if (trackingNr) params.set("tracking", trackingNr);
         return `${base}?${params.toString()}`;
-    };
+    }, [orderId, trackingNr]);
 
     useEffect(() => {
         if (!stripe) return;
@@ -135,85 +168,231 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         if (!stripe || !elements) return;
+
+        // Validate email
+        if (!validateEmail(email)) {
+            setEmailError("Bitte gib eine gültige E-Mail-Adresse ein.");
+            return;
+        }
+        setEmailError("");
+
         setIsLoading(true);
         setMessage(null);
+
+        // Update receipt_email before confirming
+        await updateReceiptEmail(email);
+
         const { error } = await stripe.confirmPayment({
             elements,
-            confirmParams: { return_url: getReturnUrl() },
+            confirmParams: {
+                return_url: getReturnUrl(),
+                payment_method_data: {
+                    billing_details: { email },
+                },
+            },
         });
         if (error) setMessage(error.message ?? "Ein Fehler ist aufgetreten.");
         setIsLoading(false);
-    }, [stripe, elements, orderId, trackingNr]);
+    }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]);
 
     const handleExpressConfirm = useCallback(async () => {
         if (!stripe || !elements) return;
+
+        // For express, update email if provided
+        if (validateEmail(email)) {
+            await updateReceiptEmail(email);
+        }
+
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: { return_url: getReturnUrl() },
         });
         if (error) setMessage(error.message ?? "Express-Zahlung fehlgeschlagen.");
-    }, [stripe, elements, orderId, trackingNr]);
+    }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]);
+
+    const handlePayPalClick = useCallback(async () => {
+        if (!stripe || !elements) return;
+
+        if (!validateEmail(email)) {
+            setEmailError("Bitte gib eine gültige E-Mail-Adresse ein.");
+            return;
+        }
+        setEmailError("");
+        setIsLoading(true);
+
+        await updateReceiptEmail(email);
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: getReturnUrl(),
+                payment_method_data: {
+                    billing_details: { email },
+                },
+            },
+            redirect: "if_required",
+        });
+        if (error) {
+            setMessage(error.message ?? "PayPal-Zahlung fehlgeschlagen.");
+            setIsLoading(false);
+        }
+    }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-5">
-            {/* ─── EXPRESS CHECKOUT GRID (Apple Pay, Google Pay) ─── */}
+            {/* ─── EMAIL FIELD (REQUIRED) ─── */}
+            <div>
+                <label className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">
+                    E-Mail-Adresse <span className="text-red-400">*</span>
+                </label>
+                <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (emailError) setEmailError("");
+                    }}
+                    onBlur={() => {
+                        if (email && !validateEmail(email)) {
+                            setEmailError("Bitte gib eine gültige E-Mail-Adresse ein.");
+                        } else {
+                            setEmailError("");
+                            updateReceiptEmail(email);
+                        }
+                    }}
+                    placeholder="deine@email.de"
+                    className={`w-full px-4 py-3 bg-white/[0.03] border rounded-xl text-white text-sm placeholder:text-white/25 outline-none transition-all font-[family-name:var(--font-dm)] ${emailError
+                            ? "border-red-500/50 focus:border-red-500"
+                            : "border-white/8 focus:border-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.15)]"
+                        }`}
+                />
+                {emailError && (
+                    <p className="text-red-400 text-[11px] mt-1.5">{emailError}</p>
+                )}
+                <p className="text-[9px] text-white/20 mt-1.5">Für Bestellbestätigung & Tracking</p>
+            </div>
+
+            {/* ─── 2×2 QUICK-PAY GRID ─── */}
             <div>
                 <p className="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-bold">
                     Schnell bezahlen
                 </p>
-                <ExpressCheckoutElement
-                    onConfirm={handleExpressConfirm}
+                <div className="grid grid-cols-2 gap-2">
+                    {/* PayPal */}
+                    <button
+                        type="button"
+                        onClick={handlePayPalClick}
+                        disabled={isLoading}
+                        className="group flex items-center justify-center gap-2 py-4 rounded-xl bg-[#FFC439] hover:bg-[#f5bb30] transition-all border border-[#FFC439]/50 disabled:opacity-40"
+                    >
+                        <svg className="h-5" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 2.5h-6a.8.8 0 0 0-.8.7L4.5 17a.5.5 0 0 0 .5.6h2.9a.8.8 0 0 0 .8-.7l.6-3.9a.8.8 0 0 1 .8-.7h1.9c4 0 6.3-1.9 6.9-5.8.3-1.7 0-3-.8-3.9-.8-1-2.3-1.6-4.4-1.1z" fill="#253B80" />
+                            <path d="M36 2.5h-6a.8.8 0 0 0-.8.7L27 17a.5.5 0 0 0 .5.6h3.1a.6.6 0 0 0 .6-.5l.6-3.8a.8.8 0 0 1 .8-.7h1.9c4 0 6.3-1.9 6.9-5.8.3-1.7 0-3-.8-3.9-.8-1-2.3-1.6-4.4-1.1z" fill="#179BD7" />
+                            <path d="M53 7.3h-3a.5.5 0 0 0-.5.4l-.1.9-.2-.3c-.7-1-2.2-1.3-3.7-1.3-3.4 0-6.3 2.6-6.9 6.2-.3 1.8.1 3.5 1.2 4.7.9 1.1 2.3 1.6 3.9 1.6 2.8 0 4.3-1.8 4.3-1.8l-.1.9a.5.5 0 0 0 .5.6h2.8a.8.8 0 0 0 .8-.7l1.7-10.5a.5.5 0 0 0-.5-.7z" fill="#179BD7" />
+                            <path d="M57.7 2.5L55.3 17a.5.5 0 0 0 .5.6h2.6a.8.8 0 0 0 .8-.7L61.4 3.2a.5.5 0 0 0-.5-.6h-2.8a.5.5 0 0 0-.4 0z" fill="#179BD7" />
+                        </svg>
+                    </button>
+
+                    {/* Apple Pay — uses hidden ExpressCheckoutElement */}
+                    <div className="relative">
+                        <div ref={expressRef} className="[&_button]:!rounded-xl [&_button]:!h-full [&_iframe]:!rounded-xl overflow-hidden rounded-xl h-[52px]">
+                            <ExpressCheckoutElement
+                                onConfirm={handleExpressConfirm}
+                                options={{
+                                    paymentMethods: {
+                                        link: "never",
+                                        applePay: "always",
+                                        googlePay: "auto",
+                                        amazonPay: "never",
+                                        paypal: "never",
+                                    },
+                                    buttonType: { applePay: "buy", googlePay: "buy" },
+                                    buttonTheme: { applePay: "white-outline", googlePay: "white" },
+                                    buttonHeight: 52,
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Google Pay — fallback button if Express doesn't show Google Pay */}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            // Trigger the Express Checkout Element's Google Pay
+                            const btn = expressRef.current?.querySelector('button') as HTMLButtonElement | null;
+                            if (btn) btn.click();
+                            else setActiveMethod("card");
+                        }}
+                        className="flex items-center justify-center gap-2 py-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] transition-all border border-white/10 hover:border-white/20"
+                    >
+                        <svg className="h-5" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.44 11.94v3.46h-1.1V7.28h2.9c.72 0 1.33.24 1.83.73.51.48.76 1.07.76 1.74 0 .69-.25 1.27-.76 1.75-.5.48-1.1.72-1.83.72h-1.8v-.28zm0-3.66v2.94h1.82c.43 0 .79-.15 1.08-.46.3-.3.45-.67.45-1.02 0-.35-.15-.71-.45-1.01-.29-.3-.65-.45-1.08-.45h-1.82z" fill="#fff" />
+                            <path d="M26.05 10.02c.8 0 1.43.21 1.9.64.46.43.69 1.02.69 1.77v3.57h-1.05v-.8h-.05c-.45.66-1.04.99-1.78.99-.63 0-1.16-.19-1.59-.56-.43-.38-.64-.85-.64-1.42 0-.6.23-1.08.68-1.43.46-.35 1.07-.53 1.83-.53.65 0 1.19.12 1.6.35v-.25c0-.42-.17-.78-.5-1.07-.33-.29-.72-.43-1.16-.43-.66 0-1.19.28-1.57.84l-.97-.61c.57-.83 1.41-1.24 2.5-1.24h.1zm-1.4 4.26c0 .32.14.58.41.79.27.21.59.31.95.31.52 0 .98-.19 1.37-.58.39-.39.59-.84.59-1.36-.34-.27-.81-.4-1.42-.4-.44 0-.81.11-1.1.33-.3.22-.45.5-.45.84l-.35.07z" fill="#fff" />
+                            <path d="M33.24 10.2l-3.68 8.42h-1.12l1.37-2.94-2.42-5.48h1.18l1.75 4.19h.02l1.71-4.19h1.19z" fill="#fff" />
+                        </svg>
+                        <span className="text-sm text-white/70 font-medium">Google Pay</span>
+                    </button>
+
+                    {/* Kreditkarte */}
+                    <button
+                        type="button"
+                        onClick={() => setActiveMethod(activeMethod === "card" ? null : "card")}
+                        className={`flex items-center justify-center gap-2 py-4 rounded-xl transition-all border ${activeMethod === "card"
+                                ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
+                                : "bg-white/[0.04] border-white/10 hover:bg-white/[0.08] hover:border-white/20"
+                            }`}
+                    >
+                        <svg className="h-4 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                        </svg>
+                        <span className="text-sm font-medium">Kreditkarte</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* ─── DIVIDER ─── */}
+            {activeMethod === "card" && (
+                <div className="relative flex items-center gap-3">
+                    <div className="flex-grow border-t border-white/8" />
+                    <span className="text-[10px] text-white/25 uppercase tracking-widest shrink-0">Kartendaten</span>
+                    <div className="flex-grow border-t border-white/8" />
+                </div>
+            )}
+
+            {/* ─── PAYMENT ELEMENT: Card, SEPA etc. ─── */}
+            <div className={activeMethod === "card" ? "block" : "hidden"}>
+                <PaymentElement
                     options={{
-                        paymentMethods: {
-                            link: "never",
-                            applePay: "always",
-                            googlePay: "always",
-                            amazonPay: "never",
-                            paypal: "never",
+                        layout: {
+                            type: "accordion",
+                            defaultCollapsed: false,
+                            radios: true,
+                            spacedAccordionItems: true,
                         },
-                        buttonType: { applePay: "buy", googlePay: "buy" },
-                        buttonTheme: { applePay: "white-outline", googlePay: "white" },
-                        buttonHeight: 52,
+                        wallets: { applePay: "never", googlePay: "never" },
+                        business: { name: "Schwerelos by NFD" },
+                        paymentMethodOrder: ["card", "sepa_debit", "klarna"],
                     }}
                 />
             </div>
 
-            {/* ─── DIVIDER ─── */}
-            <div className="relative flex items-center gap-3">
-                <div className="flex-grow border-t border-white/8" />
-                <span className="text-[10px] text-white/25 uppercase tracking-widest shrink-0">Oder mit</span>
-                <div className="flex-grow border-t border-white/8" />
-            </div>
-
-            {/* ─── PAYMENT ELEMENT: Card, Klarna, SEPA, PayPal etc. ─── */}
-            <PaymentElement
-                options={{
-                    layout: {
-                        type: "accordion",
-                        defaultCollapsed: false,
-                        radios: true,
-                        spacedAccordionItems: true,
-                    },
-                    wallets: { applePay: "never", googlePay: "never" },
-                    business: { name: "Schwerelos by NFD" },
-                }}
-            />
-
             {/* ─── SUBMIT BUTTON ─── */}
-            <button
-                type="submit"
-                disabled={isLoading || !stripe || !elements}
-                className="w-full py-4 bg-white text-black font-[family-name:var(--font-outfit)] font-bold uppercase tracking-widest rounded-full hover:bg-blue-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(255,255,255,0.08)] mt-2 relative overflow-hidden group"
-            >
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                        Verarbeiten...
-                    </span>
-                ) : "Jetzt bezahlen — 0,50 €"}
-            </button>
+            {activeMethod === "card" && (
+                <button
+                    type="submit"
+                    disabled={isLoading || !stripe || !elements}
+                    className="w-full py-4 bg-white text-black font-[family-name:var(--font-outfit)] font-bold uppercase tracking-widest rounded-full hover:bg-blue-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(255,255,255,0.08)] mt-2 relative overflow-hidden group"
+                >
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                    {isLoading ? (
+                        <span className="flex items-center justify-center gap-2">
+                            <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                            Verarbeiten...
+                        </span>
+                    ) : "Jetzt bezahlen — 0,50 €"}
+                </button>
+            )}
 
             {/* ─── TRUST FOOTER ─── */}
             <div className="flex items-center justify-center gap-4 pt-4">
@@ -228,7 +407,8 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
             </div>
 
             {message && (
-                <div className="text-center text-sm mt-2 p-3 rounded-xl border border-white/10 text-white/60">
+                <div className={`text-center text-sm mt-2 p-3 rounded-xl border ${message.startsWith("✓") ? "border-green-500/20 text-green-400 bg-green-500/5" : "border-white/10 text-white/60"
+                    }`}>
                     {message}
                 </div>
             )}
