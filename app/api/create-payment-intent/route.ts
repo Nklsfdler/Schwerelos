@@ -30,7 +30,6 @@ export async function POST(request: Request) {
             description: "Schwerelos Edition 01 — Testbestellung",
             "metadata[order_id]": generateOrderId(),
             "metadata[tracking_nr]": generateTrackingNumber(),
-            receipt_email: "", // Will be filled by Stripe from payment method
         });
 
         const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {
