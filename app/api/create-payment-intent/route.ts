@@ -24,8 +24,6 @@ export async function POST(request: Request) {
             description: "Schwerelos Edition 01 — Demo-Bestellung",
             "automatic_payment_methods[enabled]": "true",
             "automatic_payment_methods[allow_redirects]": "always",
-            // Enable email receipt to customer
-            receipt_email: "",      // Will be filled from payment form if customer provides email
             "metadata[product]": "Schwerelos Edition 01",
             "metadata[display_price]": "33.99",
         });
