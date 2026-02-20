@@ -3,7 +3,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
-import { X } from "lucide-react";
+import { X, ShieldCheck, Undo2 } from "lucide-react";
 import nextDynamic from 'next/dynamic';
 
 const StripeCheckout = nextDynamic(() => import('./StripeCheckout'), { ssr: false });
@@ -68,6 +68,20 @@ export function CartOverlay() {
                                     <span>33,99 €</span>
                                 </div>
                             </div>
+
+                            {/* Trust badges */}
+                            <div className="flex items-center gap-3 mb-5">
+                                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                                    <ShieldCheck className="w-3.5 h-3.5" />
+                                    <span>SSL-Verschlüsselt</span>
+                                </div>
+                                <div className="w-px h-3 bg-white/10" />
+                                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                                    <Undo2 className="w-3.5 h-3.5" />
+                                    <span>14 Tage Rückgabe</span>
+                                </div>
+                            </div>
+
                             <button
                                 onClick={openCheckout}
                                 className="w-full py-4 bg-white text-black font-[family-name:var(--font-outfit)] font-bold uppercase tracking-widest rounded-full hover:bg-neutral-200 transition-colors"
@@ -84,10 +98,6 @@ export function CartOverlay() {
 
 export function CheckoutOverlay() {
     const { isCheckoutOpen, closeCheckout } = useCart();
-    const [testConfirmed, setTestConfirmed] = React.useState(false);
-
-    // Simple state just for the overlay visibility/mounting
-    // Stripe handles its own internal state (processing, success, errors)
 
     return (
         <AnimatePresence>
@@ -105,12 +115,16 @@ export function CheckoutOverlay() {
                         initial={{ scale: 0.95, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                        className="relative w-full max-w-5xl bg-[#09090B] rounded-[24px] overflow-hidden flex flex-col md:flex-row h-[90vh] md:h-[700px] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+                        className="relative w-full max-w-5xl bg-[#09090B] rounded-[24px] overflow-hidden flex flex-col md:flex-row h-[90vh] md:h-[720px] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)]"
                     >
                         {/* LEFT: ORDER SUMMARY */}
-                        <div className="w-full md:w-1/3 bg-[#050505] p-8 md:p-10 border-r border-white/5 flex flex-col relative grid-pattern hidden md:flex">
-                            <h3 className="text-xs uppercase tracking-widest text-white/40 mb-10 font-[family-name:var(--font-outfit)] font-bold">Bestellübersicht</h3>
-                            <div className="flex gap-5 items-center mb-8">
+                        <div className="w-full md:w-[340px] bg-[#050507] p-8 md:p-10 border-r border-white/5 flex flex-col relative hidden md:flex">
+                            {/* Subtle grid pattern */}
+                            <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+
+                            <h3 className="text-xs uppercase tracking-widest text-white/40 mb-10 font-[family-name:var(--font-outfit)] font-bold relative z-10">Bestellübersicht</h3>
+
+                            <div className="flex gap-5 items-center mb-8 relative z-10">
                                 <div className="w-20 h-20 bg-[#111] rounded-2xl overflow-hidden shadow-sm border border-white/10 p-1">
                                     <img src="/Produktbilder/Produktbild.png" className="w-full h-full object-cover rounded-xl opacity-80" />
                                 </div>
@@ -120,12 +134,13 @@ export function CheckoutOverlay() {
                                     <p className="text-sm font-bold text-white/90 mt-2">33,99 €</p>
                                 </div>
                             </div>
-                            <div className="mt-auto space-y-4 text-sm font-[family-name:var(--font-dm)]">
+
+                            <div className="mt-auto space-y-3 text-sm font-[family-name:var(--font-dm)] relative z-10">
                                 <div className="flex justify-between border-t border-white/5 pt-4">
                                     <span className="text-white/40">Zwischensumme</span>
                                     <span className="font-medium text-white/80">29,00 €</span>
                                 </div>
-                                <div className="flex justify-between border-t border-white/10 pt-4">
+                                <div className="flex justify-between">
                                     <span className="text-white/40">Versand</span>
                                     <span className="font-medium text-white/80">4,99 €</span>
                                 </div>
@@ -133,17 +148,32 @@ export function CheckoutOverlay() {
                                     <span className="font-bold text-white">Gesamt</span>
                                     <span className="font-bold text-blue-400">33,99 €</span>
                                 </div>
-                                <div className="mt-1 text-[10px] text-blue-400/50 text-right">
-                                    Testmodus: Es werden 0,50 € berechnet
+                                <div className="mt-2 text-[10px] text-blue-400/40 text-right">
+                                    Demo · Es werden 0,50 € berechnet
+                                </div>
+                            </div>
+
+                            {/* Trust & Returns info */}
+                            <div className="mt-6 pt-4 border-t border-white/5 space-y-2 relative z-10">
+                                <div className="flex items-center gap-2 text-[10px] text-white/25">
+                                    <ShieldCheck className="w-3 h-3" />
+                                    <span>256-Bit SSL · Stripe gesichert</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-[10px] text-white/25">
+                                    <Undo2 className="w-3 h-3" />
+                                    <span>14 Tage kostenlose Rückgabe</span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* RIGHT: PAYMENT (Stripe) */}
+                        {/* RIGHT: PAYMENT */}
                         <div className="flex-1 bg-[#09090B] p-6 md:p-10 flex flex-col relative overflow-y-auto">
-                            {/* Mobile Header (Close Button) */}
-                            <div className="flex justify-between items-center mb-8">
-                                <h2 className="text-2xl font-[family-name:var(--font-outfit)] font-bold text-white">Test-Modus</h2>
+                            {/* Header */}
+                            <div className="flex justify-between items-center mb-6">
+                                <div>
+                                    <h2 className="text-2xl font-[family-name:var(--font-outfit)] font-bold text-white">Bezahlung</h2>
+                                    <p className="text-xs text-white/30 mt-1">Wähle deine Zahlungsmethode</p>
+                                </div>
                                 <button
                                     onClick={closeCheckout}
                                     className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
@@ -152,49 +182,9 @@ export function CheckoutOverlay() {
                                 </button>
                             </div>
 
-                            {/* TEST MODE DISCLAIMER */}
-                            <div className="mb-8 p-6 bg-blue-500/5 border border-blue-500/20 rounded-2xl backdrop-blur-sm">
-                                <div className="flex gap-4 mb-3">
-                                    <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                                        <span className="text-blue-400 font-bold text-lg font-[family-name:var(--font-outfit)]">i</span>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-blue-400 font-bold text-sm uppercase tracking-widest font-[family-name:var(--font-outfit)]">System-Status: Testphase</h3>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-blue-300/80 leading-relaxed mb-6 font-[family-name:var(--font-dm)]">
-                                    Dies ist eine technische Demonstration. Es wird <strong>keine Ware versendet</strong> und kein Kaufvertrag geschlossen.
-                                    Es werden technisch <strong>0,50 €</strong> verarbeitet — kein echter Kauf.
-                                </p>
-                                <label className="flex items-start gap-4 cursor-pointer group p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
-                                    <input
-                                        type="checkbox"
-                                        checked={testConfirmed}
-                                        onChange={(e) => setTestConfirmed(e.target.checked)}
-                                        className="mt-1 w-5 h-5 rounded border-white/20 bg-white/5 checked:bg-blue-500 transition-colors cursor-pointer"
-                                    />
-                                    <span className="text-xs text-white/60 group-hover:text-white transition-colors font-medium">
-                                        Ich bestätige, dass dies ein Test ist und keine Lieferung erfolgt.
-                                    </span>
-                                </label>
-                            </div>
-
                             {/* STRIPE CHECKOUT COMPONENT */}
-                            <div className={`flex-1 transition-all duration-500 ${testConfirmed ? 'opacity-100 grayscale-0' : 'opacity-30 pointer-events-none blur-sm grayscale'}`}>
+                            <div className="flex-1">
                                 <StripeCheckout amount={50} />
-                            </div>
-
-                            {/* Enable Logic via Script/Effect substitute since we are checking the checkbox */}
-                            {/* We need React State. CheckoutOverlay controls this. */}
-
-                            {/* Footer / Trust Badges */}
-                            <div className="mt-8 pt-8 border-t border-white/5 flex gap-6 justify-center items-center grayscale opacity-40">
-                                <img src="/logos/applepay.png" className="h-5 object-contain" alt="Apple Pay" />
-                                <img src="/logos/klarna.svg" className="h-4 object-contain invert brightness-200" alt="Klarna" />
-                                <svg viewBox="0 0 38 24" className="h-5 w-auto fill-white" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="38" height="24" rx="3" fill="none" stroke="white" strokeWidth="1.5" strokeOpacity="0.5" />
-                                    <text x="19" y="16" textAnchor="middle" fontSize="8" fontWeight="bold" fill="white" fontFamily="Arial">VISA</text>
-                                </svg>
                             </div>
                         </div>
                     </motion.div>

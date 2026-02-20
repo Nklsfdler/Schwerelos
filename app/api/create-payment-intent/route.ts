@@ -2,17 +2,12 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-// Generate order-related IDs
 function generateOrderId(): string {
-    const year = new Date().getFullYear();
-    const random = Math.floor(Math.random() * 900000) + 100000;
-    return `SCH-${year}-${random}`;
+    return `SCH-${new Date().getFullYear()}-${Math.floor(Math.random() * 900000) + 100000}`;
 }
 
 function generateTrackingNumber(): string {
-    // DHL-style: JD + 18 digits
-    const digits = Array.from({ length: 18 }, () => Math.floor(Math.random() * 10)).join("");
-    return `JD${digits}`;
+    return `JD${Array.from({ length: 18 }, () => Math.floor(Math.random() * 10)).join("")}`;
 }
 
 export async function POST(request: Request) {
@@ -20,15 +15,19 @@ export async function POST(request: Request) {
         const key = process.env.STRIPE_SECRET_KEY;
         if (!key) {
             console.error("STRIPE_SECRET_KEY is not set!");
-            return NextResponse.json({ error: "Server configuration error: Missing Stripe key" }, { status: 500 });
+            return NextResponse.json({ error: "Server: Missing Stripe key" }, { status: 500 });
         }
 
-        // Use native fetch — Stripe SDK has Node 24 compatibility issues on Vercel
         const body = new URLSearchParams({
-            amount: "50", // €0.50 — Stripe minimum (real price 33.99€ shown in UI)
+            amount: "50",           // €0.50 (demo amount, real price 33.99€ shown in UI)
             currency: "eur",
+            description: "Schwerelos Edition 01 — Demo-Bestellung",
             "automatic_payment_methods[enabled]": "true",
             "automatic_payment_methods[allow_redirects]": "always",
+            // Enable email receipt to customer
+            receipt_email: "",      // Will be filled from payment form if customer provides email
+            "metadata[product]": "Schwerelos Edition 01",
+            "metadata[display_price]": "33.99",
         });
 
         const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {
@@ -45,7 +44,7 @@ export async function POST(request: Request) {
         if (!stripeResponse.ok) {
             console.error("Stripe API error:", data?.error);
             return NextResponse.json(
-                { error: `Stripe Error: ${data?.error?.message ?? "Unknown error"}` },
+                { error: `Stripe: ${data?.error?.message ?? "Unknown error"}` },
                 { status: 500 }
             );
         }
@@ -58,7 +57,7 @@ export async function POST(request: Request) {
     } catch (error: any) {
         console.error("API route error:", error?.message);
         return NextResponse.json(
-            { error: `Internal Server Error: ${error.message}` },
+            { error: `Internal: ${error.message}` },
             { status: 500 }
         );
     }
