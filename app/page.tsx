@@ -1,5 +1,47 @@
 "use client";
 
+// --- SOFT-CATCH SCROLL BRAKE HOOK ---
+function useSoftCatchBrake(triggerRef: React.RefObject<HTMLElement | null>) {
+    useEffect(() => {
+        const el = triggerRef.current;
+        if (!el) return;
+
+        let velocity = 0;
+        let lastTime = 0;
+        const DECAY = 0.88;          // exponential friction per tick
+        const SPEED_THRESHOLD = 120; // px/event to consider "fast"
+        const ZONE_ABOVE = 300;      // px above element to start braking
+        const ZONE_BELOW = 600;      // px into element to keep braking
+
+        const handler = (e: WheelEvent) => {
+            const rect = el.getBoundingClientRect();
+            const triggerTop = rect.top;
+
+            // Only active in the catch zone
+            if (triggerTop < -ZONE_BELOW || triggerTop > ZONE_ABOVE) return;
+
+            const now = performance.now();
+            const dt = now - lastTime;
+            lastTime = now;
+
+            const rawDelta = Math.abs(e.deltaY);
+            velocity = dt > 0 ? rawDelta / (dt / 16) : rawDelta;
+
+            if (velocity > SPEED_THRESHOLD && e.deltaY > 0) {
+                // Brake: reduce the scroll amount
+                e.preventDefault();
+                const brakeFactor = Math.max(0.15, DECAY * (SPEED_THRESHOLD / velocity));
+                const dampedDelta = e.deltaY * brakeFactor;
+                window.scrollBy({ top: dampedDelta, behavior: 'auto' });
+                velocity *= DECAY;
+            }
+        };
+
+        window.addEventListener('wheel', handler, { passive: false });
+        return () => window.removeEventListener('wheel', handler);
+    }, [triggerRef]);
+}
+
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
 import NextImage from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
@@ -203,8 +245,12 @@ function NarrativeText({ data, scrollYProgress }: { data: any, scrollYProgress: 
 
 export default function Home() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const bentoRef = useRef<HTMLElement>(null);
     const [images, setImages] = useState<HTMLImageElement[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
+
+    // Soft-catch brake at the bento grid transition
+    useSoftCatchBrake(bentoRef);
 
     // --- SCROLL LOGIC ---
     // Header Visibility: Hide when leaving Hero Section (approx 800px)
@@ -411,7 +457,7 @@ export default function Home() {
                 <div className="h-[30vh] w-full bg-[#030303]" />
 
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
-                <section id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-4 px-2 md:px-6 min-h-screen md:min-h-0 md:h-auto md:py-12 flex items-center justify-center">
+                <section ref={bentoRef} id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-4 px-2 md:px-6 min-h-screen md:min-h-0 md:h-auto md:py-12 flex items-center justify-center">
                     <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[600px] lg:h-[450px]">
 
                         {/* TILE 1: PHILOSOPHY */}
@@ -556,19 +602,19 @@ export default function Home() {
                 <div className="mb-8 w-full max-w-[1400px] mx-auto z-20 relative px-4 md:px-12 flex justify-center md:justify-end">
                     <Link
                         href="/retoure"
-                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-2xl p-4 md:p-6 flex items-center gap-4 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full md:w-auto md:min-w-[300px]"
+                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-2xl p-5 md:p-7 flex items-center gap-5 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full md:w-auto md:min-w-[380px]"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500">
-                            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500">
+                            <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                             </svg>
                         </div>
                         <div>
-                            <p className="text-[10px] text-blue-400/80 uppercase tracking-widest font-bold mb-0.5">Bestellung</p>
-                            <p className="text-sm md:text-base font-[family-name:var(--font-outfit)] font-bold text-white group-hover:text-blue-50 transition-colors">Retoure & Status</p>
+                            <p className="text-[10px] md:text-[11px] text-blue-400/80 uppercase tracking-[0.2em] font-[family-name:var(--font-outfit)] font-bold mb-1">Bestellung</p>
+                            <p className="text-base md:text-lg font-[family-name:var(--font-outfit)] font-bold text-white/90 group-hover:text-blue-50 transition-colors tracking-tight">Retoure & Status</p>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-white/20 ml-auto group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-5 h-5 text-white/20 ml-auto group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
                     </Link>
                 </div>
 
@@ -612,10 +658,7 @@ export default function Home() {
                 {/* GENERATIVE AUDIO SYSTEM */}
                 <AmbientSound scrollProgress={smoothProgress} />
 
-                {/* DEBUG: Version Badge (To confirm deployment) */}
-                <div className="fixed bottom-2 right-2 z-50 text-[10px] text-white/20 font-mono pointer-events-none">
-                    v1.20.0-RobustReset
-                </div>
+
             </div>
         </CartProvider>
     );
