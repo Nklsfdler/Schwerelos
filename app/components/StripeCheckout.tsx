@@ -239,8 +239,8 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
                             paymentMethods: {
                                 link: "never" as const,
                                 applePay: "always" as const,
-                                googlePay: "always" as const,
-                                paypal: "always" as any,
+                                googlePay: "auto" as const,
+                                paypal: "auto" as any,
                                 amazonPay: "never" as const,
                             },
                             buttonType: {
