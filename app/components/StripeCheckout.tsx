@@ -9,6 +9,7 @@ import {
     ExpressCheckoutElement,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { motion } from "framer-motion";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -192,123 +193,164 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
         if (error) setMessage(error.message ?? "Express-Zahlung fehlgeschlagen.");
     }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]);
 
+    const [confirmedDemo, setConfirmedDemo] = useState(false);
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-5">
-            {/* ─── EMAIL FIELD (REQUIRED) ─── */}
-            <div>
-                <label className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">
-                    E-Mail-Adresse <span className="text-red-400">*</span>
-                </label>
-                <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (emailError) setEmailError("");
-                    }}
-                    onBlur={() => {
-                        if (email && !validateEmail(email)) {
-                            setEmailError("Bitte gib eine gültige E-Mail-Adresse ein.");
-                        } else {
-                            setEmailError("");
-                            updateReceiptEmail(email);
-                        }
-                    }}
-                    placeholder="deine@email.de"
-                    className={`w-full px-4 py-3 bg-white/[0.03] border rounded-xl text-white text-sm placeholder:text-white/25 outline-none transition-all font-[family-name:var(--font-dm)] ${emailError
-                        ? "border-red-500/50 focus:border-red-500"
-                        : "border-white/8 focus:border-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.15)]"
-                        }`}
-                />
-                {emailError && (
-                    <p className="text-red-400 text-[11px] mt-1.5">{emailError}</p>
-                )}
-                <p className="text-[9px] text-white/20 mt-1.5">Für Bestellbestätigung & Tracking</p>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-5 relative">
+            {/* ─── DEMO MODE GATE ─── */}
+            {!confirmedDemo && (
+                <div className="absolute inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-md rounded-3xl" />
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        className="relative z-10 w-full bg-gradient-to-b from-blue-600 to-blue-800 p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-blue-400/30 text-center"
+                    >
+                        <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
+                            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-xl font-[family-name:var(--font-outfit)] font-black text-white mb-2 uppercase tracking-tight">Wichtiger Hinweis</h3>
+                        <p className="text-white/80 text-sm leading-relaxed mb-6 font-medium">
+                            Dies ist ein <span className="text-white font-bold">Demo-Modus</span>.<br />
+                            Es wird <span className="text-white font-bold text-lg">0,50 €</span> berechnet.<br />
+                            <span className="opacity-75">Die Zahlung dient als Spende, es wird keine Ware versendet und der Betrag wird nicht zurückerstattet.</span>
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() => setConfirmedDemo(true)}
+                            className="w-full py-4 bg-white text-blue-700 font-black uppercase tracking-widest rounded-full hover:bg-blue-50 transition-all shadow-xl active:scale-95"
+                        >
+                            Verstanden & Fortfahren
+                        </button>
+                    </motion.div>
+                </div>
+            )}
 
-            {/* ─── EXPRESS CHECKOUT: PayPal, Apple Pay, Google Pay, Klarna (2×2 Grid) ─── */}
-            <div>
-                <p className="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-bold">
-                    Schnell bezahlen
-                </p>
-                <div className="express-grid [&_.p-ExpressCheckoutElement]:!gap-2 [&_button]:!rounded-xl [&_iframe]:!rounded-xl">
-                    <ExpressCheckoutElement
-                        onConfirm={handleExpressConfirm}
-                        options={{
-                            paymentMethods: {
-                                link: "never" as const,
-                                applePay: "always" as const,
-                                googlePay: "auto" as const,
-                                paypal: "auto" as any,
-                                amazonPay: "never" as const,
-                            },
-                            buttonType: {
-                                applePay: "buy" as const,
-                                googlePay: "buy" as const,
-                                paypal: "buynow" as any,
-                            },
-                            buttonTheme: {
-                                applePay: "white-outline" as const,
-                                googlePay: "white" as const,
-                                paypal: "gold" as any,
-                            },
-                            buttonHeight: 52,
-                        } as any}
+            <div className={`transition-all duration-700 ${!confirmedDemo ? 'blur-xl grayscale-[0.5] opacity-20 pointer-events-none scale-95' : 'blur-0 opacity-100'}`}>
+                {/* ─── EMAIL FIELD (REQUIRED) ─── */}
+                <div>
+                    <label className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">
+                        E-Mail-Adresse <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            if (emailError) setEmailError("");
+                        }}
+                        onBlur={() => {
+                            if (email && !validateEmail(email)) {
+                                setEmailError("Bitte gib eine gültige E-Mail-Adresse ein.");
+                            } else {
+                                setEmailError("");
+                                updateReceiptEmail(email);
+                            }
+                        }}
+                        placeholder="deine@email.de"
+                        className={`w-full px-4 py-3 bg-white/[0.03] border rounded-xl text-white text-sm placeholder:text-white/25 outline-none transition-all font-[family-name:var(--font-dm)] ${emailError
+                            ? "border-red-500/50 focus:border-red-500"
+                            : "border-white/8 focus:border-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.15)]"
+                            }`}
                     />
+                    {emailError && (
+                        <p className="text-red-400 text-[11px] mt-1.5">{emailError}</p>
+                    )}
+                    <p className="text-[9px] text-white/20 mt-1.5">Für Bestellbestätigung & Tracking</p>
                 </div>
-            </div>
 
-            {/* ─── DIVIDER ─── */}
-            <div className="relative flex items-center gap-3">
-                <div className="flex-grow border-t border-white/8" />
-                <span className="text-[10px] text-white/25 uppercase tracking-widest shrink-0">Oder mit</span>
-                <div className="flex-grow border-t border-white/8" />
-            </div>
-
-            {/* ─── PAYMENT ELEMENT: Card, SEPA, Klarna etc. ─── */}
-            <PaymentElement
-                options={{
-                    layout: {
-                        type: "accordion",
-                        defaultCollapsed: false,
-                        radios: true,
-                        spacedAccordionItems: true,
-                    },
-                    wallets: { applePay: "never", googlePay: "never" },
-                    business: { name: "Schwerelos by NFD" },
-                }}
-            />
-
-            {/* ─── SUBMIT BUTTON ─── */}
-            <button
-                type="submit"
-                disabled={isLoading || !stripe || !elements}
-                className="w-full py-4 bg-white text-black font-[family-name:var(--font-outfit)] font-bold uppercase tracking-widest rounded-full hover:bg-blue-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(255,255,255,0.08)] mt-2 relative overflow-hidden group"
-            >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                        Verarbeiten...
-                    </span>
-                ) : "Jetzt bezahlen — 0,50 €"}
-            </button>
-
-            {/* ─── TRUST FOOTER ─── */}
-            <div className="flex items-center justify-center gap-4 pt-4">
-                <div className="flex items-center gap-1.5">
-                    <svg className="w-3.5 h-3.5 text-green-500/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                    </svg>
-                    <span className="text-[9px] text-white/25">SSL verschlüsselt</span>
+                {/* ─── EXPRESS CHECKOUT: Branded native buttons ─── */}
+                <div className="mt-6">
+                    <p className="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-bold">
+                        Schnell bezahlen
+                    </p>
+                    <div className="express-grid [&_.p-ExpressCheckoutElement]:!gap-2 [&_button]:!rounded-xl [&_iframe]:!rounded-xl">
+                        <ExpressCheckoutElement
+                            onConfirm={handleExpressConfirm}
+                            options={{
+                                paymentMethods: {
+                                    link: "never" as const,
+                                    applePay: "always" as const,
+                                    googlePay: "auto" as const,
+                                    paypal: "auto" as any,
+                                    amazonPay: "never" as const,
+                                },
+                                buttonType: {
+                                    applePay: "buy" as const,
+                                    googlePay: "buy" as const,
+                                    paypal: "buynow" as any,
+                                },
+                                buttonTheme: {
+                                    applePay: "white-outline" as const,
+                                    googlePay: "white" as const,
+                                    paypal: "gold" as any,
+                                },
+                                buttonHeight: 52,
+                            } as any}
+                        />
+                    </div>
                 </div>
-                <span className="text-white/10">·</span>
-                <span className="text-[9px] text-white/25">Powered by Stripe</span>
+
+                {/* ─── DIVIDER ─── */}
+                <div className="relative flex items-center gap-3 my-6">
+                    <div className="flex-grow border-t border-white/8" />
+                    <span className="text-[10px] text-white/25 uppercase tracking-widest shrink-0">Oder mit Karte</span>
+                    <div className="flex-grow border-t border-white/8" />
+                </div>
+
+                {/* ─── PAYMENT ELEMENT: Card, SEPA, Klarna etc. ─── */}
+                <PaymentElement
+                    options={{
+                        layout: {
+                            type: "accordion",
+                            defaultCollapsed: false,
+                            radios: true,
+                            spacedAccordionItems: true,
+                        },
+                        wallets: { applePay: "never", googlePay: "never" },
+                        business: { name: "Schwerelos by NFD" },
+                    }}
+                />
+
+                {/* ─── SUBMIT BUTTON ─── */}
+                <button
+                    type="submit"
+                    disabled={isLoading || !stripe || !elements}
+                    className="w-full py-4 bg-white text-black font-[family-name:var(--font-outfit)] font-bold uppercase tracking-widest rounded-full hover:bg-blue-50 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(255,255,255,0.08)] mt-6 relative overflow-hidden group"
+                >
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                    {isLoading ? (
+                        <span className="flex items-center justify-center gap-2">
+                            <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                            Verarbeiten...
+                        </span>
+                    ) : "JETZT KAUFEN — 0,50 €"}
+                </button>
+
+                {/* ─── TRUST FOOTER ─── */}
+                <div className="flex items-center justify-center gap-4 pt-4 mb-2">
+                    <div className="flex items-center gap-1.5">
+                        <svg className="w-3.5 h-3.5 text-green-500/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                        </svg>
+                        <span className="text-[9px] text-white/25">SSL verschlüsselt</span>
+                    </div>
+                    <span className="text-white/10">·</span>
+                    <span className="text-[9px] text-white/25">Powered by Stripe</span>
+                </div>
             </div>
 
             {message && (
                 <div className={`text-center text-sm mt-2 p-3 rounded-xl border ${message.startsWith("✓") ? "border-green-500/20 text-green-400 bg-green-500/5" : "border-white/10 text-white/60"
+                    }`}>
+                    {message}
+                </div>
+            )}
+            {message && (
+                <div className={`text-center text-sm mt-6 p-3 rounded-xl border ${message.startsWith("✓") ? "border-green-500/20 text-green-400 bg-green-500/5" : "border-white/10 text-white/60"
                     }`}>
                     {message}
                 </div>

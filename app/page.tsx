@@ -3,7 +3,8 @@
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
 import NextImage from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
-import { Wind, MousePointer2 } from 'lucide-react';
+import Link from 'next/link';
+import { Wind, MousePointer2, ArrowRight } from 'lucide-react';
 import AmbientSound from './components/AmbientSound';
 import { CartProvider } from './context/CartContext';
 import nextDynamic from 'next/dynamic';
@@ -549,6 +550,26 @@ export default function Home() {
                 {/* 5. PRODUCT ORDER SECTION */}
                 <div className="mb-2 w-full max-w-[1400px] mx-auto z-20 relative">
                     <ProductSection />
+                </div>
+
+                {/* 5.1 RETOURE & STATUS TILE */}
+                <div className="mb-8 w-full max-w-[1400px] mx-auto z-20 relative px-4 md:px-12 flex justify-center md:justify-end">
+                    <Link
+                        href="/retoure"
+                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-2xl p-4 md:p-6 flex items-center gap-4 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full md:w-auto md:min-w-[300px]"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500">
+                            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p className="text-[10px] text-blue-400/80 uppercase tracking-widest font-bold mb-0.5">Bestellung</p>
+                            <p className="text-sm md:text-base font-[family-name:var(--font-outfit)] font-bold text-white group-hover:text-blue-50 transition-colors">Retoure & Status</p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-white/20 ml-auto group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
+                    </Link>
                 </div>
 
                 {/* 6. CONTACT SECTION - Tighter Layout (gap-2 equivalent) */}
