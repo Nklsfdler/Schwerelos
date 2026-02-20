@@ -181,6 +181,7 @@ function ConfirmationContent() {
     const params = useSearchParams();
     const [orderId, setOrderId] = useState("");
     const [trackingNr, setTrackingNr] = useState("");
+    const [rechnungsNr, setRechnungsNr] = useState("");
     const [deliveryDate, setDeliveryDate] = useState("");
     const [showTimeline, setShowTimeline] = useState(false);
     const [showTruck, setShowTruck] = useState(false);
@@ -188,6 +189,7 @@ function ConfirmationContent() {
     useEffect(() => {
         setOrderId(params.get("order_id") || generateOrderId());
         setTrackingNr(params.get("tracking") || generateTrackingNumber());
+        setRechnungsNr(params.get("payment_intent") || params.get("pi") || "");
         setDeliveryDate(getDeliveryEstimate());
         const t1 = setTimeout(() => setShowTimeline(true), 2800);
         const t2 = setTimeout(() => setShowTruck(true), 4000);
@@ -282,6 +284,7 @@ function ConfirmationContent() {
                     </div>
                     <div className="space-y-3">
                         <InfoRow label="Bestellnummer" value={orderId} mono />
+                        {rechnungsNr && <InfoRow label="Rechnungsnr. (Stripe)" value={rechnungsNr} mono />}
                         <InfoRow label="Sendungsnummer" value={trackingNr} mono />
                         <InfoRow label="Voraussichtliche Lieferung" value={deliveryDate} />
                         <InfoRow label="Versandart" value="DHL Express" />
