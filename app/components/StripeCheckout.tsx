@@ -182,13 +182,24 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
     const handleExpressConfirm = useCallback(async () => {
         if (!stripe || !elements) return;
 
-        if (validateEmail(email)) {
-            await updateReceiptEmail(email);
+        // E-Mail is REQUIRED for ALL payment methods
+        if (!validateEmail(email)) {
+            setEmailError("Bitte gib zuerst eine gültige E-Mail-Adresse ein.");
+            setMessage("⚠ E-Mail-Adresse erforderlich, auch für Express-Zahlungen.");
+            return;
         }
+
+        setEmailError("");
+        await updateReceiptEmail(email);
 
         const { error } = await stripe.confirmPayment({
             elements,
-            confirmParams: { return_url: getReturnUrl() },
+            confirmParams: {
+                return_url: getReturnUrl(),
+                payment_method_data: {
+                    billing_details: { email },
+                },
+            },
         });
         if (error) setMessage(error.message ?? "Express-Zahlung fehlgeschlagen.");
     }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]);
@@ -259,7 +270,7 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
                     {emailError && (
                         <p className="text-red-400 text-[11px] mt-1.5">{emailError}</p>
                     )}
-                    <p className="text-[9px] text-white/20 mt-1.5">Für Bestellbestätigung & Tracking</p>
+                    <p className="text-[9px] text-white/20 mt-1.5">Pflichtfeld · Für Bestellbestätigung & Tracking</p>
                 </div>
 
                 {/* ─── EXPRESS CHECKOUT: Branded native buttons ─── */}
@@ -345,12 +356,6 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
 
             {message && (
                 <div className={`text-center text-sm mt-2 p-3 rounded-xl border ${message.startsWith("✓") ? "border-green-500/20 text-green-400 bg-green-500/5" : "border-white/10 text-white/60"
-                    }`}>
-                    {message}
-                </div>
-            )}
-            {message && (
-                <div className={`text-center text-sm mt-6 p-3 rounded-xl border ${message.startsWith("✓") ? "border-green-500/20 text-green-400 bg-green-500/5" : "border-white/10 text-white/60"
                     }`}>
                     {message}
                 </div>

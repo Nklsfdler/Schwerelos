@@ -6,39 +6,98 @@ function useSoftCatchBrake(triggerRef: React.RefObject<HTMLElement | null>) {
         const el = triggerRef.current;
         if (!el) return;
 
-        let velocity = 0;
-        let lastTime = 0;
-        const DECAY = 0.88;          // exponential friction per tick
-        const SPEED_THRESHOLD = 120; // px/event to consider "fast"
-        const ZONE_ABOVE = 300;      // px above element to start braking
-        const ZONE_BELOW = 600;      // px into element to keep braking
+        let isLocked = false;
+        let lockTimeout: ReturnType<typeof setTimeout> | null = null;
+        let lastTouchY = 0;
+        let touchVelocity = 0;
+        let lastTouchTime = 0;
 
-        const handler = (e: WheelEvent) => {
+        const DECAY = 0.55;           // very aggressive damping
+        const SPEED_THRESHOLD = 40;   // low threshold = catches more scrolls
+        const ZONE_ABOVE = 500;       // start braking 500px before element
+        const ZONE_BELOW = 800;       // keep braking 800px into element
+        const LOCK_DURATION = 500;    // brief pause at snap point (ms)
+
+        const isInZone = () => {
             const rect = el.getBoundingClientRect();
-            const triggerTop = rect.top;
+            return rect.top > -ZONE_BELOW && rect.top < ZONE_ABOVE;
+        };
 
-            // Only active in the catch zone
-            if (triggerTop < -ZONE_BELOW || triggerTop > ZONE_ABOVE) return;
+        const snapToElement = () => {
+            if (isLocked) return;
+            isLocked = true;
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            lockTimeout = setTimeout(() => { isLocked = false; }, LOCK_DURATION);
+        };
 
-            const now = performance.now();
-            const dt = now - lastTime;
-            lastTime = now;
+        // --- WHEEL (Desktop) ---
+        const wheelHandler = (e: WheelEvent) => {
+            if (!isInZone()) return;
+            if (isLocked) { e.preventDefault(); return; }
 
-            const rawDelta = Math.abs(e.deltaY);
-            velocity = dt > 0 ? rawDelta / (dt / 16) : rawDelta;
-
-            if (velocity > SPEED_THRESHOLD && e.deltaY > 0) {
-                // Brake: reduce the scroll amount
+            const absDelta = Math.abs(e.deltaY);
+            if (absDelta > SPEED_THRESHOLD && e.deltaY > 0) {
                 e.preventDefault();
-                const brakeFactor = Math.max(0.15, DECAY * (SPEED_THRESHOLD / velocity));
+                const ratio = SPEED_THRESHOLD / absDelta;
+                const brakeFactor = Math.max(0.08, DECAY * ratio);
                 const dampedDelta = e.deltaY * brakeFactor;
-                window.scrollBy({ top: dampedDelta, behavior: 'auto' });
-                velocity *= DECAY;
+
+                // If very fast, snap
+                if (absDelta > 150) {
+                    snapToElement();
+                } else {
+                    window.scrollBy({ top: dampedDelta, behavior: 'auto' });
+                }
             }
         };
 
-        window.addEventListener('wheel', handler, { passive: false });
-        return () => window.removeEventListener('wheel', handler);
+        // --- TOUCH (Mobile) ---
+        const touchStartHandler = (e: TouchEvent) => {
+            lastTouchY = e.touches[0].clientY;
+            lastTouchTime = performance.now();
+            touchVelocity = 0;
+        };
+
+        const touchMoveHandler = (e: TouchEvent) => {
+            if (!isInZone()) return;
+            if (isLocked) { e.preventDefault(); return; }
+
+            const currentY = e.touches[0].clientY;
+            const deltaY = lastTouchY - currentY; // positive = scrolling down
+            const now = performance.now();
+            const dt = now - lastTouchTime;
+
+            if (dt > 0) {
+                touchVelocity = Math.abs(deltaY) / (dt / 16);
+            }
+
+            lastTouchY = currentY;
+            lastTouchTime = now;
+
+            if (touchVelocity > SPEED_THRESHOLD && deltaY > 0) {
+                e.preventDefault();
+                const ratio = SPEED_THRESHOLD / touchVelocity;
+                const brakeFactor = Math.max(0.1, DECAY * ratio);
+                const dampedDelta = deltaY * brakeFactor;
+
+                if (touchVelocity > 120) {
+                    snapToElement();
+                } else {
+                    window.scrollBy({ top: dampedDelta, behavior: 'auto' });
+                }
+            }
+        };
+
+        window.addEventListener('wheel', wheelHandler, { passive: false });
+        window.addEventListener('touchstart', touchStartHandler, { passive: true });
+        window.addEventListener('touchmove', touchMoveHandler, { passive: false });
+
+        return () => {
+            window.removeEventListener('wheel', wheelHandler);
+            window.removeEventListener('touchstart', touchStartHandler);
+            window.removeEventListener('touchmove', touchMoveHandler);
+            if (lockTimeout) clearTimeout(lockTimeout);
+        };
     }, [triggerRef]);
 }
 
@@ -599,22 +658,22 @@ export default function Home() {
                 </div>
 
                 {/* 5.1 RETOURE & STATUS TILE */}
-                <div className="mb-8 w-full max-w-[1400px] mx-auto z-20 relative px-4 md:px-12 flex justify-center md:justify-end">
+                <div className="mb-8 w-full max-w-[1400px] mx-auto z-20 relative px-4 md:px-12 flex justify-center">
                     <Link
                         href="/retoure"
-                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-2xl p-5 md:p-7 flex items-center gap-5 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full md:w-auto md:min-w-[380px]"
+                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-2xl p-5 md:p-8 flex items-center gap-5 md:gap-8 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500">
-                            <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500 shrink-0">
+                            <svg className="w-7 h-7 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                             </svg>
                         </div>
                         <div>
-                            <p className="text-[10px] md:text-[11px] text-blue-400/80 uppercase tracking-[0.2em] font-[family-name:var(--font-outfit)] font-bold mb-1">Bestellung</p>
-                            <p className="text-base md:text-lg font-[family-name:var(--font-outfit)] font-bold text-white/90 group-hover:text-blue-50 transition-colors tracking-tight">Retoure & Status</p>
+                            <p className="text-[10px] md:text-xs text-blue-400/80 uppercase tracking-[0.2em] font-[family-name:var(--font-outfit)] font-bold mb-1">Bestellung</p>
+                            <p className="text-lg md:text-xl lg:text-2xl font-[family-name:var(--font-outfit)] font-bold text-white/90 group-hover:text-blue-50 transition-colors tracking-tight">Aktueller Status & Retoure</p>
                         </div>
-                        <ArrowRight className="w-5 h-5 text-white/20 ml-auto group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-white/20 ml-auto group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
                     </Link>
                 </div>
 
