@@ -174,11 +174,6 @@ function CheckoutForm({ orderId = "", trackingNr = "" }: { orderId?: string; tra
                         buttonType: { applePay: "buy", googlePay: "buy" },
                         buttonTheme: { applePay: "white-outline", googlePay: "white" },
                         buttonHeight: 52,
-                        layout: {
-                            type: "auto",
-                            maxColumns: 2,
-                            maxRows: 2,
-                        },
                     }}
                 />
             </div>
