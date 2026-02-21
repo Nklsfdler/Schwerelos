@@ -1,21 +1,20 @@
 "use client";
 
 // --- SCROLL BRAKE v3: Position clamping via rAF ---
-// Kills momentum at the transition point, then lets user continue naturally.
-// No snap-back, no ghost-touch — just a brief pause.
-function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>) {
+// Pauses momentum briefly, then snaps to target (first bento tile at top).
+function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, targetRef: React.RefObject<HTMLElement | null>) {
     const brakeStateRef = useRef<'idle' | 'braking' | 'released'>('idle');
     const rafRef = useRef<number>(0);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;
-        if (!sentinel) return;
+        const target = targetRef.current;
+        if (!sentinel || !target) return;
 
         const BRAKE_DURATION = 400; // ms — just enough to kill momentum
         let clampY = 0;
         let brakeStartTime = 0;
 
-        // rAF loop: pin scroll position while braking
         const clampLoop = () => {
             if (brakeStateRef.current !== 'braking') return;
 
@@ -25,8 +24,9 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>) {
                 window.scrollTo(0, clampY);
                 rafRef.current = requestAnimationFrame(clampLoop);
             } else {
-                // Release — just let go, no snap, no scroll manipulation
                 brakeStateRef.current = 'released';
+                // Smooth snap — first bento tile pins to top of screen
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         };
 
@@ -37,13 +37,11 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>) {
             const brakePoint = sentinel.offsetTop;
             const scrollY = window.scrollY;
 
-            // Reset if user scrolls back up well above the brake zone
             if (state === 'released' && scrollY < brakePoint - window.innerHeight * 1.5) {
                 brakeStateRef.current = 'idle';
                 return;
             }
 
-            // Trigger brake when reaching the sentinel
             if (state === 'idle' && scrollY >= brakePoint - window.innerHeight * 0.3) {
                 brakeStateRef.current = 'braking';
                 clampY = scrollY;
@@ -59,7 +57,7 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>) {
             window.removeEventListener('scroll', onScroll);
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
-    }, [sentinelRef]);
+    }, [sentinelRef, targetRef]);
 }
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
@@ -270,8 +268,8 @@ export default function Home() {
     const [images, setImages] = useState<HTMLImageElement[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Scroll brake: briefly pauses momentum at the transition, then releases
-    useScrollBrake(scrollBrakeSentinelRef);
+    // Scroll brake: pauses momentum then snaps bento grid to top
+    useScrollBrake(scrollBrakeSentinelRef, bentoRef);
 
     // --- SCROLL LOGIC ---
     // Header Visibility: Hide when leaving Hero Section (approx 800px)
