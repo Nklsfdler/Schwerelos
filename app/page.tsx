@@ -1,104 +1,79 @@
 "use client";
 
-// --- SOFT-CATCH SCROLL BRAKE HOOK ---
-function useSoftCatchBrake(triggerRef: React.RefObject<HTMLElement | null>) {
+// --- SCROLL BRAKE: Hard lock at transition point ---
+// Uses IntersectionObserver + body overflow lock for reliable mobile support.
+// Touch event interception does NOT work on mobile (compositor thread).
+function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, targetRef: React.RefObject<HTMLElement | null>) {
+    const hasFiredRef = useRef(false);
+
     useEffect(() => {
-        const el = triggerRef.current;
-        if (!el) return;
+        const sentinel = sentinelRef.current;
+        const target = targetRef.current;
+        if (!sentinel || !target) return;
 
-        let isLocked = false;
-        let lockTimeout: ReturnType<typeof setTimeout> | null = null;
-        let lastTouchY = 0;
-        let touchVelocity = 0;
-        let lastTouchTime = 0;
+        let lastScrollY = window.scrollY;
+        const LOCK_DURATION = 800; // ms to freeze scroll
 
-        const DECAY = 0.55;           // very aggressive damping
-        const SPEED_THRESHOLD = 40;   // low threshold = catches more scrolls
-        const ZONE_ABOVE = 500;       // start braking 500px before element
-        const ZONE_BELOW = 800;       // keep braking 800px into element
-        const LOCK_DURATION = 500;    // brief pause at snap point (ms)
+        const lockScroll = () => {
+            if (hasFiredRef.current) return;
+            hasFiredRef.current = true;
 
-        const isInZone = () => {
-            const rect = el.getBoundingClientRect();
-            return rect.top > -ZONE_BELOW && rect.top < ZONE_ABOVE;
+            // Save current scroll position
+            const scrollY = window.scrollY;
+
+            // Hard-lock body: no scroll, no touch scroll
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+
+            // After pause, unlock and snap to target
+            setTimeout(() => {
+                // Unlock body
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+                document.body.style.touchAction = '';
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+
+                // Restore scroll position then smooth-scroll to target
+                window.scrollTo(0, scrollY);
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, LOCK_DURATION);
         };
 
-        const snapToElement = () => {
-            if (isLocked) return;
-            isLocked = true;
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            lockTimeout = setTimeout(() => { isLocked = false; }, LOCK_DURATION);
-        };
-
-        // --- WHEEL (Desktop) ---
-        const wheelHandler = (e: WheelEvent) => {
-            if (!isInZone()) return;
-            if (isLocked) { e.preventDefault(); return; }
-
-            const absDelta = Math.abs(e.deltaY);
-            if (absDelta > SPEED_THRESHOLD && e.deltaY > 0) {
-                e.preventDefault();
-                const ratio = SPEED_THRESHOLD / absDelta;
-                const brakeFactor = Math.max(0.08, DECAY * ratio);
-                const dampedDelta = e.deltaY * brakeFactor;
-
-                // If very fast, snap
-                if (absDelta > 150) {
-                    snapToElement();
-                } else {
-                    window.scrollBy({ top: dampedDelta, behavior: 'auto' });
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting && window.scrollY > lastScrollY) {
+                        lockScroll();
+                    }
                 }
+                lastScrollY = window.scrollY;
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(sentinel);
+
+        // Reset when user scrolls back up past the animation section
+        const resetHandler = () => {
+            if (window.scrollY < (sentinel.offsetTop - window.innerHeight)) {
+                hasFiredRef.current = false;
             }
+            lastScrollY = window.scrollY;
         };
 
-        // --- TOUCH (Mobile) ---
-        const touchStartHandler = (e: TouchEvent) => {
-            lastTouchY = e.touches[0].clientY;
-            lastTouchTime = performance.now();
-            touchVelocity = 0;
-        };
-
-        const touchMoveHandler = (e: TouchEvent) => {
-            if (!isInZone()) return;
-            if (isLocked) { e.preventDefault(); return; }
-
-            const currentY = e.touches[0].clientY;
-            const deltaY = lastTouchY - currentY; // positive = scrolling down
-            const now = performance.now();
-            const dt = now - lastTouchTime;
-
-            if (dt > 0) {
-                touchVelocity = Math.abs(deltaY) / (dt / 16);
-            }
-
-            lastTouchY = currentY;
-            lastTouchTime = now;
-
-            if (touchVelocity > SPEED_THRESHOLD && deltaY > 0) {
-                e.preventDefault();
-                const ratio = SPEED_THRESHOLD / touchVelocity;
-                const brakeFactor = Math.max(0.1, DECAY * ratio);
-                const dampedDelta = deltaY * brakeFactor;
-
-                if (touchVelocity > 120) {
-                    snapToElement();
-                } else {
-                    window.scrollBy({ top: dampedDelta, behavior: 'auto' });
-                }
-            }
-        };
-
-        window.addEventListener('wheel', wheelHandler, { passive: false });
-        window.addEventListener('touchstart', touchStartHandler, { passive: true });
-        window.addEventListener('touchmove', touchMoveHandler, { passive: false });
+        window.addEventListener('scroll', resetHandler, { passive: true });
 
         return () => {
-            window.removeEventListener('wheel', wheelHandler);
-            window.removeEventListener('touchstart', touchStartHandler);
-            window.removeEventListener('touchmove', touchMoveHandler);
-            if (lockTimeout) clearTimeout(lockTimeout);
+            observer.disconnect();
+            window.removeEventListener('scroll', resetHandler);
         };
-    }, [triggerRef]);
+    }, [sentinelRef, targetRef]);
 }
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
@@ -305,11 +280,12 @@ function NarrativeText({ data, scrollYProgress }: { data: any, scrollYProgress: 
 export default function Home() {
     const containerRef = useRef<HTMLDivElement>(null);
     const bentoRef = useRef<HTMLElement>(null);
+    const scrollBrakeSentinelRef = useRef<HTMLDivElement>(null);
     const [images, setImages] = useState<HTMLImageElement[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Soft-catch brake at the bento grid transition
-    useSoftCatchBrake(bentoRef);
+    // Scroll brake: locks body when sentinel is reached, then snaps to bento grid
+    useScrollBrake(scrollBrakeSentinelRef, bentoRef);
 
     // --- SCROLL LOGIC ---
     // Header Visibility: Hide when leaving Hero Section (approx 800px)
@@ -512,8 +488,8 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* SCROLL CATCH BUFFER (Soft Landing) */}
-                <div className="h-[30vh] w-full bg-[#030303]" />
+                {/* SCROLL BRAKE SENTINEL — triggers the scroll lock */}
+                <div ref={scrollBrakeSentinelRef} className="h-[30vh] w-full bg-[#030303]" />
 
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
                 <section ref={bentoRef} id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-4 px-2 md:px-6 min-h-screen md:min-h-0 md:h-auto md:py-12 flex items-center justify-center">
