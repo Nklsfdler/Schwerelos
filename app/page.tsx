@@ -1,17 +1,18 @@
 "use client";
 
-// --- SCROLL BRAKE v3: Position clamping via rAF ---
-// Pauses momentum briefly, then snaps to target (first bento tile at top).
-function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, targetRef: React.RefObject<HTMLElement | null>) {
+// --- SCROLL BRAKE v4: Exact Top-Edge Clamping ---
+// Triggers exactly when the target hits the top of the screen,
+// and clamps the scroll position perfectly at that pixel line.
+// This avoids cancelable smooth-scrolls on mobile and ensures perfect alignment.
+function useScrollBrake(targetRef: React.RefObject<HTMLElement | null>) {
     const brakeStateRef = useRef<'idle' | 'braking' | 'released'>('idle');
     const rafRef = useRef<number>(0);
 
     useEffect(() => {
-        const sentinel = sentinelRef.current;
         const target = targetRef.current;
-        if (!sentinel || !target) return;
+        if (!target) return;
 
-        const BRAKE_DURATION = 500; // ms — just enough to kill momentum
+        const BRAKE_DURATION = 500; // ms
         let clampY = 0;
         let brakeStartTime = 0;
 
@@ -25,9 +26,8 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
                 rafRef.current = requestAnimationFrame(clampLoop);
             } else {
                 brakeStateRef.current = 'released';
-                // Precise snap — scrollTo top of bento section
-                const targetTop = target.getBoundingClientRect().top + window.scrollY;
-                window.scrollTo({ top: targetTop, behavior: 'smooth' });
+                // Ensure it's perfectly set exactly once more upon release
+                window.scrollTo(0, clampY);
             }
         };
 
@@ -35,17 +35,22 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
             const state = brakeStateRef.current;
             if (state === 'braking') return;
 
-            const brakePoint = sentinel.offsetTop;
+            // Safe robust calculation of the exact top document position of the target
+            const targetTop = target.getBoundingClientRect().top + window.scrollY;
             const scrollY = window.scrollY;
 
-            if (state === 'released' && scrollY < brakePoint - window.innerHeight * 1.5) {
+            // Reset brake when user scrolls back up significantly
+            if (state === 'released' && scrollY < targetTop - window.innerHeight * 0.5) {
                 brakeStateRef.current = 'idle';
                 return;
             }
 
-            if (state === 'idle' && scrollY >= brakePoint - window.innerHeight * 0.3) {
+            // Trigger brake when target arrives at or crosses the top of the viewport
+            // Only trigger if we're moving down towards it (don't re-trigger immediately if slightly above)
+            if (state === 'idle' && scrollY >= targetTop - 5 && scrollY < targetTop + 300) {
                 brakeStateRef.current = 'braking';
-                clampY = scrollY;
+                // Clamp EXACTLY to the top edge of the tile
+                clampY = targetTop;
                 brakeStartTime = Date.now();
                 window.scrollTo(0, clampY);
                 rafRef.current = requestAnimationFrame(clampLoop);
@@ -58,7 +63,7 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
             window.removeEventListener('scroll', onScroll);
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
-    }, [sentinelRef, targetRef]);
+    }, [targetRef]);
 }
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
@@ -265,12 +270,11 @@ function NarrativeText({ data, scrollYProgress }: { data: any, scrollYProgress: 
 export default function Home() {
     const containerRef = useRef<HTMLDivElement>(null);
     const bentoRef = useRef<HTMLElement>(null);
-    const scrollBrakeSentinelRef = useRef<HTMLDivElement>(null);
     const [images, setImages] = useState<HTMLImageElement[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Scroll brake: pauses momentum then snaps bento grid to top
-    useScrollBrake(scrollBrakeSentinelRef, bentoRef);
+    // Scroll brake: pauses momentum then clamps perfectly at bento grid top
+    useScrollBrake(bentoRef);
 
     // --- SCROLL LOGIC ---
     // Header Visibility: Hide when leaving Hero Section (approx 800px)
@@ -472,9 +476,6 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-
-                {/* SCROLL BRAKE SENTINEL — triggers the scroll lock */}
-                <div ref={scrollBrakeSentinelRef} className="h-[30vh] w-full bg-[#030303]" />
 
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
                 <section ref={bentoRef} id="aesthetik" className="snap-section relative z-30 bg-[#030303] pt-0 pb-8 px-2 md:px-6 md:pt-12 md:pb-12 min-h-screen md:min-h-0 md:h-auto flex items-start justify-center">
