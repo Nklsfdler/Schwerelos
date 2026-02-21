@@ -11,7 +11,7 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
         const target = targetRef.current;
         if (!sentinel || !target) return;
 
-        const BRAKE_DURATION = 400; // ms — just enough to kill momentum
+        const BRAKE_DURATION = 500; // ms — just enough to kill momentum
         let clampY = 0;
         let brakeStartTime = 0;
 
@@ -25,8 +25,9 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
                 rafRef.current = requestAnimationFrame(clampLoop);
             } else {
                 brakeStateRef.current = 'released';
-                // Smooth snap — first bento tile pins to top of screen
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Precise snap — scrollTo top of bento section
+                const targetTop = target.getBoundingClientRect().top + window.scrollY;
+                window.scrollTo({ top: targetTop, behavior: 'smooth' });
             }
         };
 
@@ -476,7 +477,7 @@ export default function Home() {
                 <div ref={scrollBrakeSentinelRef} className="h-[30vh] w-full bg-[#030303]" />
 
                 {/* 3. BENTO GRID - STRICT 3-COLUMN LAYOUT */}
-                <section ref={bentoRef} id="aesthetik" className="snap-section relative z-30 bg-[#030303] py-4 px-2 md:px-6 min-h-screen md:min-h-0 md:h-auto md:py-12 flex items-center justify-center">
+                <section ref={bentoRef} id="aesthetik" className="snap-section relative z-30 bg-[#030303] pt-0 pb-8 px-2 md:px-6 md:pt-12 md:pb-12 min-h-screen md:min-h-0 md:h-auto flex items-start justify-center">
                     <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[600px] lg:h-[450px]">
 
                         {/* TILE 1: PHILOSOPHY */}
