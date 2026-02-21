@@ -79,7 +79,7 @@ export default function ProductSection() {
                                 <span className="text-[10px] uppercase tracking-[0.2em] text-white/40">Verfügbar</span>
                             </div>
 
-                            <h2 className="text-5xl md:text-7xl font-[family-name:var(--font-outfit)] font-black mb-6 leading-none text-white tracking-tight">
+                            <h2 className="text-5xl md:text-[3.5rem] lg:text-7xl font-[family-name:var(--font-outfit)] font-black mb-6 leading-none text-white tracking-tight">
                                 Schwerelos
                             </h2>
 
@@ -121,9 +121,9 @@ export default function ProductSection() {
 
 function InfoRow({ label, value }: { label: string, value: string }) {
     return (
-        <div className="flex justify-between items-center py-2 border-b border-white/5 last:border-0 hover:bg-white/5 px-2 rounded-lg transition-colors">
-            <span className="text-sm text-white/40 font-[family-name:var(--font-dm)] uppercase tracking-wider">{label}</span>
-            <span className="text-sm text-white/90 font-medium font-[family-name:var(--font-dm)]">{value}</span>
+        <div className="flex justify-between items-start md:items-center gap-4 py-2 border-b border-white/5 last:border-0 hover:bg-white/5 px-2 rounded-lg transition-colors">
+            <span className="text-sm text-white/40 font-[family-name:var(--font-dm)] uppercase tracking-wider shrink-0">{label}</span>
+            <span className="text-sm text-white/90 font-medium font-[family-name:var(--font-dm)] text-right">{value}</span>
         </div>
     );
 }

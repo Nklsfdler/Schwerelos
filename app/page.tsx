@@ -493,7 +493,7 @@ export default function Home() {
                                     <div>
                                         <span className="text-[10px] md:text-[10px] lg:text-xs uppercase tracking-widest font-bold text-white/40 mb-2 md:mb-2 block">Psychologie</span>
                                         {/* iPad: Reduced Weight (Bold vs Black) & Size */}
-                                        <h4 className="text-3xl md:text-3xl lg:text-3xl font-[family-name:var(--font-outfit)] font-bold text-white/70 leading-snug group-hover:text-white transition-colors duration-500">
+                                        <h4 className="text-3xl md:text-2xl lg:text-3xl font-[family-name:var(--font-outfit)] font-bold text-white/70 leading-snug group-hover:text-white transition-colors duration-500 break-words hyphens-auto" lang="de">
                                             &quot;Schwerelosigkeit ist kein Ort, <br /> sondern ein <span className="italic text-white/50">Zustand</span>.&quot;
                                         </h4>
                                     </div>
@@ -528,7 +528,7 @@ export default function Home() {
                                     priority
                                     quality={80}
                                     sizes="(max-width: 768px) 100vw, 33vw"
-                                    className="object-cover object-[55%_15%] translate-y-[20%] group-hover:translate-y-[45%] transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
+                                    className="object-cover object-[55%_15%] md:object-[50%_15%] translate-y-[20%] group-hover:translate-y-[45%] transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100 grayscale"
                                 />
                                 {/* subtle gradient overlay for text readability - Softened to 60% */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 z-10" />
@@ -586,8 +586,8 @@ export default function Home() {
                                 </div>
                             </div>
 
-                            {/* LOGOS - FIXED BOTTOM LEFT */}
-                            <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20 pointer-events-none">
+                            {/* LOGOS - FIXED BOTTOM LEFT (Moved up on iPad to avoid button overlap) */}
+                            <div className="absolute bottom-6 left-6 md:bottom-20 lg:bottom-6 flex items-center gap-4 z-20 pointer-events-none">
                                 {/* THI: Pure White Invert - Tiny on iPad (h-6) */}
                                 <img src="/logos/thi.png" alt="THI Logo" loading="lazy" decoding="async" className="h-8 md:h-6 lg:h-10 w-auto object-contain invert opacity-90" />
                                 <div className="h-6 w-px bg-white/20 hidden md:block" />
@@ -623,7 +623,7 @@ export default function Home() {
                 <div className="mb-8 w-full max-w-[1400px] mx-auto z-20 relative px-4 md:px-12 flex justify-center">
                     <Link
                         href="/retoure"
-                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-2xl p-5 md:p-8 flex items-center gap-5 md:gap-8 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full"
+                        className="group relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-[2rem] p-5 md:p-8 flex items-center gap-5 md:gap-8 transition-all duration-500 hover:bg-white/[0.05] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] w-full"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-500 shrink-0">
