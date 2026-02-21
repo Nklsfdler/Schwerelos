@@ -1,77 +1,69 @@
 "use client";
 
-// --- SCROLL BRAKE: Hard lock at transition point ---
-// Uses IntersectionObserver + body overflow lock for reliable mobile support.
-// Touch event interception does NOT work on mobile (compositor thread).
+// --- SCROLL BRAKE v3: Position clamping via rAF ---
+// Neither touch event interception nor IntersectionObserver+body-lock
+// work on mobile (compositor thread + async callbacks).
+// This approach: monitor scroll position, clamp it with scrollTo().
+// scrollTo() reliably interrupts mobile momentum scrolling.
 function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, targetRef: React.RefObject<HTMLElement | null>) {
-    const hasFiredRef = useRef(false);
+    const brakeStateRef = useRef<'idle' | 'braking' | 'released'>('idle');
+    const rafRef = useRef<number>(0);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;
         const target = targetRef.current;
         if (!sentinel || !target) return;
 
-        let lastScrollY = window.scrollY;
-        const LOCK_DURATION = 800; // ms to freeze scroll
+        const BRAKE_DURATION = 1200; // ms to hold position
+        let clampY = 0;
+        let brakeStartTime = 0;
 
-        const lockScroll = () => {
-            if (hasFiredRef.current) return;
-            hasFiredRef.current = true;
+        // rAF loop: continuously pin scroll position while braking
+        const clampLoop = () => {
+            if (brakeStateRef.current !== 'braking') return;
 
-            // Save current scroll position
+            const elapsed = Date.now() - brakeStartTime;
+
+            if (elapsed < BRAKE_DURATION) {
+                // Force scroll position back to clamp point
+                window.scrollTo(0, clampY);
+                rafRef.current = requestAnimationFrame(clampLoop);
+            } else {
+                // Release: smooth-scroll to target
+                brakeStateRef.current = 'released';
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        const onScroll = () => {
+            const state = brakeStateRef.current;
+            if (state === 'braking') return; // rAF loop handles this
+
+            // Get the brake trigger point: top of sentinel element
+            const brakePoint = sentinel.offsetTop;
             const scrollY = window.scrollY;
 
-            // Hard-lock body: no scroll, no touch scroll
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.overflow = 'hidden';
-            document.body.style.touchAction = 'none';
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.width = '100%';
-
-            // After pause, unlock and snap to target
-            setTimeout(() => {
-                // Unlock body
-                document.documentElement.style.overflow = '';
-                document.body.style.overflow = '';
-                document.body.style.touchAction = '';
-                document.body.style.position = '';
-                document.body.style.top = '';
-                document.body.style.width = '';
-
-                // Restore scroll position then smooth-scroll to target
-                window.scrollTo(0, scrollY);
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, LOCK_DURATION);
-        };
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (const entry of entries) {
-                    if (entry.isIntersecting && window.scrollY > lastScrollY) {
-                        lockScroll();
-                    }
-                }
-                lastScrollY = window.scrollY;
-            },
-            { threshold: 0.1 }
-        );
-
-        observer.observe(sentinel);
-
-        // Reset when user scrolls back up past the animation section
-        const resetHandler = () => {
-            if (window.scrollY < (sentinel.offsetTop - window.innerHeight)) {
-                hasFiredRef.current = false;
+            // Reset if user scrolls back up well above the brake zone
+            if (state === 'released' && scrollY < brakePoint - window.innerHeight * 1.5) {
+                brakeStateRef.current = 'idle';
+                return;
             }
-            lastScrollY = window.scrollY;
+
+            // Trigger brake when reaching the sentinel
+            if (state === 'idle' && scrollY >= brakePoint - window.innerHeight * 0.3) {
+                brakeStateRef.current = 'braking';
+                clampY = scrollY; // Pin at current position
+                brakeStartTime = Date.now();
+                window.scrollTo(0, clampY); // Immediate first clamp
+                rafRef.current = requestAnimationFrame(clampLoop);
+            }
         };
 
-        window.addEventListener('scroll', resetHandler, { passive: true });
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         return () => {
-            observer.disconnect();
-            window.removeEventListener('scroll', resetHandler);
+            window.removeEventListener('scroll', onScroll);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
     }, [sentinelRef, targetRef]);
 }
