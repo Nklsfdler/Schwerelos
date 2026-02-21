@@ -321,7 +321,7 @@ export default function ModelSection() {
                 </div >
 
                 {/* 3. BOTTOM: DYNAMIC CONTENT & BUTTONS */}
-                < div className="relative z-30 w-full p-6 pb-10 md:p-12 pt-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent shrink-0 pointer-events-none" >
+                <div className="relative z-30 w-full p-6 pb-10 md:p-12 pt-32 bg-gradient-to-t from-black via-black/90 to-transparent shrink-0 pointer-events-none">
 
                     {/* Dynamic Text */}
                     < AnimatePresence mode="wait" >
