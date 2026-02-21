@@ -1,45 +1,39 @@
 "use client";
 
 // --- SCROLL BRAKE v3: Position clamping via rAF ---
-// Neither touch event interception nor IntersectionObserver+body-lock
-// work on mobile (compositor thread + async callbacks).
-// This approach: monitor scroll position, clamp it with scrollTo().
-// scrollTo() reliably interrupts mobile momentum scrolling.
-function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, targetRef: React.RefObject<HTMLElement | null>) {
+// Kills momentum at the transition point, then lets user continue naturally.
+// No snap-back, no ghost-touch — just a brief pause.
+function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>) {
     const brakeStateRef = useRef<'idle' | 'braking' | 'released'>('idle');
     const rafRef = useRef<number>(0);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;
-        const target = targetRef.current;
-        if (!sentinel || !target) return;
+        if (!sentinel) return;
 
-        const BRAKE_DURATION = 1200; // ms to hold position
+        const BRAKE_DURATION = 400; // ms — just enough to kill momentum
         let clampY = 0;
         let brakeStartTime = 0;
 
-        // rAF loop: continuously pin scroll position while braking
+        // rAF loop: pin scroll position while braking
         const clampLoop = () => {
             if (brakeStateRef.current !== 'braking') return;
 
             const elapsed = Date.now() - brakeStartTime;
 
             if (elapsed < BRAKE_DURATION) {
-                // Force scroll position back to clamp point
                 window.scrollTo(0, clampY);
                 rafRef.current = requestAnimationFrame(clampLoop);
             } else {
-                // Release: smooth-scroll to target
+                // Release — just let go, no snap, no scroll manipulation
                 brakeStateRef.current = 'released';
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         };
 
         const onScroll = () => {
             const state = brakeStateRef.current;
-            if (state === 'braking') return; // rAF loop handles this
+            if (state === 'braking') return;
 
-            // Get the brake trigger point: top of sentinel element
             const brakePoint = sentinel.offsetTop;
             const scrollY = window.scrollY;
 
@@ -52,9 +46,9 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
             // Trigger brake when reaching the sentinel
             if (state === 'idle' && scrollY >= brakePoint - window.innerHeight * 0.3) {
                 brakeStateRef.current = 'braking';
-                clampY = scrollY; // Pin at current position
+                clampY = scrollY;
                 brakeStartTime = Date.now();
-                window.scrollTo(0, clampY); // Immediate first clamp
+                window.scrollTo(0, clampY);
                 rafRef.current = requestAnimationFrame(clampLoop);
             }
         };
@@ -65,7 +59,7 @@ function useScrollBrake(sentinelRef: React.RefObject<HTMLElement | null>, target
             window.removeEventListener('scroll', onScroll);
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
-    }, [sentinelRef, targetRef]);
+    }, [sentinelRef]);
 }
 
 import React, { useRef, useEffect, useState, MouseEvent } from 'react';
@@ -276,8 +270,8 @@ export default function Home() {
     const [images, setImages] = useState<HTMLImageElement[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Scroll brake: locks body when sentinel is reached, then snaps to bento grid
-    useScrollBrake(scrollBrakeSentinelRef, bentoRef);
+    // Scroll brake: briefly pauses momentum at the transition, then releases
+    useScrollBrake(scrollBrakeSentinelRef);
 
     // --- SCROLL LOGIC ---
     // Header Visibility: Hide when leaving Hero Section (approx 800px)
