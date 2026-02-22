@@ -242,7 +242,8 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
             <div className={`transition-all duration-700 ${!confirmedDemo ? 'blur-xl grayscale-[0.5] opacity-20 pointer-events-none scale-95' : 'blur-0 opacity-100'}`}>
                 {/* ─── EMAIL FIELD (REQUIRED) ─── */}
                 <div>
-                    <label className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">
+                    <label className="block text-[10px] text-white/50 uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
+                        <span className="bg-blue-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]">1</span>
                         E-Mail-Adresse <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -275,9 +276,10 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
 
                 {/* ─── EXPRESS CHECKOUT: Branded native buttons ─── */}
                 <div className="mt-6">
-                    <p className="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-bold">
-                        Schnell bezahlen
+                    <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1 font-bold">
+                        Schritt 2: Schnell bezahlen
                     </p>
+                    <p className="text-[9px] text-white/20 mb-3">(Apple Pay, Google Pay, Klarna)</p>
                     <div className="express-grid [&_.p-ExpressCheckoutElement]:!gap-2 [&_button]:!rounded-xl [&_iframe]:!rounded-xl">
                         <ExpressCheckoutElement
                             onConfirm={handleExpressConfirm}
@@ -285,7 +287,7 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
                                 paymentMethods: {
                                     link: "never" as const,
                                     applePay: "always" as const,
-                                    googlePay: "auto" as const,
+                                    googlePay: "always" as const,
                                     paypal: "auto" as any,
                                     amazonPay: "never" as const,
                                 },
@@ -321,7 +323,7 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
                             radios: true,
                             spacedAccordionItems: true,
                         },
-                        wallets: { applePay: "never", googlePay: "never" },
+                        wallets: { applePay: "auto", googlePay: "auto" },
                         business: { name: "Schwerelos by NFD" },
                     }}
                 />

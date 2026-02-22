@@ -262,7 +262,7 @@ export default function ModelSection() {
         <section className="relative w-full min-h-[100dvh] bg-[#050505] flex flex-col items-center justify-center snap-section py-4 md:py-8 px-2 md:px-4 lg:px-0">
 
             {/* SEPARATE CARD CONTAINER - Restored Card Look on Mobile */}
-            <div className="relative w-full h-[115dvh] md:h-[90dvh] lg:h-[95dvh] min-h-[750px] md:min-h-[600px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
+            <div className="relative w-full h-[850px] md:h-[90dvh] lg:h-[95dvh] min-h-[750px] md:min-h-[600px] bg-[#0a0a0a] border border-white/10 rounded-3xl md:rounded-[3rem] overflow-hidden flex flex-col justify-between shadow-2xl mx-auto md:w-[98%] max-w-[1600px]">
 
                 {/* Background Texture (With Blue Tint) */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/5 via-[#0a0a0a] to-[#050505] pointer-events-none z-0" />
