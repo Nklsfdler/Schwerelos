@@ -38,7 +38,7 @@ export async function POST(request: Request) {
             currency: "eur",
             "automatic_payment_methods[enabled]": "true",
             "automatic_payment_methods[allow_redirects]": "always",
-            description: "Schwerelos Edition 01 — Testbestellung",
+            description: `Bestellung ${orderId} — Schwerelos Edition 01`,
             "metadata[order_id]": orderId,
             "metadata[tracking_nr]": trackingNr,
         });
