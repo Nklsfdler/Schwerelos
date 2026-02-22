@@ -349,7 +349,6 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
                                     paypal: "auto" as any,
                                     amazonPay: "never" as const,
                                 },
-                                layout: "grid",
                                 buttonType: {
                                     applePay: "buy" as const,
                                     googlePay: "buy" as const,
