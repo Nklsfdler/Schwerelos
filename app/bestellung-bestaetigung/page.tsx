@@ -196,33 +196,32 @@ function ConfirmationContent() {
                 {/* ─── TRUCK ANIMATION (loads immediately, no delay) ─── */}
                 <DeliveryTruck />
 
-                {/* ─── ORDER DETAILS CARD ─── */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 md:p-5 mb-4 backdrop-blur-sm"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 mb-8 backdrop-blur-sm shadow-2xl"
                 >
-                    <div className="flex items-center gap-3 pb-4 border-b border-white/8 mb-4">
-                        <div className="w-12 h-12 bg-white/5 rounded-xl border border-white/10 overflow-hidden flex-shrink-0">
+                    <div className="flex items-center gap-4 pb-6 border-b border-white/8 mb-6">
+                        <div className="w-16 h-16 bg-white/5 rounded-2xl border border-white/10 overflow-hidden flex-shrink-0">
                             <img src="/Produktbilder/Produktbild.png" className="w-full h-full object-cover opacity-70" alt="Schwerelos" />
                         </div>
                         <div className="min-w-0">
-                            <p className="font-[family-name:var(--font-outfit)] font-bold text-white text-sm">Schwerelos</p>
-                            <p className="text-[10px] text-white/40 mt-0.5">Edition 01 · 1 Stück</p>
+                            <p className="font-[family-name:var(--font-outfit)] font-black text-white text-lg">Schwerelos</p>
+                            <p className="text-xs text-white/50 mt-1 uppercase tracking-widest font-bold">Edition 01 · 1 Stück</p>
                         </div>
-                        <p className="text-sm font-bold text-white/70 ml-auto shrink-0">33,99 €</p>
+                        <p className="text-xl font-bold text-white ml-auto shrink-0">33,99 €</p>
                     </div>
-                    <div className="space-y-2.5">
+                    <div className="space-y-4">
                         <InfoRow label="Bestellnummer" value={orderId} mono />
                         {rechnungsNr && <InfoRow label="Rechnungsnr." value={rechnungsNr} mono />}
                         <InfoRow label="Sendungsnummer" value={trackingNr} mono />
                         <InfoRow label="Voraussichtliche Lieferung" value={deliveryDate} />
-                        <div className="flex justify-between items-center py-0.5">
-                            <span className="text-[10px] text-white/35">Versandart</span>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                                <span className="text-[10px] text-white/70">DHL Express</span>
+                        <div className="flex justify-between items-center py-1 border-t border-white/5 pt-3 mt-1">
+                            <span className="text-sm text-white/50">Versandart</span>
+                            <div className="flex items-center gap-2 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20">
+                                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">DHL Express</span>
                             </div>
                         </div>
                         <InfoRow label="Status" value="Zahlung erhalten" badge />
@@ -252,12 +251,12 @@ function ConfirmationContent() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
-                    className="w-full mb-6"
+                    className="w-full mb-10"
                 >
-                    <p className="text-[9px] text-white/20 uppercase tracking-[0.25em] font-bold mb-4 text-center">
+                    <p className="text-xs text-white/30 uppercase tracking-[0.25em] font-bold mb-6 text-center">
                         Nächste Schritte
                     </p>
-                    <div className="flex items-start gap-1 md:gap-3">
+                    <div className="flex items-start justify-between gap-2 md:gap-4 px-2">
                         <HorizontalStep
                             icon={<svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
                             title="Zahlung"
@@ -292,17 +291,19 @@ function ConfirmationContent() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9 }}
-                    className="w-full p-4 rounded-xl bg-white/[0.02] border border-white/8 mb-4"
+                    className="w-full p-5 md:p-6 rounded-2xl bg-white/[0.02] border border-white/8 mb-6"
                 >
-                    <div className="flex items-start gap-3">
-                        <svg className="w-4 h-4 text-white/25 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
-                        </svg>
+                    <div className="flex items-start gap-4">
+                        <div className="p-2 bg-white/5 rounded-full mt-0.5">
+                            <svg className="w-5 h-5 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                            </svg>
+                        </div>
                         <div className="min-w-0">
-                            <p className="text-[11px] text-white/50 font-bold mb-0.5">Widerrufsrecht & Retoure</p>
-                            <p className="text-[10px] text-white/30 leading-relaxed">
+                            <p className="text-sm text-white/70 font-bold mb-1">Widerrufsrecht & Retoure</p>
+                            <p className="text-xs text-white/40 leading-relaxed max-w-sm">
                                 14 Tage Widerrufsrecht. E-Mail an{" "}
-                                <a href="mailto:hallo@nfd.studio" className="text-blue-400 hover:underline">hallo@nfd.studio</a>{" "}
+                                <a href="mailto:hallo@nfd.studio" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">hallo@nfd.studio</a>{" "}
                                 mit deiner Bestellnummer.
                             </p>
                         </div>
@@ -367,17 +368,19 @@ function ConfirmationContent() {
 /* ─── INFO ROW ─── */
 function InfoRow({ label, value, mono, badge }: { label: string; value: string; mono?: boolean; badge?: boolean }) {
     return (
-        <div className="flex justify-between items-start gap-4">
-            <span className="text-[10px] text-white/35 shrink-0">{label}</span>
-            {badge ? (
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/20 font-medium animate-pulse">
-                    {value}
-                </span>
-            ) : (
-                <span className={`text-[10px] text-right text-white/70 break-all ${mono ? "font-mono tracking-tight" : ""}`}>
-                    {value}
-                </span>
-            )}
+        <div className="flex justify-between items-center gap-4 py-1.5">
+            <span className="text-sm text-white/50 whitespace-nowrap">{label}</span>
+            <div className="text-right">
+                {badge ? (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">
+                        {value}
+                    </span>
+                ) : (
+                    <span className={`text-sm ${mono ? 'font-[family-name:var(--font-dm)] text-white/80' : 'text-white font-medium'}`}>
+                        {value}
+                    </span>
+                )}
+            </div>
         </div>
     );
 }
