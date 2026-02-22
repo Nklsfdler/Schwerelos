@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import {
     Elements,
     PaymentElement,
+    ExpressCheckoutElement,
     useStripe,
     useElements,
 } from "@stripe/react-stripe-js";
@@ -211,9 +212,45 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
         }
     }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]);
 
+    const handleExpressConfirm = useCallback(async () => {
+        if (!stripe || !elements) return;
 
+        // E-Mail is REQUIRED for ALL payment methods
+        if (!validateEmail(email)) {
+            setEmailError("Bitte gib zuerst eine gültige E-Mail-Adresse ein.");
+            setMessage("⚠ E-Mail-Adresse erforderlich, auch für Express-Zahlungen.");
+            return;
+        }
 
-    const [confirmedDemo, setConfirmedDemo] = useState(false);
+        setEmailError("");
+        await updateReceiptEmail(email);
+
+        const { error, paymentIntent } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: getReturnUrl(),
+                payment_method_data: {
+                    billing_details: { email },
+                },
+            },
+            redirect: "if_required",
+        });
+
+        if (error) {
+            // If the user aborts PayPal or Apple Pay, Stripe returns an error.
+            if (error.type === "validation_error") {
+                // Ignore standard form validation errors when using the express button
+                return;
+            }
+            setMessage(error.message ?? "Express-Zahlung fehlgeschlagen.");
+        } else if (paymentIntent && (paymentIntent.status === "succeeded" || paymentIntent.status === "processing")) {
+            sessionStorage.removeItem("cartOpen");
+            sessionStorage.removeItem("checkoutOpen");
+            window.location.href = getReturnUrl();
+        } else {
+            window.location.href = getReturnUrl();
+        }
+    }, [stripe, elements, email, getReturnUrl, updateReceiptEmail]); const [confirmedDemo, setConfirmedDemo] = useState(false);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-5 relative">
@@ -296,18 +333,56 @@ function CheckoutForm({ orderId = "", trackingNr = "", paymentIntentId = "" }: {
                     </div>
                 )}
 
-                {/* ─── PAYMENT ELEMENT: ALL PAYMENT METHODS (Unified) ─── */}
+                {/* ─── EXPRESS CHECKOUT: Branded native buttons (Grid Layout) ─── */}
                 <div className="mt-6">
                     <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-3">
-                        Zahlungsmethode wählen
+                        Schnell bezahlen
                     </p>
+                    <div className="express-grid [&_.p-ExpressCheckoutElement]:!gap-2 [&_button]:!rounded-xl [&_iframe]:!rounded-xl">
+                        <ExpressCheckoutElement
+                            onConfirm={handleExpressConfirm}
+                            options={{
+                                paymentMethods: {
+                                    link: "never",
+                                    applePay: "always",
+                                    googlePay: "always",
+                                    paypal: "auto",
+                                    amazonPay: "never",
+                                },
+                                buttonType: {
+                                    applePay: "buy",
+                                    googlePay: "buy",
+                                    paypal: "buynow",
+                                },
+                                buttonTheme: {
+                                    applePay: "white-outline",
+                                    googlePay: "white",
+                                    paypal: "gold",
+                                },
+                                buttonHeight: 52,
+                            }}
+                        />
+                    </div>
+                </div>
+
+                {/* ─── DIVIDER ─── */}
+                <div className="relative flex items-center gap-3 my-6">
+                    <div className="flex-grow border-t border-white/8" />
+                    <span className="text-[10px] text-white/25 uppercase tracking-widest shrink-0">Alle Zahlungsarten</span>
+                    <div className="flex-grow border-t border-white/8" />
+                </div>
+
+                {/* ─── PAYMENT ELEMENT: ALL PAYMENT METHODS (Unified) ─── */}
+                <div className="mt-2">
                     <PaymentElement
                         options={{
                             layout: {
-                                type: "tabs",
+                                type: "accordion",
                                 defaultCollapsed: false,
+                                radios: true,
+                                spacedAccordionItems: true,
                             },
-                            wallets: { applePay: "auto", googlePay: "auto" },
+                            wallets: { applePay: "never", googlePay: "never" },
                             business: { name: "Schwerelos by NFD" },
                         }}
                     />
