@@ -63,7 +63,6 @@ export async function POST(request: Request) {
             description: `Bestellung ${orderId} — Schwerelos Edition 01`,
             "metadata[order_id]": orderId,
             "metadata[tracking_nr]": trackingNr,
-            setup_future_usage: "on_session", // Dies zwingt Stripe oft, den Kunden robuster zu behandeln
         });
 
         // Set customer to trigger reliable receipts
