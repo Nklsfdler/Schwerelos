@@ -32,6 +32,28 @@ export async function POST(request: Request) {
         const orderId = generateOrderId();
         const trackingNr = generateTrackingNumber();
 
+        // Optional: Customer anlegen, damit Receipts sicher gesendet werden
+        let customerId: string | undefined;
+
+        if (email && email.includes("@")) {
+            const customerBody = new URLSearchParams({
+                email: email,
+                name: `Gast-Besteller (${orderId})`,
+            });
+            const customerRes = await fetch("https://api.stripe.com/v1/customers", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${key}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: customerBody.toString(),
+            });
+            if (customerRes.ok) {
+                const customerData = await customerRes.json() as any;
+                customerId = customerData.id;
+            }
+        }
+
         // Create PaymentIntent — 0.50€ (50 cents) — LIVE mode
         const body = new URLSearchParams({
             amount: "50",
@@ -43,9 +65,10 @@ export async function POST(request: Request) {
             "metadata[tracking_nr]": trackingNr,
         });
 
-        // Set receipt_email if email is provided → Stripe sends automatic receipt
-        if (email && email.includes("@")) {
-            body.set("receipt_email", email);
+        // Set customer to trigger reliable receipts
+        if (customerId) {
+            body.set("customer", customerId);
+            body.set("receipt_email", email as string);
         }
 
         const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {

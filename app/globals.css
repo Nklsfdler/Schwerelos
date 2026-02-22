@@ -38,3 +38,12 @@ body {
 model-viewer::part(default-progress-bar) {
   display: none;
 }
+
+/* Enforce 2x2 Grid Layout for Stripe Express Checkout buttons on md+ screens */
+@media (min-width: 768px) {
+  .express-grid .p-ExpressCheckoutElement {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+}

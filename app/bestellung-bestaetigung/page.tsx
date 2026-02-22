@@ -122,9 +122,9 @@ function ConfirmationContent() {
     return (
         <div className="min-h-screen bg-[#050507] text-white relative overflow-hidden">
             {/* Background glow — subtle, no beam */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-600/[0.02] blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-blue-600/[0.03] blur-[150px] pointer-events-none" />
 
-            <div className="relative max-w-xl mx-auto px-4 md:px-6 py-10 md:py-14 flex flex-col items-center">
+            <div className="relative max-w-2xl mx-auto px-4 md:px-8 py-16 md:py-24 flex flex-col items-center">
 
                 {/* ─── SUCCESS ANIMATION ─── */}
                 <motion.div
@@ -155,22 +155,42 @@ function ConfirmationContent() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-center mb-6"
+                    className="text-center mb-8 w-full"
                 >
                     <motion.p
-                        className="text-[10px] text-blue-400/80 uppercase tracking-[0.3em] font-bold mb-2"
+                        className="text-[10px] md:text-xs text-blue-400/80 uppercase tracking-[0.3em] font-bold mb-3"
                         initial={{ letterSpacing: "0.1em" }}
                         animate={{ letterSpacing: "0.3em" }}
                         transition={{ delay: 0.4, duration: 0.6 }}
                     >
                         Bestellung bestätigt
                     </motion.p>
-                    <h1 className="text-3xl md:text-4xl font-[family-name:var(--font-outfit)] font-bold text-white mb-2">
+                    <h1 className="text-4xl md:text-5xl font-[family-name:var(--font-outfit)] font-black text-white mb-4 tracking-tight drop-shadow-xl">
                         Vielen Dank!
                     </h1>
-                    <p className="text-white/40 text-sm max-w-sm mx-auto leading-relaxed">
-                        Deine Bestellung wurde erfolgreich aufgenommen. Du erhältst eine Bestätigung per E-Mail.
+                    <p className="text-white/50 text-base md:text-lg max-w-md mx-auto leading-relaxed mb-6">
+                        Deine Bestellung wurde erfolgreich aufgenommen. Du erhältst in Kürze eine Bestätigung per E-Mail.
                     </p>
+
+                    {/* PROMINENT ORDER ID BADGE */}
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.6 }}
+                        className="inline-flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3 shadow-[0_0_30px_rgba(255,255,255,0.02)] backdrop-blur-md"
+                    >
+                        <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Bestellnr.</span>
+                        <span className="text-lg md:text-xl font-[family-name:var(--font-dm)] text-white tracking-widest">{orderId}</span>
+                        <button
+                            onClick={() => navigator.clipboard.writeText(orderId)}
+                            className="ml-2 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors group"
+                            title="Kopieren"
+                        >
+                            <svg className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </button>
+                    </motion.div>
                 </motion.div>
 
                 {/* ─── TRUCK ANIMATION (loads immediately, no delay) ─── */}
